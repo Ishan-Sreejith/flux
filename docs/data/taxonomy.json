@@ -1,0 +1,148 @@
+{
+  "primes": {
+    "Animal": {
+      "tree": {
+        "name": "Mammal",
+        "bit_on_yes": "1",
+        "bit_on_no": "0",
+        "params_on_yes": {"p1": 0.7, "p3": 0.6},
+        "params_on_no": {"p1": 0.4, "p3": 0.4},
+        "yes": {
+          "name": "Domestic",
+          "bit_on_yes": "0",
+          "bit_on_no": "1",
+          "params_on_yes": {"p5": 0.9, "p10": 0.8},
+          "params_on_no": {"p5": 0.2, "p10": 0.4},
+          "yes": {
+            "name": "Carnivore",
+            "bit_on_yes": "1",
+            "bit_on_no": "0",
+            "params_on_yes": {"p14": 0.8, "p9": 0.6},
+            "params_on_no": {"p14": 0.2, "p9": 0.2}
+          },
+          "no": {
+            "name": "Carnivore",
+            "bit_on_yes": "1",
+            "bit_on_no": "0",
+            "params_on_yes": {"p14": 0.7, "p9": 0.5},
+            "params_on_no": {"p14": 0.1, "p9": 0.1}
+          }
+        },
+        "no": {
+          "name": "Domestic",
+          "bit_on_yes": "0",
+          "bit_on_no": "1",
+          "params_on_yes": {"p5": 0.9, "p10": 0.8},
+          "params_on_no": {"p5": 0.2, "p10": 0.4},
+          "yes": {
+            "name": "Carnivore",
+            "bit_on_yes": "1",
+            "bit_on_no": "0",
+            "params_on_yes": {"p14": 0.7, "p9": 0.5},
+            "params_on_no": {"p14": 0.1, "p9": 0.1}
+          },
+          "no": {
+            "name": "Carnivore",
+            "bit_on_yes": "1",
+            "bit_on_no": "0",
+            "params_on_yes": {"p14": 0.9, "p9": 0.7},
+            "params_on_no": {"p14": 0.2, "p9": 0.2}
+          }
+        }
+      }
+    },
+    "Object": {
+      "tree": {
+        "name": "Tool",
+        "bit_on_yes": "1",
+        "bit_on_no": "0",
+        "params_on_yes": {"p7": 0.8, "p8": 0.7},
+        "params_on_no": {"p7": 0.3, "p8": 0.3},
+        "yes": {
+          "name": "Mechanical",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p6": 0.7, "p3": 0.5},
+          "params_on_no": {"p6": 0.3, "p3": 0.3}
+        },
+        "no": {
+          "name": "Natural",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p6": 0.4, "p3": 0.4},
+          "params_on_no": {"p6": 0.2, "p3": 0.2}
+        }
+      }
+    },
+    "Action": {
+      "tree": {
+        "name": "Intentional",
+        "bit_on_yes": "1",
+        "bit_on_no": "0",
+        "params_on_yes": {"p2": 0.6, "p6": 0.7},
+        "params_on_no": {"p2": 0.2, "p6": 0.3},
+        "yes": {
+          "name": "Violence",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p2": 0.9, "p9": 0.9},
+          "params_on_no": {"p2": 0.4, "p9": 0.4}
+        },
+        "no": {
+          "name": "Cooperation",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p10": 0.7, "p5": 0.6},
+          "params_on_no": {"p10": 0.3, "p5": 0.3}
+        }
+      }
+    },
+    "Feeling": {
+      "tree": {
+        "name": "Positive",
+        "bit_on_yes": "1",
+        "bit_on_no": "0",
+        "params_on_yes": {"p10": 0.8, "p11": 0.7},
+        "params_on_no": {"p10": 0.2, "p11": 0.3},
+        "yes": {
+          "name": "Calm",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p11": 0.7, "p1": 0.4},
+          "params_on_no": {"p11": 0.3, "p1": 0.2}
+        },
+        "no": {
+          "name": "Arousal",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p11": 0.9, "p1": 0.6},
+          "params_on_no": {"p11": 0.4, "p1": 0.3}
+        }
+      }
+    }
+    ,
+    "Food": {
+      "tree": {
+        "name": "Fruit",
+        "bit_on_yes": "1",
+        "bit_on_no": "0",
+        "params_on_yes": {"p12": 0.9, "p13": 0.8},
+        "params_on_no": {"p12": 0.7, "p13": 0.2},
+        "yes": {
+          "name": "Fresh",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p12": 0.95, "p13": 0.7},
+          "params_on_no": {"p12": 0.6, "p13": 0.4}
+        },
+        "no": {
+          "name": "Cooked",
+          "bit_on_yes": "1",
+          "bit_on_no": "0",
+          "params_on_yes": {"p12": 0.9, "p13": 0.3},
+          "params_on_no": {"p12": 0.5, "p13": 0.1}
+        }
+      }
+    }
+  }
+}

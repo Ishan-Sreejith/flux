@@ -1,0 +1,6104 @@
+{
+  "otter": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.9
+    }
+  },
+  "term": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mitochondrial mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chromosomal mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "birth mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "royana": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "oyal\u0131": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "megan and morag": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sonny wool": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wether": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tracy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anomalous double sheep at lausanne natural history museum": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "double diamond": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fiona": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "churra galega bragan\u00e7ana branca": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "duldul": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "balaenoptera physalus skeleton": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "shrek": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chris": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "yamashita cave man": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thechikottukavu ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ambalappuzha ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ambalapuzha vijayakrishnan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur padmanabhan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur lakshmikkutti": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chengallor ranganathan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thiruvalla jayachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "malayalapuzha rajan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thechikotukav ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayoor ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur elite narayanankutti": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur pazhaya padmanabhan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chengalloor dakshayani": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wolfdog": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "jackal\u2013dog hybrid": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dogxim": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ]
+  },
+  "new york": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lizzie the elephant": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bubbles": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "twelves": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gas station sushi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "courser": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "vizir": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pit pony": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "american belgian draft": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "little brown jug": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bj\u00f6rsells briar 899": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ferdinand bb": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "allstar b (horse)": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "utter": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nijinsky": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "skowronek": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "man o' war": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "florizel": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "marengo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sunday silence": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hatsushiba o": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "allabaculia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "huaso": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "st. simon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gidde palema": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "abdullah": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "prometea": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "acatenango": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "adlerflug": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bonfire": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lexington": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tikkanen": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cigar": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "eri-aaroni": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "phar lap": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ahlerich": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "victoria park": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aiken cura": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "citation": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dahlia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kincsem": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "angelzarke": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "malacara": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nino des buissonnets": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "trigger": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "artificial": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "intelligence": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mouse": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p1": 0.15
+    }
+  },
+  "giraffe": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "godolphin arabian": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "alleged": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dalakhani": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bucephalus": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "wakataka": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "gigolo frh": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "electrocutionist": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "royal ski": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "deep impact": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "admire don": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "devil diver": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bairactar": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "beauty": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "silent witness": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "indigenous": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "salinero": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "big ben": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ratina z": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "borgia": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "overdose": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "highflyer": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sassafras": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "curlin": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "incitatus": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "docs keepin time": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "totilas": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "traveller": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "green moon": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sakhee": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q1001792": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "rock of gibraltar": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "danehill": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "lammtarra": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "burmese": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "byerley turk": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "caletto i": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "caletto ii": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "calvaro z": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "majestic prince": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nonoalco": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cassini i": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "catoki": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dubai millennium": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "chambertin": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "native dancer": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ruffian": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "goldikova": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "zarkava": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "imperi\u00e1l": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "matchem": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "danzig": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sadler's wells": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mr. prospector": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "comanche": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cond\u00e9": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "clever hans": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cor de la bryere": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cornet obolensky": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "secretariat": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dai jin": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "danedream": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "copenhagen": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dark ronald": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "darley arabian": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "deister": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "eclipse": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "donnerhall": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "herodot": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "morzillo": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kelso": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "workforce": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "erdeni": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "war admiral": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "herold": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "for pleasure": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "snowman": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "blacklock": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "seattle slew": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hadban enzahi": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "galopin": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "seabiscuit": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "silbersee": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cirrus des aigles": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ticino": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "monte bellini": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "halla": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "haru urara": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "helene": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hickstead": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "jalisco b": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sefton": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kidron": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kolibri": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nereide": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "k\u00f6nigsstuhl": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q1462701": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "goldfever": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q1557423": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "little sorrel": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "jalisca solier": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "elephant": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p1": 0.95
+    }
+  },
+  "ai": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "computer": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "fox": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "zebra": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "rhino": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p1": 0.9
+    }
+  },
+  "hippo": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p15": 0.6,
+      "p1": 0.9
+    }
+  },
+  "kangaroo": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "panda": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p18": 0.5
+    }
+  },
+  "camel": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bison": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "chimpanzee": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p18": 0.8
+    }
+  },
+  "gorilla": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p18": 0.8
+    }
+  },
+  "monkey": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p18": 0.7
+    }
+  },
+  "dolphin": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.9
+    }
+  },
+  "owl": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p16": 0.8,
+      "p17": 0.9
+    }
+  },
+  "falcon": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p16": 0.9
+    }
+  },
+  "penguin": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.7
+    }
+  },
+  "snake": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "lizard": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "toad": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.6
+    }
+  },
+  "rabbit": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p1": 0.2
+    }
+  },
+  "rat": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p1": 0.2
+    }
+  },
+  "orange": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "grape": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "strawberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cheese": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "milk": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "egg": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chicken": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9
+    }
+  },
+  "beef": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "carrot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "potato": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "tomato": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "screwdriver": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "wrench": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Mechanical"
+    ]
+  },
+  "saw": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "phone": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "engine": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "robot": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Mechanical"
+    ]
+  },
+  "microscope": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "telescope": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "drill": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sadnes": {
+    "prime": "Feeling",
+    "path": [
+      "Negative",
+      "Arousal"
+    ]
+  },
+  "surprise": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anxiety": {
+    "prime": "Feeling",
+    "path": [
+      "Negative",
+      "Arousal"
+    ]
+  },
+  "pride": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "build": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "learn": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "travel": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "j\u00e4rvs\u00f6faks": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "lando": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "levisto z": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "lirung": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "keto star": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "luciano": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "manduro": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bankes's horse": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "meteor": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "milton": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mondrian": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "monsun": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nazeer": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "a.p. indy": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "northern dancer": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nebos": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "necktar": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "guusje": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "oleander": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "plesiodipsas perijanensis": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q131587766": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "two-toed tom": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "macgyver the lizard": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ichthyosaurium from genga": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "leiodon owen (1841)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "aesculapian snake": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "turtle island": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "king faruk's turtle": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ayam cemani": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "zino's petrel": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cher ami": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "g.i. joe": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "flying dutchman": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "commando": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "gustav": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mary of exeter": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "paddy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "tyke": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "white vision": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "winkie": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "happy feet": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "freddie": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "laying hen": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "k&n's": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sanusi livestock  poultry farm": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kamfat poultry production,": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kuntry agri-farms and agro-allied": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "poultry in tamale": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "golden kite": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "booted bantam": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "fjalar": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "maurice": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "victoria": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nihilist penguin": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "emmanuel todd lopez": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "leptoptilos crumenifer in zambia": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mycteria ibis in flight": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ephippiorhynchus senegalensis in zambia": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "skateboarding duck": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "u.t.c.a. popekinsky": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "b\u00e9b\u00e9": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mandarin patinkin": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "wrinkle": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cikap-kamuy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "flaco": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "noctua caprimulgus garsault": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sparkie williams": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "poll": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "murphy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dove released by noah": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "griffon vulture": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "rock wren": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "eagle": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p16": 0.9
+    }
+  },
+  "birds of karanji lake": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sparrows in winter": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "emberiza cirlus female": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "maquis (pigeon)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mercury (pigeon)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "princess (pigeon)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "navy blue (pigeon)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dd.43.t.139": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dd.43.q.879": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "ruhr express (pigeon)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nurp.38.bpc.6": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nps.42.ns.2780": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nps.42.ns.7524": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nurp.43.cc.1418": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "duke of normandy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cologne": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "the king of rome": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "leaping lena": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "belgian bearded d'anvers": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sebright": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "pekin": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bantam wyandotte": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "pomelo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "galia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "solanum betaceum": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nectarine": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "calamansi": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "charentais melon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lemon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "forbidden fruit": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hami melon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ogen melon": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "amarillo liso": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fig": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "quince": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "coco plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "loquat": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "cooking apple": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Fresh"
+    ]
+  },
+  "breba": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "bizzarria": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "peacotum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "crane melon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fried plantain": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kiyomi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "a\u00e7ai berry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "youngberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "vanilla bean": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gharbouz": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rowan berry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "tonburi": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "andes melon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kalpi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cl\u00e9mentine de corse": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "melon du quercy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "berberis jaeschkeana fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "assam lemon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "muskmelon": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "cantaloupe": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "cloudberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "taqua banana": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "queen anne\u2019s pocket melon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pero de arag\u00f3n": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "agredol\u00e7": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "acerola cherry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "black cherry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cucamelon": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "kakadu plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "black raspberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "ackee": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chokecherry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "sacred garlic pear": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "long pepper": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "cluster fig": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "small cranberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "wild date": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "yuzufruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "hardy kiwi": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "chaste berry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "highbush blueberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "mobola plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "javanese long pepper": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "japanese plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "northern dewberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "boysenberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "snow pear": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "kumquat": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "rocoto": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "sycamore fig": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "california coffeeberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "white mulberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "wild gourd": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "ohelo berry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "mangosteen": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "tangerine": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "sweet cucumber": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kokum fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "natal orange": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "pacific serviceberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "guaran\u00e1 fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "serviceberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nanjing cherry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "american gooseberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "brazillian pepper": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "wax gourd": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "evergreen huckleberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "african wild mango": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "bog bilberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "noni fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "pawpaw": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "velvetleaf huckleberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "nepali hog plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "malabar plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "gingerbread plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "bullace plum": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "caryocar brasiliense fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "california blackberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "monkfruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "sea-buckthorn fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "malabar tamarind": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "cupua\u00e7u fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "christ's thorn jujube": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "indian wood apple": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "service tree fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "honeyberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "beach strawberry": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "citron melon": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "sweet crabapple": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "african olive": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "pond apple": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "myasishchev m-55": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "imam ro.41": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "douglas d-558-2 skyrocket": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tatra t.101": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mitsubishi j4m": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "akaflieg m\u00fcnchen m\u00fc13": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lituanica": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "utva trojka": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sukhoi-gulfstream s-21": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "northrop n-9m": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pzl bielsko szd-9": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "zmaj fizir fn": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avro avocet": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ac mobil 34 chrysalin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "stearman xbt-17": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cac ceres": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "vickers type 123": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "de havilland dh.93 don": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hawker woodcock": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "de havilland dh.71 tiger moth": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aeg dj.i": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dfs kranich": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dfs habicht": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fieseler fi 333": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "caproni ps.1": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tupolev tu-244": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "airspeed viceroy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hpt-32 deepak": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "2037 bomber": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "scheibe falke": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ph\u00f6nix d.i": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avro 531 spider": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "type e": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "advanced medium stol transport": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aerion sbj": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "redigo": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "aero a.200": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lippisch ente": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aeronautica umbra trojani aut.18": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "breezer breezer": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pws-10": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "ilyushin il-108": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lim-6": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "air jelly": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "akaflieg m\u00fcnchen m\u00fc3 kakadu": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "boeing pelican": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "macchi m.26": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "morane-saulnier ms.315": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bristol 188": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hes 3": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "douglas o-46": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lat\u00e9co\u00e8re 25": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "martin-baker mb 3": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aviotehas pn-3": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "caproni vizzola f.6": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "fieseler fi 157": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arsenal-delanne 10": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hansa-brandenburg c.i": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kawasaki ki-96": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "kawasaki ki-64": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "imam ro.58": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "caproni ca.335": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hawker hotspur": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sncase se.100": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "anbo viii": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "supermarine type 322": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kokusai ku-7": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "stinson model o": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cessna citation columbus": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "armstrong whitworth aw.23": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chase ycg-14": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fleetwings bt-12 sophomore": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ikarus mm-2": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "blohm & voss bv 40": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "yokosuka mxy5": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tupolev tu-324": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fma i.ae. 37": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "hafner rotabuggy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "grob g180 spn": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "14-bis": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "argus as 292": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lwd \u017curaw": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "szd-45 ogar": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "piper pa-36 pawnee brave": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lvg c.vi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bartel bm-5": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hawker hornbill": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fieseler fi 98": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bell xp-52": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "grob g 115": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "armstrong whitworth f.k.10": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nakajima ki-4": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kawasaki army type 88 reconnaisance aircraft": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tachikawa ki-70": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "heinkel he 176": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nakajima e4n": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kawasaki army type 92 fighter": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "artificial intelligence": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "cat": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p5": 0.7,
+      "p10": 0.7
+    }
+  },
+  "q2047206": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q20107002": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q124695285": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q133521395": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cnemasspis kolhapurensis": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q120477747": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "myrtle the parachick": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q136822154": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "scotch lass": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q1243908": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q18957261": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "easter rooster": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q123668004": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "oie d'anjou": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1369874-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hiyoko-chan": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1369361-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q13173666": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q135002236": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "birds of alcal\u00e1 de henares": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "birds of sheikalmudi": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "indian golden oriole": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "raven released by noah": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q18192414": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hannibal": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "the harbourmaster": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "peachick": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1370423-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "african goose": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mario": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hr\u00e6svelgr": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "aethon": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "old abe": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "tommy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dutch coast": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "john silver": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "royal blue": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "all alone": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "beach comber": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "billy": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "kenley lass": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "welsumer bantam": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q3807357": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q9264220": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "minorca bantams": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "prunus avium fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "q5621376": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q11358501": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "melon du haut-poitou": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q20826151": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q25550963": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nectacot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cherry of vignola": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q56401985": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "java tamarin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q90311546": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "moringa oleifera fruit": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "alenia aermacchi molynx": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fiat g.56": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lwd junak": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rumpler c.vii": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hawker p.1081": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "focke-wulf ta 400": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gippsaero ga8 airvan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "atlantis": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wainfan facetmobile": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bristol m.1": {
+    "prime": "Action",
+    "path": [
+      "Violence"
+    ]
+  },
+  "myasishchev vm-t atlant": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "westland limousine": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avia bh-6": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avro 571 buffalo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avro antelope": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "avro type g": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bot sc07 speed cruiser": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "t-6 texan ii": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "horten h.xviii": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "beriev be-1": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "swift s-1": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mdm mdm-1 fox": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "boulton paul balliol": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "abaris's arrow": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "jianruiying war arrow": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2533": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tiny gold leaf in shape of arrow head, yale university art gallery, inv. 1933.608": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "persian arrow head, yale university art gallery, inv. 1932.1519": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "persian arrow head, yale university art gallery, inv. 1932.1520": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wooden arrow footing, yale university art gallery, inv. 1932.1716": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2554": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze lancet or arrow head, yale university art gallery, inv. 1938.2539": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2542": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2543": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2544": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2545": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2546": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2547": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2548": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2536": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2537": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2538": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2541": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2534": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1938.2535": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wooden arrow footing, yale university art gallery, inv. 1933.448a-b": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bronze arrow head, yale university art gallery, inv. 1933.687": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "three iron arrow heads, yale university art gallery, inv. 1933.690": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrow, ao 28429, department of near eastern antiquities of the louvre": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrow, ao 28430, department of near eastern antiquities of the louvre": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrow": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hollow-based arrowhead": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrowhead": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "five broken arrows, probably associated with the bow s. 290; from the grave goods of child mummy s. 278": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrow, associated with mummy s. 00293": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "willow": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arrow made of reed, with fibre bound around end of shaft.": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "appari": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sar": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gas van": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "starkiller base (ilum)": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "pistol of the gendarmes de la maison du roi model 1750-mus\u00e9e de l'arm\u00e9e on display 4": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pistol of the gendarmes de la maison du roi model 1763-mus\u00e9e de l'arm\u00e9e on display 5": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ammunition in privas": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q111696788": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "monteleone chariot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q12406763": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mus\u00e9e saint-raymond, 25518": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anjinsha": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "harpoon found in tude \u00e5": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "harpoon from le mas-d'azil, france": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "arp\u00e3o": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q107675168": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q107675312": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "harpoon": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "abura kiri": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q11320146": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "egg cracking machine": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "dough dispenser": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q11626764": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "larding needle": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "moedor de gelo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "moedor": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nhoqueira": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pe\u00e7a interna de cuscuzeira": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tacho": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cheese basket": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cheese mold": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cross shaping tool": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "flat cooking pot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fried dumpling cutter": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "morel shaping tool": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "rounded iron rod": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "apple": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "banana": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "mango": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pear": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "peach": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "bread": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "rice": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "pasta": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "fish": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fear": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "joy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anger": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sadness": {
+    "prime": "Feeling",
+    "path": [
+      "Arousal"
+    ]
+  },
+  "peace": {
+    "prime": "Feeling",
+    "path": [
+      "Negative",
+      "Arousal"
+    ]
+  },
+  "calm": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "shame": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "run": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fight": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "attack": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hug": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "help": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "teach": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cook": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "dog": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p5": 0.9,
+      "p10": 0.85
+    }
+  },
+  "hammer": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lion": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "tiger": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "wolf": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "deer": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "horse": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cow": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9
+    }
+  },
+  "sheep": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9
+    }
+  },
+  "goat": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9
+    }
+  },
+  "shark": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.9
+    }
+  },
+  "whale": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.9
+    }
+  },
+  "knife": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "scissors": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "bear": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "frog": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.6
+    }
+  },
+  "moose": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "seal": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "car": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "camera": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hello": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "robotic": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "life": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "oak": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "leopard": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "cheetah": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "jaguar": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "hyena": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "crocodile": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.7
+    }
+  },
+  "alligator": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Carnivore"
+    ],
+    "overrides": {
+      "p15": 0.7
+    }
+  },
+  "elk": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "antelope": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "pig": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9
+    }
+  },
+  "duck": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9,
+      "p15": 0.6
+    }
+  },
+  "goose": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Domestic",
+      "Herbivore"
+    ],
+    "overrides": {
+      "p5": 0.9,
+      "p15": 0.6
+    }
+  },
+  "l1370105-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q6859257": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "buettnererpeton": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1369355-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1369625-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "l1370310-s1": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "barramundi": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "matsya": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "giant snakehead": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mullet": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "grey gurnard": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "thunnus tonggol": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "annual fish": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bullet tuna": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "spanish mackerel": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "brisbane river cod": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q5648618": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "cownose ray": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q11961553": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "orange oranda": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q25694798": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q27019899": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q64559650": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "archaephippus asper": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dantsurku": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "tapajos red head": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q124211259": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "leroy brown": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q131679385": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "angara fish": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "shibuta": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q137556672": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "shiroshita karei": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "glofish": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "electric yellow cichlid": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q18450127": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "chub mackerel": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "chinese sturgeon": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "chinese goldfish": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "phoroctenia vittata": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "sipho otte & perez-gelabert (2009) non m\u00f6rch (1852)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q65297015": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "stingless bee": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "acacia-ant symbiosis": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "heteropterus wang (1992) non dum\u00e9ril (1806)": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "nadezhda": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mountain pine beetle": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "fall webworm": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q111211565": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "diaethria eluina": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "q86671790": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "maggot": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "mezcal worm": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "worker bee": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "drone": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "queen bee": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "hoplitis adunca": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "bombyx mori": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "gamergate": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "forage ants": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "i'm": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "really": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "excit": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  }
+}

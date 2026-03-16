@@ -1,0 +1,298 @@
+{
+  "tone_map": {
+    "happy": "warm",
+    "joy": "warm",
+    "love": "warm",
+    "friendly": "warm",
+    "kind": "warm",
+    "calm": "calm",
+    "peace": "calm",
+    "relaxed": "calm",
+    "gentle": "calm",
+    "sad": "somber",
+    "sadness": "somber",
+    "fear": "somber",
+    "anxiety": "somber",
+    "grief": "somber",
+    "anger": "intense",
+    "rage": "intense",
+    "aggressive": "intense",
+    "attack": "intense",
+    "fight": "intense",
+    "danger": "urgent",
+    "urgent": "urgent",
+    "risk": "urgent",
+    "warning": "urgent",
+    "analysis": "analytical",
+    "explain": "analytical",
+    "define": "analytical",
+    "compare": "analytical",
+    "logic": "analytical",
+    "curious": "curious",
+    "why": "curious",
+    "how": "curious",
+    "wonder": "curious",
+    "fun": "playful",
+    "play": "playful",
+    "joke": "playful",
+    "silly": "playful",
+    "formal": "formal",
+    "official": "formal",
+    "report": "formal",
+    "summary": "neutral",
+    "kindness": "warm",
+    "kindly": "warm",
+    "care": "warm",
+    "caring": "warm",
+    "support": "warm",
+    "grateful": "warm",
+    "gratitude": "warm",
+    "hope": "warm",
+    "optimism": "warm",
+    "serene": "calm",
+    "quiet": "calm",
+    "steady": "calm",
+    "balanced": "calm",
+    "peaceful": "calm",
+    "loss": "somber",
+    "sorrow": "somber",
+    "mourn": "somber",
+    "bleak": "somber",
+    "grim": "somber",
+    "tragic": "somber",
+    "furious": "intense",
+    "hostile": "intense",
+    "violent": "intense",
+    "strike": "intense",
+    "battle": "intense",
+    "alert": "urgent",
+    "critical": "urgent",
+    "emergency": "urgent",
+    "dangerous": "urgent",
+    "hazard": "urgent",
+    "technical": "analytical",
+    "detail": "analytical",
+    "evidence": "analytical",
+    "model": "analytical",
+    "structure": "analytical",
+    "system": "analytical",
+    "process": "analytical",
+    "method": "analytical",
+    "reasoning": "analytical",
+    "curiosity": "curious",
+    "explore": "curious",
+    "investigate": "curious",
+    "discover": "curious",
+    "question": "curious",
+    "playful": "playful",
+    "funny": "playful",
+    "cute": "playful",
+    "quirky": "playful",
+    "whimsical": "playful",
+    "statement": "formal",
+    "document": "formal",
+    "policy": "formal",
+    "procedure": "formal",
+    "regulation": "formal",
+    "compliance": "formal",
+    "general": "neutral",
+    "basic": "neutral",
+    "simple": "neutral",
+    "overview": "neutral",
+    "excited": "excited",
+    "exciting": "excited",
+    "thrilled": "excited",
+    "enthusiastic": "excited",
+    "amazing": "excited",
+    "awesome": "excited"
+  },
+  "tone_styles": {
+    "warm": {
+      "prefixes": [
+        "In simple terms",
+        "Think of it this way",
+        "Here is a friendly take"
+      ],
+      "copulas": [
+        "is",
+        "is basically",
+        "can be seen as"
+      ],
+      "closers": [
+        "in everyday life",
+        "for most people",
+        "in a simple sense"
+      ]
+    },
+    "calm": {
+      "prefixes": [
+        "Calmly",
+        "In a steady way",
+        "With a quiet lens"
+      ],
+      "copulas": [
+        "is",
+        "is essentially",
+        "is best described as"
+      ],
+      "closers": [
+        "without extra drama",
+        "in a measured way",
+        "in a grounded sense"
+      ]
+    },
+    "somber": {
+      "prefixes": [
+        "To be direct",
+        "In plain terms",
+        "It can be described as"
+      ],
+      "copulas": [
+        "is",
+        "often is",
+        "tends to be"
+      ],
+      "closers": [
+        "in difficult moments",
+        "for hard situations",
+        "in a serious sense"
+      ]
+    },
+    "intense": {
+      "prefixes": [
+        "Straight up",
+        "With intensity",
+        "In high-energy terms"
+      ],
+      "copulas": [
+        "is",
+        "is strongly",
+        "tends to be"
+      ],
+      "closers": [
+        "when stakes are high",
+        "in forceful contexts",
+        "under pressure"
+      ]
+    },
+    "urgent": {
+      "prefixes": [
+        "Quickly",
+        "Important to note",
+        "In urgent terms"
+      ],
+      "copulas": [
+        "is",
+        "can be",
+        "often becomes"
+      ],
+      "closers": [
+        "when time matters",
+        "in risk-heavy settings",
+        "when speed is critical"
+      ]
+    },
+    "analytical": {
+      "prefixes": [
+        "In technical terms",
+        "Analytically",
+        "From a structured view"
+      ],
+      "copulas": [
+        "is",
+        "is defined as",
+        "can be classified as"
+      ],
+      "closers": [
+        "based on the schema",
+        "by the given traits",
+        "under this model"
+      ]
+    },
+    "curious": {
+      "prefixes": [
+        "Let's explore",
+        "If you zoom in",
+        "Curiously"
+      ],
+      "copulas": [
+        "is",
+        "is usually",
+        "can be seen as"
+      ],
+      "closers": [
+        "if you look closely",
+        "when you dig deeper",
+        "in a closer look"
+      ]
+    },
+    "playful": {
+      "prefixes": [
+        "Just for fun",
+        "Playfully",
+        "Lightly speaking"
+      ],
+      "copulas": [
+        "is",
+        "is kind of",
+        "can be seen as"
+      ],
+      "closers": [
+        "in a lighthearted way",
+        "if you keep it simple",
+        "for a quick picture"
+      ]
+    },
+    "formal": {
+      "prefixes": [
+        "Formally",
+        "In formal terms",
+        "From a formal standpoint"
+      ],
+      "copulas": [
+        "is",
+        "is defined as",
+        "is categorized as"
+      ],
+      "closers": [
+        "under standard definitions",
+        "within this framework",
+        "by formal usage"
+      ]
+    },
+    "neutral": {
+      "prefixes": [
+        "In short",
+        "Simply",
+        "At a high level"
+      ],
+      "copulas": [
+        "is",
+        "is basically",
+        "can be described as"
+      ],
+      "closers": [
+        "in general",
+        "for common usage",
+        "in this schema"
+      ]
+    },
+    "excited": {
+      "prefixes": [
+        "With excitement",
+        "Here's a fun, excited take",
+        "Energetically"
+      ],
+      "copulas": [
+        "is",
+        "is definitely",
+        "is clearly"
+      ],
+      "closers": [
+        "with lots of energy",
+        "in an upbeat way",
+        "when you're pumped to learn"
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schemas": {
+    "restaurant": {
+      "type": "event",
+      "prime": "Object",
+      "params": {"p10": 0.6, "p3": 0.5},
+      "script": ["enter", "wait_to_be_seated", "order", "eat", "pay", "leave"]
+    },
+    "library": {
+      "type": "social",
+      "prime": "Object",
+      "params": {"p10": 0.4, "p3": 0.6},
+      "rules": ["speak_quietly", "return_books", "no_running"]
+    },
+    "dog": {
+      "type": "object",
+      "prime": "Animal",
+      "params": {"p10": 0.8, "p5": 0.9},
+      "sensory": ["bark", "fur", "wet_nose"]
+    },
+    "teacher": {
+      "type": "person",
+      "prime": "Person",
+      "params": {"p4": 0.7, "p10": 0.6},
+      "roles": ["authority", "helper", "evaluator"]
+    },
+    "support_request": {
+      "type": "event",
+      "prime": "Action",
+      "params": {"p10": 0.7},
+      "script": ["acknowledge", "clarify", "propose_solution", "confirm"]
+    }
+  }
+}
+

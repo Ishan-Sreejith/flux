@@ -1,0 +1,198 @@
+:root {
+  --bg: #f4f1ea;
+  --ink: #1b1b1b;
+  --accent: #2f5d50;
+  --card: #ffffff;
+  --muted: #6f6a64;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Georgia", "Times New Roman", serif;
+  color: var(--ink);
+  background: linear-gradient(135deg, #f4f1ea 0%, #e9efe9 100%);
+}
+
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+}
+
+.app__header h1 {
+  font-size: 2.4rem;
+  margin: 0 0 4px 0;
+}
+
+.app__header p {
+  margin: 0 0 24px 0;
+  color: var(--muted);
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 10px 30px var(--shadow);
+  min-height: 320px;
+}
+
+.message {
+  padding: 14px 16px;
+  border-radius: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.message.user {
+  background: #e2ece7;
+  align-self: flex-end;
+}
+
+.message.bot {
+  background: #f8f6f2;
+  border: 1px solid #ece6db;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  margin-top: 8px;
+}
+
+.composer {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.composer input[type="text"] {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #d9d4cb;
+  font-size: 1rem;
+}
+
+.composer button {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.trainer {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fdfbf7;
+  border: 1px solid #ece6db;
+}
+
+.trainer h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.4rem;
+}
+
+.trainer p {
+  margin: 0 0 12px 0;
+  color: var(--muted);
+}
+
+.trainer textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d9d4cb;
+  padding: 12px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.trainer__actions {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.trainer__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.trainer__field input {
+  width: 96px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #d9d4cb;
+  font-size: 0.9rem;
+}
+
+.trainer__status {
+  color: var(--muted);
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.slider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ece6db;
+}
+
+.slider label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.slider input[type="range"] {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .composer {
+    grid-template-columns: 1fr;
+  }
+  .trainer__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

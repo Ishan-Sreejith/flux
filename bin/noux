@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+python3 /Users/ishan/flux/noux_cli.py "$@"

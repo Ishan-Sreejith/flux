@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+.idea/
+sandboxes/
+evolver_memory.json
+master_ai/reports/
+master_ai/population/
+master_ai/core/core_hashes.json

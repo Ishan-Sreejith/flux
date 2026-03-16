@@ -1,0 +1,2557 @@
+[
+  {
+    "question": "Explain dogs in simple terms",
+    "expect_any": [
+      "domesticated",
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a giraffe?",
+    "expect_any": [
+      "animal",
+      "large"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain an elephant",
+    "expect_any": [
+      "animal",
+      "large"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain a hammer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain apples",
+    "expect_any": [
+      "edible",
+      "sweet"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain fear",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is artificial intelligence",
+    "expect_any": [
+      "artificial",
+      "intelligent"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain lion",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain tiger",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain wolf",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain bear",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain fox",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain deer",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain horse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain cow",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain sheep",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain goat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain zebra",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rhino",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain hippo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain kangaroo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain panda",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain otter",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain camel",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain moose",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain bison",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain chimpanzee",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain gorilla",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain monkey",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain dolphin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain shark",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain eagle",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain owl",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain falcon",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain penguin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain snake",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain lizard",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain frog",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain toad",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain whale",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain seal",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rabbit",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain mouse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain giraffe",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain elephant",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain apple",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain banana",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain orange",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain grape",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain mango",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain strawberry",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain pear",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain peach",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain bread",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain rice",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain pasta",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain cheese",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain milk",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain egg",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain chicken",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain beef",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain fish",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain carrot",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain potato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain tomato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain hammer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain screwdriver",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain wrench",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain saw",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain knife",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain scissors",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain computer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain phone",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain car",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain engine",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain robot",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain microscope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain telescope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain drill",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain camera",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain fear",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain joy",
+    "expect_any": [],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain anger",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain sadness",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain peace",
+    "expect_any": [],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain surprise",
+    "expect_any": [],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain anxiety",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain calm",
+    "expect_any": [],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain pride",
+    "expect_any": [],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain shame",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain run",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain fight",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain attack",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain hug",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain help",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain build",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain learn",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain teach",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain travel",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain cook",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain lion",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a lion?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the lion",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain tiger",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a tiger?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the tiger",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain wolf",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a wolf?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the wolf",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain bear",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a bear?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the bear",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain fox",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a fox?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the fox",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain deer",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a deer?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the deer",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain horse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a horse?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the horse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain cow",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a cow?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the cow",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain sheep",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a sheep?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the sheep",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain goat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a goat?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the goat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain zebra",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a zebra?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the zebra",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rhino",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a rhino?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the rhino",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain hippo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a hippo?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the hippo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain kangaroo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a kangaroo?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the kangaroo",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain panda",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a panda?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the panda",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain otter",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a otter?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the otter",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain camel",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a camel?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the camel",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain moose",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a moose?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the moose",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain bison",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a bison?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the bison",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain chimpanzee",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a chimpanzee?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the chimpanzee",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain gorilla",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a gorilla?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the gorilla",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain monkey",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a monkey?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the monkey",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain dolphin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a dolphin?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the dolphin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain shark",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a shark?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the shark",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain eagle",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a eagle?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the eagle",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain owl",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a owl?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the owl",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain falcon",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a falcon?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the falcon",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain penguin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a penguin?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the penguin",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain snake",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a snake?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the snake",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain lizard",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a lizard?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the lizard",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain frog",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a frog?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the frog",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain toad",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a toad?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the toad",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain whale",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a whale?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the whale",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain seal",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a seal?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the seal",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rabbit",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a rabbit?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the rabbit",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain rat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a rat?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the rat",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain mouse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a mouse?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the mouse",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain giraffe",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a giraffe?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the giraffe",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain elephant",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "What is a elephant?",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Describe the elephant",
+    "expect_any": [
+      "animal"
+    ],
+    "expect_prime": "Animal"
+  },
+  {
+    "question": "Explain apple",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is apple?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe apple",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain banana",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is banana?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe banana",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain orange",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is orange?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe orange",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain grape",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is grape?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe grape",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain mango",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is mango?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe mango",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain strawberry",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is strawberry?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe strawberry",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain pear",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is pear?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe pear",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain peach",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is peach?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe peach",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain bread",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is bread?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe bread",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain rice",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is rice?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe rice",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain pasta",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is pasta?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe pasta",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain cheese",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is cheese?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe cheese",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain milk",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is milk?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe milk",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain egg",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is egg?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe egg",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain chicken",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is chicken?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe chicken",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain beef",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is beef?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe beef",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain fish",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is fish?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe fish",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain carrot",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is carrot?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe carrot",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain potato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is potato?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe potato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain tomato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "What is tomato?",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Describe tomato",
+    "expect_any": [
+      "edible"
+    ],
+    "expect_prime": "Food"
+  },
+  {
+    "question": "Explain hammer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a hammer?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe hammer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain screwdriver",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a screwdriver?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe screwdriver",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain wrench",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a wrench?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe wrench",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain saw",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a saw?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe saw",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain knife",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a knife?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe knife",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain scissors",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a scissors?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe scissors",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain computer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a computer?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe computer",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain phone",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a phone?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe phone",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain car",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a car?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe car",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain engine",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a engine?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe engine",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain robot",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a robot?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe robot",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain microscope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a microscope?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe microscope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain telescope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a telescope?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe telescope",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain drill",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a drill?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe drill",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain camera",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "What is a camera?",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Describe camera",
+    "expect_any": [
+      "tool",
+      "artificial"
+    ],
+    "expect_prime": "Object"
+  },
+  {
+    "question": "Explain fear",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is fear?",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain joy",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is joy?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain anger",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is anger?",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain sadness",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is sadness?",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain peace",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is peace?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain surprise",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is surprise?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain anxiety",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is anxiety?",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain calm",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is calm?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain pride",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is pride?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain shame",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "What is shame?",
+    "expect_any": [
+      "negative"
+    ],
+    "expect_prime": "Feeling"
+  },
+  {
+    "question": "Explain run",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is run?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain fight",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is fight?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain attack",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is attack?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain hug",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is hug?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain help",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is help?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain build",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is build?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain learn",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is learn?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain teach",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is teach?",
+    "expect_any": [
+      "friendly"
+    ],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain travel",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is travel?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "Explain cook",
+    "expect_any": [],
+    "expect_prime": "Action"
+  },
+  {
+    "question": "What is cook?",
+    "expect_any": [],
+    "expect_prime": "Action"
+  }
+]

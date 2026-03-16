@@ -1,0 +1,300 @@
+{"question": "Explain continuous integration.", "source": "web"}
+{"question": "What is an embedding?", "source": "web"}
+{"question": "What is dependency injection?", "source": "web"}
+{"question": "Explain overfitting simply.", "source": "web"}
+{"question": "What is version control?", "source": "web"}
+{"question": "Explain test-driven development.", "source": "web"}
+{"question": "What is a REST API?", "source": "web"}
+{"question": "What is supervised learning?", "source": "web"}
+{"question": "What is the bias-variance tradeoff?", "source": "web"}
+{"question": "What is a primary key?", "source": "web"}
+{"question": "What is a database index?", "source": "web"}
+{"question": "Explain ACID properties.", "source": "web"}
+{"question": "What is gradient descent?", "source": "web"}
+{"question": "What is a process?", "source": "web"}
+{"question": "Explain normalization in databases.", "source": "web"}
+{"question": "What is data warehousing?", "source": "web"}
+{"question": "Explain a thread vs process.", "source": "web"}
+{"question": "What is a kernel?", "source": "web"}
+{"question": "What is a container?", "source": "web"}
+{"question": "What is a virtual machine?", "source": "web"}
+{"question": "What is phishing?", "source": "web"}
+{"question": "What is encryption?", "source": "web"}
+{"question": "Explain multi-factor authentication.", "source": "web"}
+{"question": "What is SQL injection?", "source": "web"}
+{"question": "What is zero trust?", "source": "web"}
+{"question": "Explain load balancing in simple terms.", "source": "web"}
+{"question": "Give a concise definition of load balancing.", "source": "web"}
+{"question": "Why does load balancing matter?", "source": "web"}
+{"question": "What are common mistakes about load balancing?", "source": "web"}
+{"question": "How does load balancing work?", "source": "web"}
+{"question": "Provide a real-world example of load balancing.", "source": "web"}
+{"question": "Explain caching in simple terms.", "source": "web"}
+{"question": "Give a concise definition of caching.", "source": "web"}
+{"question": "Provide a real-world example of caching.", "source": "web"}
+{"question": "Why does caching matter?", "source": "web"}
+{"question": "What are common mistakes about caching?", "source": "web"}
+{"question": "Explain feature flags in simple terms.", "source": "web"}
+{"question": "Give a concise definition of feature flags.", "source": "web"}
+{"question": "How does caching work?", "source": "web"}
+{"question": "Why does feature flags matter?", "source": "web"}
+{"question": "Provide a real-world example of feature flags.", "source": "web"}
+{"question": "What are common mistakes about feature flags?", "source": "web"}
+{"question": "How does feature flags work?", "source": "web"}
+{"question": "What are common mistakes about observability?", "source": "web"}
+{"question": "Explain observability in simple terms.", "source": "web"}
+{"question": "Give a concise definition of observability.", "source": "web"}
+{"question": "Why does observability matter?", "source": "web"}
+{"question": "Provide a real-world example of observability.", "source": "web"}
+{"question": "How does observability work?", "source": "web"}
+{"question": "Explain unit testing in simple terms.", "source": "web"}
+{"question": "Give a concise definition of unit testing.", "source": "web"}
+{"question": "Why does unit testing matter?", "source": "web"}
+{"question": "Provide a real-world example of unit testing.", "source": "web"}
+{"question": "What are common mistakes about unit testing?", "source": "web"}
+{"question": "Explain integration testing in simple terms.", "source": "web"}
+{"question": "How does unit testing work?", "source": "web"}
+{"question": "Give a concise definition of integration testing.", "source": "web"}
+{"question": "Why does integration testing matter?", "source": "web"}
+{"question": "Provide a real-world example of integration testing.", "source": "web"}
+{"question": "What are common mistakes about integration testing?", "source": "web"}
+{"question": "How does integration testing work?", "source": "web"}
+{"question": "Explain API rate limiting in simple terms.", "source": "web"}
+{"question": "Why does API rate limiting matter?", "source": "web"}
+{"question": "Give a concise definition of API rate limiting.", "source": "web"}
+{"question": "Provide a real-world example of API rate limiting.", "source": "web"}
+{"question": "What are common mistakes about data pipeline?", "source": "web"}
+{"question": "Why does data pipeline matter?", "source": "web"}
+{"question": "Give a concise definition of data pipeline.", "source": "web"}
+{"question": "How does API rate limiting work?", "source": "web"}
+{"question": "Provide a real-world example of data pipeline.", "source": "web"}
+{"question": "What are common mistakes about API rate limiting?", "source": "web"}
+{"question": "Explain data pipeline in simple terms.", "source": "web"}
+{"question": "How does data pipeline work?", "source": "web"}
+{"question": "Explain distributed systems in simple terms.", "source": "web"}
+{"question": "Give a concise definition of distributed systems.", "source": "web"}
+{"question": "Why does distributed systems matter?", "source": "web"}
+{"question": "Provide a real-world example of distributed systems.", "source": "web"}
+{"question": "What are common mistakes about distributed systems?", "source": "web"}
+{"question": "How does distributed systems work?", "source": "web"}
+{"question": "Explain consensus in simple terms.", "source": "web"}
+{"question": "Give a concise definition of consensus.", "source": "web"}
+{"question": "Why does consensus matter?", "source": "web"}
+{"question": "What are common mistakes about consensus?", "source": "web"}
+{"question": "How does consensus work?", "source": "web"}
+{"question": "Provide a real-world example of consensus.", "source": "web"}
+{"question": "Explain schema migration in simple terms.", "source": "web"}
+{"question": "Why does schema migration matter?", "source": "web"}
+{"question": "Give a concise definition of schema migration.", "source": "web"}
+{"question": "What are common mistakes about schema migration?", "source": "web"}
+{"question": "Provide a real-world example of schema migration.", "source": "web"}
+{"question": "How does schema migration work?", "source": "web"}
+{"question": "Explain vector search in simple terms.", "source": "web"}
+{"question": "Why does vector search matter?", "source": "web"}
+{"question": "Give a concise definition of vector search.", "source": "web"}
+{"question": "Provide a real-world example of vector search.", "source": "web"}
+{"question": "What are common mistakes about vector search?", "source": "web"}
+{"question": "Explain semantic search in simple terms.", "source": "web"}
+{"question": "Give a concise definition of semantic search.", "source": "web"}
+{"question": "Why does semantic search matter?", "source": "web"}
+{"question": "How does vector search work?", "source": "web"}
+{"question": "Provide a real-world example of semantic search.", "source": "web"}
+{"question": "What are common mistakes about semantic search?", "source": "web"}
+{"question": "How does semantic search work?", "source": "web"}
+{"question": "Explain content moderation in simple terms.", "source": "web"}
+{"question": "Give a concise definition of content moderation.", "source": "web"}
+{"question": "Provide a real-world example of content moderation.", "source": "web"}
+{"question": "What are common mistakes about content moderation?", "source": "web"}
+{"question": "Why does content moderation matter?", "source": "web"}
+{"question": "Explain data governance in simple terms.", "source": "web"}
+{"question": "Give a concise definition of data governance.", "source": "web"}
+{"question": "How does content moderation work?", "source": "web"}
+{"question": "Why does data governance matter?", "source": "web"}
+{"question": "Provide a real-world example of data governance.", "source": "web"}
+{"question": "What are common mistakes about data governance?", "source": "web"}
+{"question": "How does data governance work?", "source": "web"}
+{"question": "Explain privacy by design in simple terms.", "source": "web"}
+{"question": "Give a concise definition of privacy by design.", "source": "web"}
+{"question": "Why does privacy by design matter?", "source": "web"}
+{"question": "Provide a real-world example of privacy by design.", "source": "web"}
+{"question": "What are common mistakes about privacy by design?", "source": "web"}
+{"question": "How does privacy by design work?", "source": "web"}
+{"question": "Explain latency in simple terms.", "source": "web"}
+{"question": "Give a concise definition of latency.", "source": "web"}
+{"question": "Why does latency matter?", "source": "web"}
+{"question": "Provide a real-world example of latency.", "source": "web"}
+{"question": "How does latency work?", "source": "web"}
+{"question": "What are common mistakes about latency?", "source": "web"}
+{"question": "Explain throughput in simple terms.", "source": "web"}
+{"question": "Give a concise definition of throughput.", "source": "web"}
+{"question": "Why does throughput matter?", "source": "web"}
+{"question": "Provide a real-world example of throughput.", "source": "web"}
+{"question": "What are common mistakes about throughput?", "source": "web"}
+{"question": "Explain backpressure in simple terms.", "source": "web"}
+{"question": "How does throughput work?", "source": "web"}
+{"question": "Give a concise definition of backpressure.", "source": "web"}
+{"question": "Why does backpressure matter?", "source": "web"}
+{"question": "What are common mistakes about backpressure?", "source": "web"}
+{"question": "What are common mistakes about event sourcing?", "source": "web"}
+{"question": "Explain event sourcing in simple terms.", "source": "web"}
+{"question": "Provide a real-world example of event sourcing.", "source": "web"}
+{"question": "Give a concise definition of event sourcing.", "source": "web"}
+{"question": "How does backpressure work?", "source": "web"}
+{"question": "Provide a real-world example of backpressure.", "source": "web"}
+{"question": "Why does event sourcing matter?", "source": "web"}
+{"question": "What are common mistakes about message queue?", "source": "web"}
+{"question": "Provide a real-world example of message queue.", "source": "web"}
+{"question": "How does message queue work?", "source": "web"}
+{"question": "Explain task scheduler in simple terms.", "source": "web"}
+{"question": "Why does message queue matter?", "source": "web"}
+{"question": "Explain message queue in simple terms.", "source": "web"}
+{"question": "How does event sourcing work?", "source": "web"}
+{"question": "Give a concise definition of message queue.", "source": "web"}
+{"question": "Give a concise definition of task scheduler.", "source": "web"}
+{"question": "Why does task scheduler matter?", "source": "web"}
+{"question": "Provide a real-world example of task scheduler.", "source": "web"}
+{"question": "What are common mistakes about task scheduler?", "source": "web"}
+{"question": "Why does service mesh matter?", "source": "web"}
+{"question": "Give a concise definition of service mesh.", "source": "web"}
+{"question": "Explain service mesh in simple terms.", "source": "web"}
+{"question": "How does task scheduler work?", "source": "web"}
+{"question": "Provide a real-world example of service mesh.", "source": "web"}
+{"question": "What are common mistakes about service mesh?", "source": "web"}
+{"question": "How does service mesh work?", "source": "web"}
+{"question": "Why does idempotency matter?", "source": "web"}
+{"question": "Explain idempotency in simple terms.", "source": "web"}
+{"question": "Provide a real-world example of idempotency.", "source": "web"}
+{"question": "Give a concise definition of idempotency.", "source": "web"}
+{"question": "What are common mistakes about idempotency?", "source": "web"}
+{"question": "How does idempotency work?", "source": "web"}
+{"question": "Explain retry strategy in simple terms.", "source": "web"}
+{"question": "Give a concise definition of retry strategy.", "source": "web"}
+{"question": "Why does retry strategy matter?", "source": "web"}
+{"question": "Provide a real-world example of retry strategy.", "source": "web"}
+{"question": "What are common mistakes about retry strategy?", "source": "web"}
+{"question": "How does retry strategy work?", "source": "web"}
+{"question": "Explain exponential backoff in simple terms.", "source": "web"}
+{"question": "Give a concise definition of exponential backoff.", "source": "web"}
+{"question": "Why does exponential backoff matter?", "source": "web"}
+{"question": "Provide a real-world example of exponential backoff.", "source": "web"}
+{"question": "What are common mistakes about exponential backoff?", "source": "web"}
+{"question": "How does exponential backoff work?", "source": "web"}
+{"question": "Give a concise definition of circuit breaker.", "source": "web"}
+{"question": "Explain circuit breaker in simple terms.", "source": "web"}
+{"question": "Why does circuit breaker matter?", "source": "web"}
+{"question": "Provide a real-world example of circuit breaker.", "source": "web"}
+{"question": "What are common mistakes about circuit breaker?", "source": "web"}
+{"question": "How does circuit breaker work?", "source": "web"}
+{"question": "Explain auth token in simple terms.", "source": "web"}
+{"question": "Give a concise definition of auth token.", "source": "web"}
+{"question": "Why does auth token matter?", "source": "web"}
+{"question": "Provide a real-world example of auth token.", "source": "web"}
+{"question": "What are common mistakes about auth token?", "source": "web"}
+{"question": "Explain API gateway in simple terms.", "source": "web"}
+{"question": "How does auth token work?", "source": "web"}
+{"question": "Give a concise definition of API gateway.", "source": "web"}
+{"question": "Why does API gateway matter?", "source": "web"}
+{"question": "What are common mistakes about API gateway?", "source": "web"}
+{"question": "How does API gateway work?", "source": "web"}
+{"question": "Provide a real-world example of API gateway.", "source": "web"}
+{"question": "Explain edge computing in simple terms.", "source": "web"}
+{"question": "Provide a real-world example of edge computing.", "source": "web"}
+{"question": "Give a concise definition of edge computing.", "source": "web"}
+{"question": "Why does edge computing matter?", "source": "web"}
+{"question": "What are common mistakes about edge computing?", "source": "web"}
+{"question": "Explain feature store in simple terms.", "source": "web"}
+{"question": "How does edge computing work?", "source": "web"}
+{"question": "Why does feature store matter?", "source": "web"}
+{"question": "Give a concise definition of feature store.", "source": "web"}
+{"question": "What are common mistakes about feature store?", "source": "web"}
+{"question": "Provide a real-world example of feature store.", "source": "web"}
+{"question": "How does feature store work?", "source": "web"}
+{"question": "Explain model drift in simple terms.", "source": "web"}
+{"question": "Give a concise definition of model drift.", "source": "web"}
+{"question": "Provide a real-world example of model drift.", "source": "web"}
+{"question": "What are common mistakes about model drift?", "source": "web"}
+{"question": "Why does model drift matter?", "source": "web"}
+{"question": "Give a concise definition of prompt injection.", "source": "web"}
+{"question": "How does model drift work?", "source": "web"}
+{"question": "Explain prompt injection in simple terms.", "source": "web"}
+{"question": "Why does prompt injection matter?", "source": "web"}
+{"question": "What are common mistakes about prompt injection?", "source": "web"}
+{"question": "Provide a real-world example of prompt injection.", "source": "web"}
+{"question": "How does prompt injection work?", "source": "web"}
+{"question": "Explain RAG in simple terms.", "source": "web"}
+{"question": "Give a concise definition of RAG.", "source": "web"}
+{"question": "Why does RAG matter?", "source": "web"}
+{"question": "Provide a real-world example of RAG.", "source": "web"}
+{"question": "What are common mistakes about RAG?", "source": "web"}
+{"question": "How does RAG work?", "source": "web"}
+{"question": "Explain knowledge graph in simple terms.", "source": "web"}
+{"question": "Give a concise definition of knowledge graph.", "source": "web"}
+{"question": "Why does knowledge graph matter?", "source": "web"}
+{"question": "Provide a real-world example of knowledge graph.", "source": "web"}
+{"question": "What are common mistakes about knowledge graph?", "source": "web"}
+{"question": "How does knowledge graph work?", "source": "web"}
+{"question": "Explain tokenization in simple terms.", "source": "web"}
+{"question": "Give a concise definition of tokenization.", "source": "web"}
+{"question": "Provide a real-world example of tokenization.", "source": "web"}
+{"question": "What are common mistakes about tokenization?", "source": "web"}
+{"question": "Why does tokenization matter?", "source": "web"}
+{"question": "Give a concise definition of serialization.", "source": "web"}
+{"question": "How does tokenization work?", "source": "web"}
+{"question": "Explain serialization in simple terms.", "source": "web"}
+{"question": "Why does serialization matter?", "source": "web"}
+{"question": "Provide a real-world example of serialization.", "source": "web"}
+{"question": "What are common mistakes about serialization?", "source": "web"}
+{"question": "How does serialization work?", "source": "web"}
+{"question": "Explain profiling in simple terms.", "source": "web"}
+{"question": "Give a concise definition of profiling.", "source": "web"}
+{"question": "Provide a real-world example of profiling.", "source": "web"}
+{"question": "Why does profiling matter?", "source": "web"}
+{"question": "What are common mistakes about profiling?", "source": "web"}
+{"question": "How does profiling work?", "source": "web"}
+{"question": "Why does deadlock matter?", "source": "web"}
+{"question": "Explain deadlock in simple terms.", "source": "web"}
+{"question": "Give a concise definition of deadlock.", "source": "web"}
+{"question": "Provide a real-world example of deadlock.", "source": "web"}
+{"question": "How does deadlock work?", "source": "web"}
+{"question": "What are common mistakes about deadlock?", "source": "web"}
+{"question": "Give a concise definition of race condition.", "source": "web"}
+{"question": "Explain race condition in simple terms.", "source": "web"}
+{"question": "Why does race condition matter?", "source": "web"}
+{"question": "Provide a real-world example of race condition.", "source": "web"}
+{"question": "What are common mistakes about race condition?", "source": "web"}
+{"question": "Give a concise definition of memory leak.", "source": "web"}
+{"question": "Explain memory leak in simple terms.", "source": "web"}
+{"question": "How does race condition work?", "source": "web"}
+{"question": "Provide a real-world example of memory leak.", "source": "web"}
+{"question": "Why does memory leak matter?", "source": "web"}
+{"question": "How does memory leak work?", "source": "web"}
+{"question": "Explain garbage collection in simple terms.", "source": "web"}
+{"question": "What are common mistakes about memory leak?", "source": "web"}
+{"question": "Give a concise definition of garbage collection.", "source": "web"}
+{"question": "Provide a real-world example of garbage collection.", "source": "web"}
+{"question": "Why does garbage collection matter?", "source": "web"}
+{"question": "What are common mistakes about garbage collection?", "source": "web"}
+{"question": "How does garbage collection work?", "source": "web"}
+{"question": "Explain CPU cache in simple terms.", "source": "web"}
+{"question": "Why does CPU cache matter?", "source": "web"}
+{"question": "Give a concise definition of CPU cache.", "source": "web"}
+{"question": "Provide a real-world example of CPU cache.", "source": "web"}
+{"question": "How does CPU cache work?", "source": "web"}
+{"question": "Explain I/O bound vs CPU bound in simple terms.", "source": "web"}
+{"question": "What are common mistakes about CPU cache?", "source": "web"}
+{"question": "Give a concise definition of I/O bound vs CPU bound.", "source": "web"}
+{"question": "What are common mistakes about I/O bound vs CPU bound?", "source": "web"}
+{"question": "Provide a real-world example of I/O bound vs CPU bound.", "source": "web"}
+{"question": "Why does I/O bound vs CPU bound matter?", "source": "web"}
+{"question": "How does I/O bound vs CPU bound work?", "source": "web"}
+{"question": "Explain deployment pipeline in simple terms.", "source": "web"}
+{"question": "Provide a real-world example of deployment pipeline.", "source": "web"}
+{"question": "Give a concise definition of deployment pipeline.", "source": "web"}
+{"question": "How does deployment pipeline work?", "source": "web"}
+{"question": "Why does deployment pipeline matter?", "source": "web"}
+{"question": "Explain blue green deployment in simple terms.", "source": "web"}
+{"question": "What are common mistakes about deployment pipeline?", "source": "web"}
+{"question": "Give a concise definition of blue green deployment.", "source": "web"}
+{"question": "What are common mistakes about blue green deployment?", "source": "web"}
+{"question": "Provide a real-world example of blue green deployment.", "source": "web"}
+{"question": "Why does blue green deployment matter?", "source": "web"}

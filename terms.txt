@@ -1,0 +1,11 @@
+dog
+cat
+lion
+tiger
+panda
+giraffe
+elephant
+apple
+banana
+car
+computer

@@ -1,0 +1,1664 @@
+{
+  "otter": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "term": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mitochondrial mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chromosomal mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "birth mother of dolly the sheep": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "royana": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "oyal\u0131": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "megan and morag": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sonny wool": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wether": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tracy": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anomalous double sheep at lausanne natural history museum": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "double diamond": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "fiona": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "churra galega bragan\u00e7ana branca": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "duldul": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "balaenoptera physalus skeleton": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "shrek": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chris": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "yamashita cave man": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thechikottukavu ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ambalappuzha ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ambalapuzha vijayakrishnan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur padmanabhan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur lakshmikkutti": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chengallor ranganathan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thiruvalla jayachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "malayalapuzha rajan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "thechikotukav ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayoor ramachandran": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur elite narayanankutti": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "guruvayur pazhaya padmanabhan": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chengalloor dakshayani": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wolfdog": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "jackal\u2013dog hybrid": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "dogxim": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ]
+  },
+  "new york": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lizzie the elephant": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bubbles": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "twelves": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gas station sushi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "courser": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "vizir": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "pit pony": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "american belgian draft": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "little brown jug": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bj\u00f6rsells briar 899": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ferdinand bb": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "allstar b (horse)": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "utter": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nijinsky": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "skowronek": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "man o' war": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "florizel": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "marengo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sunday silence": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hatsushiba o": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "allabaculia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "huaso": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "st. simon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gidde palema": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "abdullah": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "prometea": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "acatenango": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "adlerflug": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bonfire": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lexington": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "tikkanen": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cigar": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "eri-aaroni": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "phar lap": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ahlerich": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "victoria park": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "aiken cura": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "citation": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dahlia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kincsem": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "angelzarke": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "malacara": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nino des buissonnets": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "trigger": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "artificial": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "intelligence": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mouse": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "giraffe": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "godolphin arabian": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "alleged": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dalakhani": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bucephalus": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "wakataka": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gigolo frh": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "electrocutionist": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "royal ski": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "deep impact": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "admire don": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "devil diver": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bairactar": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "beauty": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "silent witness": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "indigenous": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "salinero": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "big ben": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ratina z": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "borgia": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "overdose": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "highflyer": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sassafras": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "curlin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "incitatus": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "docs keepin time": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "totilas": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "traveller": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "green moon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sakhee": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q1001792": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rock of gibraltar": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "danehill": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lammtarra": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "burmese": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "byerley turk": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "caletto i": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "caletto ii": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "calvaro z": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "majestic prince": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nonoalco": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cassini i": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "catoki": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dubai millennium": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chambertin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "native dancer": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ruffian": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "goldikova": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "zarkava": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "imperi\u00e1l": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "matchem": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "danzig": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sadler's wells": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "mr. prospector": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "comanche": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cond\u00e9": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "clever hans": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cor de la bryere": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cornet obolensky": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "secretariat": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dai jin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "danedream": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "copenhagen": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dark ronald": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "darley arabian": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "deister": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "eclipse": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "donnerhall": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "herodot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "morzillo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kelso": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "workforce": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "erdeni": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "war admiral": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "herold": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "for pleasure": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "snowman": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "blacklock": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "seattle slew": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hadban enzahi": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "galopin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "seabiscuit": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "silbersee": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cirrus des aigles": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ticino": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "monte bellini": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "halla": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "haru urara": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "helene": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hickstead": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "jalisco b": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sefton": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kidron": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kolibri": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "nereide": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "k\u00f6nigsstuhl": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q1462701": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "goldfever": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "q1557423": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "little sorrel": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "jalisca solier": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "elephant": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "ai": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "computer": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "fox": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "zebra": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rhino": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "hippo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "kangaroo": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "panda": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "camel": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "bison": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chimpanzee": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "gorilla": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "monkey": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "dolphin": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "owl": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "falcon": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "penguin": {
+    "prime": "Animal",
+    "path": [
+      "Non-Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  },
+  "snake": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "lizard": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "toad": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rabbit": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "rat": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "orange": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "grape": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "strawberry": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "cheese": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "milk": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "egg": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "chicken": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Domestic",
+      "Herbivore"
+    ]
+  },
+  "beef": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Carnivore"
+    ]
+  },
+  "carrot": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "potato": {
+    "prime": "Food",
+    "path": [
+      "Non-Fruit",
+      "Cooked"
+    ]
+  },
+  "tomato": {
+    "prime": "Food",
+    "path": [
+      "Fruit",
+      "Cooked"
+    ]
+  },
+  "screwdriver": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "wrench": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Mechanical"
+    ]
+  },
+  "saw": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "phone": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "engine": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Mechanical"
+    ]
+  },
+  "robot": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Mechanical"
+    ]
+  },
+  "microscope": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "telescope": {
+    "prime": "Object",
+    "path": [
+      "Tool",
+      "Natural"
+    ]
+  },
+  "drill": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "sadnes": {
+    "prime": "Feeling",
+    "path": [
+      "Negative",
+      "Arousal"
+    ]
+  },
+  "surprise": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "anxiety": {
+    "prime": "Feeling",
+    "path": [
+      "Negative",
+      "Arousal"
+    ]
+  },
+  "pride": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "build": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "learn": {
+    "prime": "Object",
+    "path": [
+      "Non-Tool",
+      "Natural"
+    ]
+  },
+  "travel": {
+    "prime": "Animal",
+    "path": [
+      "Mammal",
+      "Wild",
+      "Herbivore"
+    ]
+  }
+}
