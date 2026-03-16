@@ -2,6 +2,11 @@ __pycache__/
 *.pyc
 .DS_Store
 .idea/
+.venv/
+animal1010101/wikidata_cache.json
+animal1010101/lexicon_snapshots/
+flux_app/logs/
+flux_app/data/
 sandboxes/
 evolver_memory.json
 master_ai/reports/

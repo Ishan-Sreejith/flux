@@ -1,6 +1,0 @@
-127.0.0.1 - - [15/Mar/2026 10:06:46] "GET /ask_stream?question=artificial+intelligence&refresh=0&grade_level=10 HTTP/1.1" 200 -
-127.0.0.1 - - [15/Mar/2026 10:07:29] "GET /ask_stream?question=osama+bin+laden&refresh=0&grade_level=10 HTTP/1.1" 200 -
-127.0.0.1 - - [15/Mar/2026 10:07:43] "GET /ask_stream?question=1+%2B+1&refresh=0&grade_level=10 HTTP/1.1" 200 -
-127.0.0.1 - - [15/Mar/2026 10:47:59] "POST /ask HTTP/1.1" 200 -
-127.0.0.1 - - [15/Mar/2026 10:48:07] "POST /ask HTTP/1.1" 200 -
-127.0.0.1 - - [15/Mar/2026 10:48:07] "POST /ask HTTP/1.1" 200 -
