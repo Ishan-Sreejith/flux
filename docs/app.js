@@ -30,6 +30,7 @@ const state = {
   vocab: [],
   vocabIndex: {},
   matrix: [],
+  hashMatrix: [],
   entryVectors: [],
   embedDim: 32,
   lastQuery: "",
@@ -253,19 +254,30 @@ function buildMatrix() {
   const stored = loadMatrix(embedDim);
   if (stored && stored.length === embedDim && stored[0]?.length === vocabSize) {
     state.matrix = stored;
-    return;
-  }
-  const rng = mulberry32(1337);
-  const matrix = [];
-  for (let i = 0; i < embedDim; i++) {
-    const row = new Array(vocabSize).fill(0);
-    for (let j = 0; j < vocabSize; j++) {
-      row[j] = (rng() - 0.5) * 0.2;
+  } else {
+    const rng = mulberry32(1337);
+    const matrix = [];
+    for (let i = 0; i < embedDim; i++) {
+      const row = new Array(vocabSize).fill(0);
+      for (let j = 0; j < vocabSize; j++) {
+        row[j] = (rng() - 0.5) * 0.2;
+      }
+      matrix.push(row);
     }
-    matrix.push(row);
+    state.matrix = matrix;
+    saveMatrix();
   }
-  state.matrix = matrix;
-  saveMatrix();
+  const hashSize = 512;
+  const rngHash = mulberry32(7331);
+  const hashMatrix = [];
+  for (let i = 0; i < embedDim; i++) {
+    const row = new Array(hashSize).fill(0);
+    for (let j = 0; j < hashSize; j++) {
+      row[j] = (rngHash() - 0.5) * 0.2;
+    }
+    hashMatrix.push(row);
+  }
+  state.hashMatrix = hashMatrix;
 }
 
 function vectorize(text) {
@@ -274,6 +286,19 @@ function vectorize(text) {
     if (STOPWORDS.has(tok)) continue;
     const idx = state.vocabIndex[tok];
     if (idx !== undefined) vec[idx] += 1;
+  }
+  return vec;
+}
+
+function hashVectorize(text, size) {
+  const vec = new Array(size).fill(0);
+  for (const tok of tokenize(text)) {
+    if (STOPWORDS.has(tok)) continue;
+    let h = 0;
+    for (let i = 0; i < tok.length; i++) {
+      h = (h * 31 + tok.charCodeAt(i)) >>> 0;
+    }
+    vec[h % size] += 1;
   }
   return vec;
 }
@@ -298,7 +323,13 @@ function normalize(vec) {
 
 function embedText(text) {
   const bow = vectorize(text);
-  return normalize(matmul(state.matrix, bow));
+  const base = bow.reduce((acc, v) => acc + v, 0) > 0 && state.matrix.length
+    ? normalize(matmul(state.matrix, bow))
+    : null;
+  if (base) return base;
+  const hashSize = state.hashMatrix[0]?.length || 512;
+  const hvec = hashVectorize(text, hashSize);
+  return normalize(matmul(state.hashMatrix, hvec));
 }
 
 function buildEntryVectors() {

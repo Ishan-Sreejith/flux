@@ -30,9 +30,10 @@ body.light {
 
 body {
   margin: 0;
-  font-family: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+  font-family: "Atkinson Hyperlegible", "IBM Plex Sans", "Inter Tight", "Segoe UI", system-ui, sans-serif;
   background: radial-gradient(circle at top, #172033, #0e0f12 40%);
   color: var(--text);
+  line-height: 1.6;
 }
 
 body.light {
@@ -68,12 +69,13 @@ body.light {
 
 h1 {
   margin: 0 0 10px;
-  font-size: 30px;
+  font-size: 32px;
 }
 
 p {
   margin: 0;
   color: var(--muted);
+  font-size: 15px;
 }
 
 .card {
@@ -95,11 +97,12 @@ p {
 
 input {
   flex: 1 1 240px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--panel-2);
   color: var(--text);
+  font-size: 14px;
 }
 
 select {
@@ -111,13 +114,14 @@ select {
 }
 
 button {
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-radius: 10px;
   border: 1px solid transparent;
   background: linear-gradient(135deg, var(--accent), #5ab7ff);
   color: #0c1119;
   font-weight: 600;
   cursor: pointer;
+  font-size: 14px;
 }
 
 button.ghost {
@@ -144,7 +148,7 @@ button:hover {
   padding: 12px;
   color: var(--text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .section-title {
@@ -234,7 +238,7 @@ button:hover {
 .terminal__log {
   flex: 1;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text);
   overflow-y: auto;
   white-space: pre-wrap;
@@ -258,7 +262,7 @@ button:hover {
   background: transparent;
   border: none;
   color: var(--text);
-  font-size: 12px;
+  font-size: 13px;
   outline: none;
 }
 
