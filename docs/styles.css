@@ -47,6 +47,39 @@ body.light {
   animation: fadeUp 0.5s ease;
 }
 
+.minimal {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 18px;
+  height: 100vh;
+  padding: 18px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 18px 40px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel.left {
+  align-items: flex-start;
+}
+
+.panel.right {
+  overflow: hidden;
+}
+
+.input-row {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
 .hero {
   padding: 28px;
   border-radius: 20px;
@@ -252,6 +285,12 @@ input[type="range"] {
   border: 1px solid var(--border);
   overflow-x: auto;
   color: var(--text);
+}
+
+.flowchart.full {
+  margin-top: 0;
+  flex: 1;
+  height: 100%;
 }
 
 .terminal-card {

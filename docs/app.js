@@ -434,15 +434,26 @@ function formatAnswer(question, matches, params, prime) {
 }
 
 function flowchartFor(prime, path) {
-  if (!path || !path.length) return "flowchart TD\nA[Input] --> B[Unknown]";
-  let lines = "flowchart TD\nA[Input] --> B[" + path[0] + "]";
-  for (let i = 1; i < path.length; i++) {
-    const from = String.fromCharCode(66 + i - 1);
-    const to = String.fromCharCode(66 + i);
-    lines += `\n${from} --> ${to}[${path[i]}]`;
+  const tree = state.taxonomy?.primes?.Animal?.tree;
+  if (!tree) return "flowchart TD\nA[Animal] --> B[Unknown]";
+  const nodes = [];
+  const edges = [];
+  let id = 0;
+  function walk(node, parentId) {
+    const nodeId = `N${id++}`;
+    nodes.push(`${nodeId}[${node.name}]`);
+    if (parentId) edges.push(`${parentId} --> ${nodeId}`);
+    if (node.yes) walk(node.yes, nodeId);
+    if (node.no) walk(node.no, nodeId);
   }
-  const last = String.fromCharCode(66 + path.length - 1);
-  lines += `\n${last} --> Z[${prime}]`;
+  walk(tree, "A");
+  let lines = "flowchart TD\nA[Animal]";
+  nodes.forEach((n) => {
+    lines += `\n${n}`;
+  });
+  edges.forEach((e) => {
+    lines += `\n${e}`;
+  });
   return lines;
 }
 
