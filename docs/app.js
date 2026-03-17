@@ -1,5 +1,5 @@
-const taxonomyUrl = "./data/taxonomy.json";
-const lexiconUrl = "./data/lexicon.json";
+const taxonomyUrl = new URL("./data/taxonomy.json", import.meta.url).toString();
+const lexiconUrl = new URL("./data/lexicon.json", import.meta.url).toString();
 
 const state = {
   taxonomy: null,
