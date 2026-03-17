@@ -22,7 +22,7 @@
         </div>
         <label class="toggle">
           <input id="qa-live" type="checkbox" />
-          <span>Use live web override</span>
+          <span>Enable internet</span>
         </label>
         <textarea id="qa-output" class="output" rows="10" readonly></textarea>
         <div class="result-grid">
@@ -35,6 +35,8 @@
             <div id="qa-stats" class="stats"></div>
           </div>
         </div>
+        <div class="sub-title">Flowchart</div>
+        <div id="flowchart" class="flowchart"></div>
       </section>
 
       <section class="card">
@@ -56,6 +58,13 @@
           <label class="toggle">
             <input id="auto-learn" type="checkbox" checked />
             <span>Auto-learn on ask</span>
+          </label>
+          <label class="control">
+            Temperature
+            <div class="range-row">
+              <input id="temperature" type="range" min="0" max="1" step="0.05" value="0.2" />
+              <span id="temperature-val" class="pill">0.20</span>
+            </div>
           </label>
         </div>
         <div class="controls__actions">
@@ -105,6 +114,7 @@
       </footer>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script type="module" src="docs/app.js"></script>
   </body>
 </html>

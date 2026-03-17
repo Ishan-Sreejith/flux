@@ -118,6 +118,7 @@ const STOPWORDS = new Set([
 ]);
 
 const GREETINGS = new Set(["hello", "hi", "hey", "yo", "sup", "hola", "bonjour"]);
+const ANIMAL_HINTS = new Set(["animal", "animals", "mammal", "mammals", "bird", "birds", "fish", "reptile", "insect", "species"]);
 
 function mulberry32(seed) {
   let t = seed >>> 0;
@@ -341,6 +342,8 @@ function buildEntryVectors() {
     return {
       word,
       text,
+      prime: entry?.prime || "",
+      path: entry?.path || [],
       vector: embedText(text),
     };
   });
@@ -352,10 +355,12 @@ function cosine(a, b) {
   return sum;
 }
 
-function searchEntries(query, k = 5) {
+function searchEntries(query, k = 5, filterPrime = "") {
   const qvec = embedText(query);
   const queryTokens = tokenize(query);
-  const scored = state.entryVectors.map((item) => {
+  const scored = state.entryVectors
+    .filter((item) => !filterPrime || item.prime === filterPrime)
+    .map((item) => {
     let score = cosine(qvec, item.vector);
     if (queryTokens.includes(item.word)) score += 0.4;
     if (queryTokens.some((t) => item.word.includes(t) || t.includes(item.word))) score += 0.15;
@@ -428,6 +433,46 @@ function formatAnswer(question, matches, params, prime) {
   return sentences.join("\n");
 }
 
+function flowchartFor(prime, path) {
+  if (!path || !path.length) return "flowchart TD\nA[Input] --> B[Unknown]";
+  let lines = "flowchart TD\nA[Input] --> B[" + path[0] + "]";
+  for (let i = 1; i < path.length; i++) {
+    const from = String.fromCharCode(66 + i - 1);
+    const to = String.fromCharCode(66 + i);
+    lines += `\n${from} --> ${to}[${path[i]}]`;
+  }
+  const last = String.fromCharCode(66 + path.length - 1);
+  lines += `\n${last} --> Z[${prime}]`;
+  return lines;
+}
+
+function renderFlowchart(mermaidText) {
+  const container = document.getElementById("flowchart");
+  if (!container) return;
+  if (!window.mermaid) {
+    container.textContent = mermaidText;
+    return;
+  }
+  container.innerHTML = `<div class="mermaid">${mermaidText}</div>`;
+  window.mermaid.initialize({ startOnLoad: false, theme: "base" });
+  window.mermaid.run({ nodes: [container.querySelector(".mermaid")] });
+}
+
+function applyTemperature(text, temperature) {
+  if (temperature <= 0.05) return text;
+  const lines = text.split("\n");
+  if (lines.length <= 2) return text;
+  const head = lines.slice(0, 2);
+  const tail = lines.slice(2);
+  for (let i = tail.length - 1; i > 0; i--) {
+    if (Math.random() < temperature) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [tail[i], tail[j]] = [tail[j], tail[i]];
+    }
+  }
+  return head.concat(tail).join("\n");
+}
+
 function saveMatrix() {
   const key = `flux_lite_matrix_v1_${state.embedDim}`;
   const payload = {
@@ -478,9 +523,9 @@ function learnFrom(query, targetText, lr) {
 const EVAL_PROMPTS = [
   { prompt: "Explain dogs in simple terms", expected: ["animal", "dog", "pet"] },
   { prompt: "What is a wolf?", expected: ["animal", "wolf", "wild"] },
-  { prompt: "Define apple", expected: ["food", "fruit", "sweet"] },
-  { prompt: "Describe fear", expected: ["feeling", "negative"] },
-  { prompt: "Explain running", expected: ["action", "move"] },
+  { prompt: "Describe a cat", expected: ["animal", "cat", "domestic"] },
+  { prompt: "Explain a whale", expected: ["animal", "mammal", "aquatic"] },
+  { prompt: "What is a sparrow?", expected: ["animal", "bird", "wild"] },
 ];
 
 function scoreAnswer(answer, expected) {
@@ -541,13 +586,14 @@ function runQuery() {
   const live = document.getElementById("qa-live");
   const autoLearn = document.getElementById("auto-learn");
   const learnRateEl = document.getElementById("learn-rate");
+  const tempEl = document.getElementById("temperature");
   const learnStatus = document.getElementById("learn-status");
   const question = input.value.trim();
   if (!question) return;
 
   const rawTokens = tokenize(question);
   if (rawTokens.length === 1 && GREETINGS.has(rawTokens[0])) {
-    output.value = "Hi. Ask a question about a concept, object, or topic.";
+    output.value = "Hi. Ask a question about an animal or species.";
     renderMatches([], matchesEl);
     renderStats(new Array(state.embedDim).fill(0), statsEl);
     return;
@@ -555,14 +601,26 @@ function runQuery() {
   const tokens = rawTokens.filter((t) => !STOPWORDS.has(t));
   const encoded = tokens.map((t) => encode(t)).filter(Boolean);
   const params = aggregateParams(encoded);
-  const prime = encoded[0]?.prime || guessPrime(question);
-  const search = searchEntries(question, 5);
+  const animalFocus = encoded.some((e) => e.prime === "Animal") || rawTokens.some((t) => ANIMAL_HINTS.has(t));
+  if (!animalFocus) {
+    const fallback = searchEntries(question, 5, "Animal");
+    output.value = "This model focuses on animals. Try asking about a specific animal or species.";
+    renderMatches(fallback.results, matchesEl);
+    renderStats(fallback.qvec, statsEl);
+    renderFlowchart(flowchartFor("Animal", fallback.results[0]?.path || []));
+    return;
+  }
+  const prime = "Animal";
+  const search = searchEntries(question, 5, "Animal");
   const summary = formatAnswer(question, search.results, params, prime);
+  const temperature = Number(tempEl?.value || 0.2);
+  const finalSummary = applyTemperature(summary, temperature);
   state.lastQuery = question;
   state.lastBest = search.results[0]?.word || "";
 
   renderMatches(search.results, matchesEl);
   renderStats(search.qvec, statsEl);
+  renderFlowchart(flowchartFor(prime, encoded[0]?.path || search.results[0]?.path || []));
 
   if (autoLearn?.checked && state.lastBest) {
     const lr = Number(learnRateEl?.value || 0.03);
@@ -571,12 +629,12 @@ function runQuery() {
   }
 
   if (live.checked) {
-    output.value = summary + "\n\nFetching Wikipedia summary...";
+    output.value = finalSummary + "\n\nFetching Wikipedia summary...";
     wikiSummary(question).then((extra) => {
-      output.value = extra ? `${summary}\n\nWeb summary:\n${extra}` : summary;
+      output.value = extra ? `${finalSummary}\n\nWeb summary:\n${extra}` : finalSummary;
     });
   } else {
-    output.value = summary;
+    output.value = finalSummary;
   }
 }
 
@@ -607,17 +665,23 @@ function handleTerminalCommand(line) {
     return;
   }
   if (cmd === "search") {
-    const search = searchEntries(arg || trimmed, 5);
+    const search = searchEntries(arg || trimmed, 5, "Animal");
     search.results.forEach((r) => terminalWrite(`${r.word} (${r.score.toFixed(3)})`));
     return;
   }
   if (cmd === "ask") {
     const q = arg || trimmed;
-    const tokens = tokenize(q).filter((t) => !STOPWORDS.has(t));
+    const rawTokens = tokenize(q);
+    const tokens = rawTokens.filter((t) => !STOPWORDS.has(t));
     const encoded = tokens.map((t) => encode(t)).filter(Boolean);
     const params = aggregateParams(encoded);
-    const prime = encoded[0]?.prime || guessPrime(q);
-    const search = searchEntries(q, 5);
+    const animalFocus = encoded.some((e) => e.prime === "Animal") || rawTokens.some((t) => ANIMAL_HINTS.has(t));
+    if (!animalFocus) {
+      terminalWrite("This model focuses on animals. Try asking about an animal or species.");
+      return;
+    }
+    const prime = "Animal";
+    const search = searchEntries(q, 5, "Animal");
     terminalWrite(formatAnswer(q, search.results, params, prime));
     return;
   }
@@ -647,6 +711,8 @@ loadData()
   const themeToggle = document.getElementById("theme-toggle");
   const learnRate = document.getElementById("learn-rate");
   const learnRateVal = document.getElementById("learn-rate-val");
+  const temperature = document.getElementById("temperature");
+  const temperatureVal = document.getElementById("temperature-val");
 
   const savedTheme = localStorage.getItem("flux_lite_theme");
   if (savedTheme === "light") {
@@ -705,6 +771,12 @@ loadData()
     learnRateVal.textContent = Number(learnRate.value).toFixed(3);
     learnRate.addEventListener("input", () => {
       learnRateVal.textContent = Number(learnRate.value).toFixed(3);
+    });
+  }
+  if (temperature && temperatureVal) {
+    temperatureVal.textContent = Number(temperature.value).toFixed(2);
+    temperature.addEventListener("input", () => {
+      temperatureVal.textContent = Number(temperature.value).toFixed(2);
     });
   }
   terminalWrite("Flux Lite terminal ready. Type help.");
