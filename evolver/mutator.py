@@ -51,14 +51,13 @@ class MutationProposal:
 
 
 class Mutator:
-    """Pure internet-driven mutator with zero external AI usage."""
 
     def propose(self, current_source: str, generation: int) -> MutationProposal:
         terms, query, items = self._learn_terms_from_web(generation)
         new_style = self._build_style_string(terms)
         new_source = self._apply_mutation(current_source, new_style, terms)
         if new_source == current_source:
-            # Guaranteed tiny mutation to avoid deadlock if regex did not match.
+
             new_source = current_source.replace(
                 'SYSTEM_STYLE = "clear, concise, factual"',
                 f'SYSTEM_STYLE = "clear, concise, factual (g{generation})"',
@@ -94,7 +93,7 @@ class Mutator:
         tokens = re.findall(r"[a-z]{4,}", text_blob)
         counts = Counter(t for t in tokens if t not in STOPWORDS and not t.isdigit())
         learned = [w for w, _ in counts.most_common(12)] if counts else ["learning", "model", "training"]
-        # Keep web terms first but guarantee task-critical anchors are always present.
+
         merged = []
         for t in learned + benchmark_anchor_terms:
             if t not in merged:
@@ -109,7 +108,7 @@ class Mutator:
     def _apply_mutation(self, current_source: str, new_style: str, terms: List[str]) -> str:
         out = current_source
 
-        # Update SYSTEM_STYLE constant.
+
         out = re.sub(
             r'SYSTEM_STYLE\s*=\s*"[^"]*"',
             f'SYSTEM_STYLE = "{new_style}"',
@@ -117,7 +116,7 @@ class Mutator:
             count=1,
         )
 
-        # Update or insert LEARNED_TERMS list.
+
         learned_terms_literal = json.dumps(terms[:12])
         if "LEARNED_TERMS" in out:
             out = re.sub(
@@ -133,7 +132,7 @@ class Mutator:
                 insert_at = anchor.end()
                 out = out[:insert_at] + f"\nLEARNED_TERMS = {learned_terms_literal}" + out[insert_at:]
 
-        # Nudge instruction to favor concrete terminology.
+
         out = out.replace(
             "Draft answer: explain the key idea and give one concrete example.",
             "Draft answer: explain the key idea, use precise ML terms, and give one concrete example.",

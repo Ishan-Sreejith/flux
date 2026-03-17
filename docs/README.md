@@ -1,17 +1,18 @@
-# Flux Lite Web Demo (GitHub Pages)
+# Flux Lite Web Demo
 
-This folder is a static site. To deploy on GitHub Pages:
+This folder is a static site for GitHub Pages.
 
-1. Push this repo to GitHub.
-2. In GitHub → Settings → Pages:
-   - Source: `Deploy from a branch`
-   - Branch: `main` (or `master`) and `/docs` folder
-3. Save. GitHub Pages will serve the site.
+Publish steps:
+
+1. Push the repo to GitHub.
+2. In GitHub Settings, open Pages.
+3. Choose Deploy from a branch.
+4. Select the main branch and the docs folder.
 
 Local dev:
 
-```bash
-bash /Users/ishan/flux/docs/serve.sh
-```
+Run this in a terminal:
 
-The `.nojekyll` file prevents GitHub Pages from ignoring the `data/` folder.
+bash /Users/ishan/flux/docs/serve.sh
+
+The .nojekyll file keeps the data folder visible on GitHub Pages.

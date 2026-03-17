@@ -49,7 +49,7 @@ class SchemaEngine:
                 if "script" in schema:
                     scripts.append(token)
             else:
-                # Assimilation attempt: map to BaseWord1010101 and create a new schema.
+
                 result = self.lex.encode(token)
                 new_schema = {
                     "type": "object",

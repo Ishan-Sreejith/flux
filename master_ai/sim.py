@@ -337,10 +337,10 @@ def run_simulation(
             finally:
                 ex.shutdown(wait=True)
     except KeyboardInterrupt:
-        # Return partial run dir with events logged so far.
+
         return [], run_dir
 
-    # Fitness test: allow forbidden questions now.
+
     scored = []
     set_forbidden_phrases([p for p in forbidden_phrases if all(p.lower() not in q.lower() for q in forbidden_questions)])
     cache_path = root / "population" / "golden_cache.json"

@@ -63,7 +63,7 @@ def render_with_tone(subject: str, prime: str, traits: list[str], tone: str) -> 
     copula = _stable_choice(style.get("copulas", []), subject + prime)
     closer = _stable_choice(style.get("closers", []), subject)
 
-    trait_text = ", ".join(traits[:5]) if traits else ""  # keep concise
+    trait_text = ", ".join(traits[:5]) if traits else ""
     if trait_text:
         body = f"{subject} {copula} a {prime.lower()} that tends to be {trait_text}"
     else:

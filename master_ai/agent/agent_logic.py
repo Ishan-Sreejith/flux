@@ -31,7 +31,7 @@ def answer(prompt: str, learned: List[Dict[str, str]] | None = None) -> str:
     if facts:
         parts.append("Learned facts: " + " | ".join(facts))
     else:
-        # Fallback: provide a minimal, useful explanation even with no learned facts.
+
         parts.append(
             "Definition: describe the concept in one sentence, then add a simple example and a practical implication."
         )

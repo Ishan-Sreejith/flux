@@ -122,7 +122,7 @@ def main() -> None:
         add(f"Explain {a}", expect, "Action")
         add(f"What is {a}?", expect, "Action")
 
-    # Clean empty expect_any
+
     for q in data:
         q["expect_any"] = [x for x in q.get("expect_any", []) if x]
 

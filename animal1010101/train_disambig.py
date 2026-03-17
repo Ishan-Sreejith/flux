@@ -18,26 +18,26 @@ FEATURES = [
 ]
 
 POSITIVE_TYPES = {
-    "Q16521",  # taxon
-    "Q7432",  # species
-    "Q7377",  # mammal
-    "Q729",  # animal
-    "Q5113",  # bird
-    "Q10811",  # reptile
-    "Q10908",  # amphibian
-    "Q1390",  # insect
-    "Q756",  # plant
+    "Q16521",
+    "Q7432",
+    "Q7377",
+    "Q729",
+    "Q5113",
+    "Q10811",
+    "Q10908",
+    "Q1390",
+    "Q756",
 }
 
 NEGATIVE_TYPES = {
-    "Q5",  # human
-    "Q202444",  # given name
-    "Q101352",  # family name
-    "Q41298",  # magazine/journal
-    "Q571",  # book
-    "Q11424",  # film
-    "Q7366",  # song
-    "Q482994",  # album
+    "Q5",
+    "Q202444",
+    "Q101352",
+    "Q41298",
+    "Q571",
+    "Q11424",
+    "Q7366",
+    "Q482994",
 }
 
 
@@ -103,7 +103,7 @@ def train(dataset_path: Path, out_path: Path, epochs: int = 10, lr: float = 0.3)
             if not correct_feat:
                 continue
 
-            # Pairwise perceptron update
+
             for hid, feat in feat_map:
                 if hid == correct:
                     continue

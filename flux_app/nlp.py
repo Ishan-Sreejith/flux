@@ -76,15 +76,15 @@ def split_sentences(text: str) -> List[str]:
 
 
 def simplify_sentence(sentence: str) -> str:
-    # Remove parenthetical clauses.
+
     sentence = re.sub(r"\([^)]*\)", "", sentence)
     sentence = re.sub(r"\[[^]]*\]", "", sentence)
-    # Replace some complex words.
+
     lowered = sentence.lower()
     for k, v in _SIMPLE_SUBS.items():
         if k in lowered:
             sentence = re.sub(rf"\b{k}\b", v, sentence, flags=re.IGNORECASE)
-    # Compress spaces.
+
     sentence = re.sub(r"\s+", " ", sentence).strip()
     return sentence
 
@@ -108,7 +108,7 @@ def extract_keywords(text: str, max_words: int = 6) -> List[str]:
 
 
 def synthesize_answer(question: str, sources: List[dict], max_sentences: int = 3) -> str:
-    # Build a concise answer from source summaries.
+
     chunks = []
     for src in sources:
         summary = src.get("summary", "") or src.get("text", "") or ""
@@ -118,7 +118,7 @@ def synthesize_answer(question: str, sources: List[dict], max_sentences: int = 3
     sentences = split_sentences(combined)
     if not sentences:
         return ""
-    # Prefer sentences containing keywords from question.
+
     keywords = set(extract_keywords(question))
     scored = []
     for s in sentences:
@@ -138,7 +138,7 @@ def simplify_answer(answer: str, grade_level: int = 10) -> str:
         s = simplify_sentence(s)
         s = limit_sentence(s, max_words=24 if grade_level <= 10 else 28)
         simplified.append(s)
-    # Keep it short for 10th grade.
+
     max_sentences = 3 if grade_level <= 10 else 4
     return " ".join(simplified[:max_sentences]).strip()
 
@@ -151,7 +151,7 @@ def clamp_params(params: Dict) -> Dict:
                 out[k] = int(v)
             except (TypeError, ValueError):
                 continue
-    # Hard bounds
+
     out["readability_level"] = max(6, min(16, out["readability_level"]))
     out["max_sentences"] = max(1, min(6, out["max_sentences"]))
     out["max_words_per_sentence"] = max(10, min(30, out["max_words_per_sentence"]))
@@ -171,9 +171,9 @@ def analyze_text(text: str) -> Dict:
     elif lower.startswith("compare") or " vs " in lower:
         intent = "compare"
 
-    # Entities: simple proper noun heuristic.
+
     entities = re.findall(r"\b[A-Z][a-z]{2,}\b", text)
-    # Sentiment: basic word list.
+
     pos = {"good", "great", "helpful", "benefit", "effective", "positive"}
     neg = {"bad", "harm", "risk", "negative", "problem", "danger"}
     score = sum(1 for t in tokens if t in pos) - sum(1 for t in tokens if t in neg)
@@ -207,7 +207,7 @@ def rewrite_question(question: str, params: Dict, state: Dict) -> str:
 def paraphrase(text: str, strength: int) -> str:
     if strength < 30:
         return text
-    # Light paraphrase by swapping some connectors.
+
     swaps = {
         "because": "since",
         "also": "as well",

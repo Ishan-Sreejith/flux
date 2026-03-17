@@ -70,7 +70,7 @@ def _trait_list(params: dict, weights: dict | None) -> list[str]:
                 continue
             if _sigmoid(_dot(w, params)) >= 0.55:
                 traits.append(t)
-        # Merge rule-based traits to avoid missing obvious signals.
+
         rule_traits = _trait_list(params, None)
         for t in rule_traits:
             if t not in traits:
@@ -151,7 +151,7 @@ def synthesize_answer(simplified, weights: dict | None = None) -> str:
     else:
         prime_guess = _predict_prime(params, weights, prime)
         if weights:
-            # Only override the prime if the model is confident.
+
             score = _sigmoid(_dot(weights.get(f"prime:{prime_guess}", {}), params))
             if score >= 0.65:
                 prime = prime_guess

@@ -115,14 +115,14 @@ def generate_seeds(min_count: int = 300) -> List[str]:
         for tpl in TEMPLATES:
             seeds.append(tpl.format(term))
 
-    # Ensure we have at least min_count items.
+
     if len(seeds) < min_count:
         extras = [
             f"Explain {term} briefly." for term in TERMS
         ]
         seeds.extend(extras)
 
-    # Deduplicate while preserving order.
+
     seen = set()
     unique = []
     for q in seeds:

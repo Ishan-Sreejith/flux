@@ -5,18 +5,18 @@ from typing import List, Tuple
 
 def _load_wordnet():
     try:
-        from nltk.corpus import wordnet as wn  # type: ignore
+        from nltk.corpus import wordnet as wn
 
-        # Touch data to trigger LookupError if missing.
+
         _ = wn.synsets("dog")
         return wn
     except Exception:
         try:
-            import nltk  # type: ignore
+            import nltk
 
             nltk.download("wordnet", quiet=True)
             nltk.download("omw-1.4", quiet=True)
-            from nltk.corpus import wordnet as wn  # type: ignore
+            from nltk.corpus import wordnet as wn
 
             _ = wn.synsets("dog")
             return wn

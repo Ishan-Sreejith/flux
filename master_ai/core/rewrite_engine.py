@@ -44,7 +44,7 @@ def write_config(path: Path, config: Dict[str, float]) -> None:
 def crossover(parent_a: Dict[str, float], parent_b: Dict[str, float]) -> Dict[str, float]:
     keys = list(parent_a.keys())
     random.shuffle(keys)
-    split = len(keys) // 2
+    split = len(keys)
     out = {}
     for k in keys[:split]:
         out[k] = parent_a[k]

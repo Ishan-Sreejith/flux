@@ -10,7 +10,7 @@ from .utils import l2_normalize, tokenize
 
 try:
     from gensim.models import Word2Vec
-except Exception:  # pragma: no cover
+except Exception:
     Word2Vec = None
 
 
@@ -40,7 +40,7 @@ def embed_text(text: str, dim: int = EMBED_DIM) -> List[float]:
 
     model = load_model(dim)
     if model is None:
-        # Fallback to stable hashed bag-of-words if Word2Vec is unavailable.
+
         vec = [0.0] * dim
         for tok in tokens:
             digest = hashlib.sha256(tok.encode("utf-8", errors="ignore")).hexdigest()

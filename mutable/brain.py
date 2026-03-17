@@ -18,7 +18,7 @@ def _pick_focus_terms(prompt: str) -> List[str]:
         terms.extend(["supervised", "unsupervised", "labels"])
     if not terms:
         terms.extend(LEARNED_TERMS[:3])
-    # Preserve order while dropping duplicates.
+
     seen = set()
     out: List[str] = []
     for t in terms:
@@ -67,7 +67,6 @@ def answer(
     research: List[Dict[str, str]] | None = None,
     learned_memory: List[Dict[str, str]] | None = None,
 ) -> str:
-    """Return a natural-language answer using any learned memory facts."""
     prompt = (prompt or "").strip()
     if not prompt:
         return "Please ask a specific question so I can help."

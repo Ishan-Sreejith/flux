@@ -55,7 +55,7 @@ def main() -> None:
             _load_learned(agent_dir, max_items=200)
             print(answer(agent_dir, args.question))
             return
-        # chat mode
+
         print("Chat mode. Press Ctrl+C to exit.")
         try:
             while True:

@@ -22,6 +22,7 @@ from .config import (
     REQUEST_TIME_BUDGET_MS,
 )
 from .embeddings import embed_text, update_model
+from .experimental import experimental_sources
 from .nlp import clamp_params, compose_answer, rewrite_question
 from .retrieval import fuse_scores, semantic_scores, tfidf_scores, top_k
 from .storage import (
@@ -209,6 +210,7 @@ class BackendHandler(BaseHTTPRequestHandler):
             refresh = (qs.get("refresh") or ["0"])[0] == "1"
             grade_level = int((qs.get("grade_level") or ["10"])[0])
             session_id = (qs.get("session_id") or ["default"])[0]
+            mode = (qs.get("mode") or ["default"])[0]
             self._send_sse_headers()
             if not question:
                 self._sse_send({"delta": "Please ask a specific question.", "done": True})
@@ -218,6 +220,7 @@ class BackendHandler(BaseHTTPRequestHandler):
                 refresh=refresh,
                 grade_level=grade_level,
                 session_id=session_id,
+                mode=mode,
             )
             text = answer["answer"]
             for chunk in chunk_words(text, size=12):
@@ -248,6 +251,7 @@ class BackendHandler(BaseHTTPRequestHandler):
             refresh = bool(payload.get("refresh", False))
             grade_level = int(payload.get("grade_level", 10))
             session_id = str(payload.get("session_id", "default"))
+            mode = str(payload.get("mode", "default"))
             if not question:
                 self._send_json({"error": "question required"}, code=400)
                 return
@@ -256,6 +260,7 @@ class BackendHandler(BaseHTTPRequestHandler):
                 refresh=refresh,
                 grade_level=grade_level,
                 session_id=session_id,
+                mode=mode,
             )
             self._send_json(answer)
             return
@@ -390,6 +395,7 @@ class BackendHandler(BaseHTTPRequestHandler):
         force_web: bool = False,
         grade_level: int = 10,
         session_id: str = "default",
+        mode: str = "default",
     ) -> Dict:
         start_ms = monotonic_ms()
         conn = connect()
@@ -421,6 +427,8 @@ class BackendHandler(BaseHTTPRequestHandler):
         web = web_answer(rewritten, fast=True, max_sources=3, time_budget_ms=budget_ms)
         answer_text = web.get("answer", "")
         sources = web.get("sources", [])
+        if mode == "experimental":
+            sources = experimental_sources(rewritten) + sources
         if not answer_text or not sources:
             conn.close()
             return {
@@ -436,7 +444,7 @@ class BackendHandler(BaseHTTPRequestHandler):
         if len(session["history"]) > MAX_SESSION_HISTORY:
             session["history"] = session["history"][-MAX_SESSION_HISTORY:]
 
-        # Dedupe: if a very similar entry exists, update weight instead of inserting.
+
         best = _best_similarity(question, embeddings, dim=active_dim)
         if best and best.get("score", 0.0) >= 0.9:
             update_knowledge(

@@ -2,6 +2,7 @@ const chat = document.getElementById("chat");
 const form = document.getElementById("ask-form");
 const input = document.getElementById("question");
 const refresh = document.getElementById("refresh");
+const experimental = document.getElementById("experimental");
 const askGrade = document.getElementById("ask-grade");
 const trainInput = document.getElementById("train-input");
 const trainButton = document.getElementById("train-submit");
@@ -162,6 +163,7 @@ form.addEventListener("submit", (event) => {
     refresh: refresh.checked ? "1" : "0",
     grade_level: String(Number(askGrade.value || 10)),
     session_id: sessionId,
+    mode: experimental && experimental.checked ? "experimental" : "default",
   });
 
   const source = new EventSource(`${apiBase}/ask_stream?${params.toString()}`);

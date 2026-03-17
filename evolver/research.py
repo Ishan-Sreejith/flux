@@ -68,7 +68,6 @@ def _wikipedia_research(query: str, max_results: int) -> List[Dict[str, str]]:
 
 
 def internet_research(query: str, max_results: int = 3) -> List[Dict[str, str]]:
-    """Aggregate lightweight research from multiple internet sources."""
     out: List[Dict[str, str]] = []
     try:
         out.extend(_ddg_research(query, max_results))

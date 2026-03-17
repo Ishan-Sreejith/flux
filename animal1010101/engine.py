@@ -35,7 +35,7 @@ class LexicalEngine:
 
         entry = self.lexicon.get(word_key) or self.lexicon_auto.get(word_key)
         if not entry:
-            # Fallback: WordNet-style heuristic + optional auto-lookup
+
             prime, path = self._resolve_unknown(word_key, write=True)
         else:
             prime = entry["prime"]
@@ -86,7 +86,7 @@ class LexicalEngine:
         return "Object"
 
     def _resolve_unknown(self, word: str, write: bool) -> Tuple[str, List[str]]:
-        # First: Wikidata description mapping.
+
         desc_result = self._wikidata_classify(word)
         if desc_result:
             prime, path = desc_result
@@ -94,13 +94,13 @@ class LexicalEngine:
                 self._write_auto_lexicon(word, prime, path)
             return prime, path
 
-        # Second: guess prime + path heuristics from the word itself.
+
         prime = self._guess_prime(word)
         path = self._path_guess_from_tokens(word, prime)
         if path:
             return prime, path
 
-        # Third: attempt Wikidata lookup and classify description.
+
         return self._lookup_and_classify(word, write=write)
 
     def _lookup_and_classify(self, word: str, write: bool) -> Tuple[str, List[str]]:
@@ -190,26 +190,26 @@ class LexicalEngine:
             return params.get(key, 0.0) >= thr
 
         bits = [
-            is_true("p1", 0.7),   # large
-            params.get("p1", 0.0) <= 0.3,  # small
-            is_true("p12", 0.7),  # edible
-            is_true("p13", 0.7),  # sweet
-            is_true("p14", 0.7),  # carnivorous
-            is_true("p20", 0.7),  # herbivorous
-            is_true("p5", 0.7),   # domesticated
-            is_true("p19", 0.7),  # wild
-            is_true("p15", 0.7),  # aquatic
-            is_true("p16", 0.7),  # flying
-            is_true("p17", 0.7),  # nocturnal
-            is_true("p18", 0.7),  # social
-            is_true("p2", 0.7),   # aggressive
-            is_true("p9", 0.7),   # dangerous
-            is_true("p7", 0.7),   # tool-like
-            is_true("p8", 0.7),   # artificial
-            params.get("p8", 1.0) <= 0.3,  # natural
-            is_true("p10", 0.7),  # friendly
-            is_true("p3", 0.7),   # intelligent
-            is_true("p6", 0.7),   # agentic
+            is_true("p1", 0.7),
+            params.get("p1", 0.0) <= 0.3,
+            is_true("p12", 0.7),
+            is_true("p13", 0.7),
+            is_true("p14", 0.7),
+            is_true("p20", 0.7),
+            is_true("p5", 0.7),
+            is_true("p19", 0.7),
+            is_true("p15", 0.7),
+            is_true("p16", 0.7),
+            is_true("p17", 0.7),
+            is_true("p18", 0.7),
+            is_true("p2", 0.7),
+            is_true("p9", 0.7),
+            is_true("p7", 0.7),
+            is_true("p8", 0.7),
+            params.get("p8", 1.0) <= 0.3,
+            is_true("p10", 0.7),
+            is_true("p3", 0.7),
+            is_true("p6", 0.7),
         ]
         return "".join("1" if b else "0" for b in bits)
 
@@ -236,5 +236,5 @@ class LexicalEngine:
         diff = 0.0
         for k in keys:
             diff += abs(a.get(k, 0.0) - b.get(k, 0.0))
-        # Normalize by max possible range (assume 0..1 per param)
+
         return max(0.0, 1.0 - diff / max(1.0, len(keys)))

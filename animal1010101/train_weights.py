@@ -60,7 +60,7 @@ def train(dataset_path: Path, out_path: Path, epochs: int = 20, lr: float = 0.4)
             simplified = simplify(q, engine)
             x = simplified.parameters
 
-            # Trait classification
+
             gold = set(row.get("traits", []))
             for t in TRAITS:
                 y = 1.0 if t in gold else 0.0
@@ -70,7 +70,7 @@ def train(dataset_path: Path, out_path: Path, epochs: int = 20, lr: float = 0.4)
                     weights[t][k] = weights[t].get(k, 0.0) + lr * err * v
                 weights[t]["bias"] = weights[t].get("bias", 0.0) + lr * err
 
-            # Prime classification (one-vs-rest)
+
             prime = row.get("prime")
             for p in PRIMES:
                 key = f"prime:{p}"

@@ -44,7 +44,7 @@ def reason(traits: List[str], prime: str) -> List[str]:
     for key, sentence in RULES:
         if key in traits:
             notes.append(sentence)
-    # de-dup while preserving order
+
     seen = set()
     out: List[str] = []
     for n in notes:

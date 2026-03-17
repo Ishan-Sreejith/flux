@@ -48,7 +48,7 @@ def append_items(path: Path, topic: str, items: List[Dict[str, str]], max_items:
         for row in new_rows:
             f.write(json.dumps(row) + "\n")
 
-    # Trim file if it grows too large.
+
     trimmed = load_items(path, max_items=max_items)
     if len(trimmed) >= max_items:
         path.write_text(
