@@ -222,6 +222,7 @@ function traverse(tree, path) {
 }
 
 function encode(word) {
+  if (!state.lexicon) return null;
   const key = word.trim().toLowerCase();
   const entry = state.lexicon[key];
   let prime = entry?.prime || guessPrime(key);
@@ -673,8 +674,13 @@ function runQuery() {
   const learnRateEl = document.getElementById("learn-rate");
   const tempEl = document.getElementById("temperature");
   const learnStatus = document.getElementById("learn-status");
+  if (!input || !output) return;
   const question = input.value.trim();
   if (!question) return;
+  if (!state.lexicon || !state.taxonomy) {
+    output.value = "Data not loaded yet. Refresh and try again.";
+    return;
+  }
 
   const rawTokens = tokenize(question);
   if (rawTokens.length === 1 && GREETINGS.has(rawTokens[0])) {
@@ -779,18 +785,24 @@ function handleTerminalCommand(line) {
   terminalWrite("Unknown command. Type help.");
 }
 
-document.getElementById("qa-btn").addEventListener("click", runQuery);
-document.getElementById("qa-input").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") runQuery();
-});
-
-document.getElementById("term-input").addEventListener("keydown", (event) => {
-  if (event.key !== "Enter") return;
-  const line = event.target.value;
-  event.target.value = "";
-  terminalWrite(`flux> ${line}`);
-  handleTerminalCommand(line);
-});
+const qaBtn = document.getElementById("qa-btn");
+if (qaBtn) qaBtn.addEventListener("click", runQuery);
+const qaInput = document.getElementById("qa-input");
+if (qaInput) {
+  qaInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") runQuery();
+  });
+}
+const termInput = document.getElementById("term-input");
+if (termInput) {
+  termInput.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter") return;
+    const line = event.target.value;
+    event.target.value = "";
+    terminalWrite(`flux> ${line}`);
+    handleTerminalCommand(line);
+  });
+}
 
 loadData()
   .then(() => {
@@ -870,7 +882,9 @@ loadData()
       temperatureVal.textContent = Number(temperature.value).toFixed(2);
     });
   }
-  terminalWrite("Flux Lite terminal ready. Type help.");
+  if (document.getElementById("term-log")) {
+    terminalWrite("Flux Lite terminal ready. Type help.");
+  }
   })
   .catch((err) => {
     const output = document.getElementById("qa-output");
