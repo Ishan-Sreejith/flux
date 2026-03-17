@@ -1,5 +1,28 @@
-const taxonomyUrl = new URL("./data/taxonomy.json", import.meta.url).toString();
-const lexiconUrl = new URL("./data/lexicon.json", import.meta.url).toString();
+function resolveBaseUrl() {
+  if (location.pathname.includes("/docs/")) {
+    return new URL("./", location.href);
+  }
+  return new URL("./docs/", location.href);
+}
+
+function resolveDataUrl(name) {
+  try {
+    return new URL(`./data/${name}`, import.meta.url).toString();
+  } catch {
+    return new URL(`./data/${name}`, resolveBaseUrl()).toString();
+  }
+}
+
+async function fetchJsonWithFallback(primary, fallback) {
+  const res = await fetch(primary);
+  if (res.ok) return res.json();
+  const alt = await fetch(fallback);
+  if (!alt.ok) throw new Error("data fetch failed");
+  return alt.json();
+}
+
+const taxonomyUrl = resolveDataUrl("taxonomy.json");
+const lexiconUrl = resolveDataUrl("lexicon.json");
 
 const state = {
   taxonomy: null,
@@ -104,9 +127,12 @@ function mulberry32(seed) {
 }
 
 async function loadData() {
+  const base = resolveBaseUrl();
+  const fallbackTax = new URL("./data/taxonomy.json", base).toString();
+  const fallbackLex = new URL("./data/lexicon.json", base).toString();
   const [taxonomy, lexicon] = await Promise.all([
-    fetch(taxonomyUrl).then((r) => r.json()),
-    fetch(lexiconUrl).then((r) => r.json()),
+    fetchJsonWithFallback(taxonomyUrl, fallbackTax),
+    fetchJsonWithFallback(lexiconUrl, fallbackLex),
   ]);
   state.taxonomy = taxonomy;
   state.lexicon = lexicon;
@@ -568,7 +594,8 @@ document.getElementById("term-input").addEventListener("keydown", (event) => {
   handleTerminalCommand(line);
 });
 
-loadData().then(() => {
+loadData()
+  .then(() => {
   const sizeSelect = document.getElementById("model-size");
   const learnBtn = document.getElementById("learn-btn");
   const resetBtn = document.getElementById("reset-btn");
@@ -630,4 +657,11 @@ loadData().then(() => {
     });
   }
   terminalWrite("Flux Lite terminal ready. Type help.");
-});
+  })
+  .catch((err) => {
+    const output = document.getElementById("qa-output");
+    if (output) {
+      output.value = "Data failed to load. Check the GitHub Pages path settings.";
+    }
+    terminalWrite("Data failed to load. Check the GitHub Pages path settings.");
+  });
