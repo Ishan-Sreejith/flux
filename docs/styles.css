@@ -80,6 +80,10 @@ body.light {
   gap: 10px;
 }
 
+.output {
+  margin-top: auto;
+}
+
 .hero {
   padding: 28px;
   border-radius: 20px;

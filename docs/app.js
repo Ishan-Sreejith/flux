@@ -23,6 +23,7 @@ async function fetchJsonWithFallback(primary, fallback) {
 
 const taxonomyUrl = resolveDataUrl("taxonomy.json");
 const lexiconUrl = resolveDataUrl("lexicon.json");
+const animalsUrl = resolveDataUrl("animals.json");
 
 const state = {
   taxonomy: null,
@@ -134,12 +135,15 @@ async function loadData() {
   const base = resolveBaseUrl();
   const fallbackTax = new URL("./data/taxonomy.json", base).toString();
   const fallbackLex = new URL("./data/lexicon.json", base).toString();
+  const fallbackAnimals = new URL("./data/animals.json", base).toString();
   const [taxonomy, lexicon] = await Promise.all([
     fetchJsonWithFallback(taxonomyUrl, fallbackTax),
     fetchJsonWithFallback(lexiconUrl, fallbackLex),
   ]);
+  const animals = await fetchJsonWithFallback(animalsUrl, fallbackAnimals);
   state.taxonomy = taxonomy;
   state.lexicon = lexicon;
+  state.animals = Array.isArray(animals) ? animals : [];
   buildVocab();
   buildMatrix();
   buildEntryVectors();
@@ -230,6 +234,27 @@ function encode(word) {
     params[k] = Number(v);
   }
   return { prime, bitstring, params, path };
+}
+
+function classifyAnimalPath(name) {
+  const low = name.toLowerCase();
+  const mammalHints = ["mammal", "dog", "cat", "wolf", "bear", "whale", "dolphin", "bat", "deer", "cow", "horse"];
+  const birdHints = ["bird", "sparrow", "eagle", "hawk", "owl", "parrot", "penguin", "duck", "goose"];
+  const fishHints = ["fish", "shark", "salmon", "trout", "tuna", "carp", "ray"];
+  const reptileHints = ["snake", "lizard", "turtle", "crocodile", "alligator"];
+  const insectHints = ["bee", "ant", "wasp", "butterfly", "moth", "beetle", "fly"];
+  const amphibianHints = ["frog", "toad", "salamander", "newt"];
+  let mammal = true;
+  if (birdHints.some((k) => low.includes(k))) mammal = false;
+  if (fishHints.some((k) => low.includes(k))) mammal = false;
+  if (reptileHints.some((k) => low.includes(k))) mammal = false;
+  if (insectHints.some((k) => low.includes(k))) mammal = false;
+  if (amphibianHints.some((k) => low.includes(k))) mammal = false;
+  if (mammalHints.some((k) => low.includes(k))) mammal = true;
+  const mammalLabel = mammal ? "Mammal" : "Non-Mammal";
+  const domestic = low.includes("dog") || low.includes("cat") || low.includes("cow") || low.includes("horse") ? "Domestic" : "Wild";
+  const carn = low.includes("shark") || low.includes("wolf") || low.includes("lion") || low.includes("tiger") ? "Carnivore" : "Herbivore";
+  return [mammalLabel, domestic, carn];
 }
 
 function buildVocab() {
@@ -336,7 +361,7 @@ function embedText(text) {
 }
 
 function buildEntryVectors() {
-  state.entryVectors = Object.keys(state.lexicon || {}).map((word) => {
+  const base = Object.keys(state.lexicon || {}).map((word) => {
     const entry = state.lexicon[word];
     const text = `${word} ${entry?.prime || ""} ${(entry?.path || []).join(" ")}`;
     return {
@@ -347,6 +372,20 @@ function buildEntryVectors() {
       vector: embedText(text),
     };
   });
+  const animals = (state.animals || []).map((name) => {
+    const key = name.toLowerCase();
+    const entry = state.lexicon[key];
+    const path = entry?.path || classifyAnimalPath(name);
+    const text = `${name} Animal ${path.join(" ")}`;
+    return {
+      word: name.toLowerCase(),
+      text,
+      prime: "Animal",
+      path,
+      vector: embedText(text),
+    };
+  });
+  state.entryVectors = base.concat(animals);
 }
 
 function cosine(a, b) {
@@ -420,6 +459,37 @@ async function wikiSummary(query) {
   }
 }
 
+async function scientificLineage(term) {
+  const params = new URLSearchParams({
+    action: "wbsearchentities",
+    format: "json",
+    language: "en",
+    limit: "1",
+    search: term,
+    origin: "*",
+  });
+  const searchUrl = `https://www.wikidata.org/w/api.php?${params.toString()}`;
+  const searchRes = await fetch(searchUrl).then((r) => r.json());
+  const hit = searchRes?.search?.[0];
+  if (!hit?.id) return [];
+  const qid = hit.id;
+  const chain = [];
+  let current = qid;
+  for (let i = 0; i < 8; i++) {
+    const entityUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=${current}&props=claims|labels&languages=en&origin=*`;
+    const entityRes = await fetch(entityUrl).then((r) => r.json());
+    const ent = entityRes?.entities?.[current];
+    if (!ent) break;
+    const label = ent.labels?.en?.value || current;
+    chain.push(label);
+    const parents = ent.claims?.P171 || [];
+    const parentId = parents[0]?.mainsnak?.datavalue?.value?.id;
+    if (!parentId) break;
+    current = parentId;
+  }
+  return chain;
+}
+
 function formatAnswer(question, matches, params, prime) {
   const traits = traitList(params);
   const sentences = [];
@@ -465,8 +535,12 @@ function renderFlowchart(mermaidText) {
     return;
   }
   container.innerHTML = `<div class="mermaid">${mermaidText}</div>`;
-  window.mermaid.initialize({ startOnLoad: false, theme: "base" });
-  window.mermaid.run({ nodes: [container.querySelector(".mermaid")] });
+  try {
+    window.mermaid.initialize({ startOnLoad: false, theme: "base" });
+    window.mermaid.run({ nodes: [container.querySelector(".mermaid")] });
+  } catch {
+    container.textContent = mermaidText;
+  }
 }
 
 function applyTemperature(text, temperature) {
@@ -643,6 +717,12 @@ function runQuery() {
     output.value = finalSummary + "\n\nFetching Wikipedia summary...";
     wikiSummary(question).then((extra) => {
       output.value = extra ? `${finalSummary}\n\nWeb summary:\n${extra}` : finalSummary;
+    });
+    scientificLineage(search.results[0]?.word || question).then((lineage) => {
+      if (lineage.length) {
+        const path = lineage.slice(0, 7).reverse();
+        renderFlowchart(flowchartFor("Animal", path));
+      }
     });
   } else {
     output.value = finalSummary;
