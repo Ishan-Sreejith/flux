@@ -82,8 +82,8 @@ p {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
   box-shadow: 0 18px 40px var(--shadow);
   animation: fadeIn 0.5s ease both;
 }
@@ -141,12 +141,12 @@ button:hover {
 
 .output {
   width: 100%;
-  min-height: 220px;
+  min-height: 180px;
   background: #0b0e14;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
-  color: var(--text);
+  color: #ffffff;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 13px;
 }
@@ -169,14 +169,14 @@ button:hover {
 
 .result-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin-top: 16px;
 }
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
   align-items: end;
 }
