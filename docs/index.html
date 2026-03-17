@@ -3,18 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Animal1010101 Demo</title>
+    <title>Flux Lite NLU</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="page">
       <header class="hero">
-        <div class="hero__tag">Animal1010101</div>
-        <h1>Schema Q&A</h1>
-        <p>Ask a question. The engine answers and simulates the flowchart path.</p>
+        <div class="hero__tag">Flux Lite</div>
+        <h1>Local NLU + Tiny AI</h1>
+        <p>Client-side semantic search with a miniature neural projection, running on GitHub Pages.</p>
       </header>
 
       <section class="card">
+        <div class="section-title">Ask Mode</div>
         <div class="form-row">
           <input id="qa-input" type="text" placeholder="Explain dogs in simple terms" />
           <button id="qa-btn">Ask</button>
@@ -24,10 +25,83 @@
           <span>Use live web override</span>
         </label>
         <textarea id="qa-output" class="output" rows="10" readonly></textarea>
+        <div class="result-grid">
+          <div>
+            <div class="sub-title">Top Matches</div>
+            <ol id="qa-matches" class="list"></ol>
+          </div>
+          <div>
+            <div class="sub-title">Vector Stats</div>
+            <div id="qa-stats" class="stats"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Model Controls</div>
+        <div class="controls">
+          <label class="control">
+            Model size
+            <select id="model-size">
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32" selected>32</option>
+              <option value="64">64</option>
+            </select>
+          </label>
+          <label class="control">
+            Learning rate
+            <input id="learn-rate" type="number" min="0.001" max="0.2" step="0.001" value="0.03" />
+          </label>
+          <label class="toggle">
+            <input id="auto-learn" type="checkbox" checked />
+            <span>Auto-learn on ask</span>
+          </label>
+        </div>
+        <div class="controls__actions">
+          <button id="learn-btn" class="ghost">Learn from last</button>
+          <button id="reset-btn" class="ghost">Reset model</button>
+          <label class="toggle">
+            <input id="theme-toggle" type="checkbox" />
+            <span>Light mode</span>
+          </label>
+          <div id="learn-status" class="status">Ready</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Evaluation</div>
+        <p class="muted">Run a quick benchmark over fixed prompts to track model changes.</p>
+        <div class="controls__actions">
+          <button id="eval-btn">Run Evaluation</button>
+          <div id="eval-status" class="status">Idle</div>
+        </div>
+        <div class="result-grid">
+          <div>
+            <div class="sub-title">Score</div>
+            <div id="eval-score" class="score">0.00</div>
+          </div>
+          <div>
+            <div class="sub-title">Prompt Results</div>
+            <ol id="eval-list" class="list"></ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="card terminal-card">
+        <div class="section-title">Terminal Mode</div>
+        <div class="terminal">
+          <div id="term-log" class="terminal__log"></div>
+          <div class="terminal__prompt">
+            <span class="terminal__label">flux&gt;</span>
+            <input id="term-input" type="text" placeholder="help, ask dogs, search fox, encode wolf" />
+          </div>
+        </div>
+        <div class="terminal__hint">Commands: help, ask &lt;question&gt;, search &lt;query&gt;, encode &lt;word&gt;, clear</div>
       </section>
 
       <footer class="footer">
-        <div>Static demo built for GitHub Pages.</div>
+        <div>Static demo built for GitHub Pages. No server required.</div>
       </footer>
     </main>
 

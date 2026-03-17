@@ -1,8 +1,8 @@
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs
 
-from .config import BRIDGE_PORT
+from .config import BRIDGE_HOST, BRIDGE_PORT, MAX_REQUEST_BYTES
 from .embeddings import embed_text
 from .utils import json_dumps
 
@@ -25,6 +25,9 @@ class BridgeHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path.startswith("/embed"):
             length = int(self.headers.get("Content-Length", "0"))
+            if length > MAX_REQUEST_BYTES:
+                self._send_json({"error": "payload too large"}, code=413)
+                return
             raw = self.rfile.read(length).decode("utf-8", errors="ignore")
             try:
                 payload = json.loads(raw)
@@ -39,7 +42,7 @@ class BridgeHandler(BaseHTTPRequestHandler):
 
 
 def run() -> None:
-    server = HTTPServer(("", BRIDGE_PORT), BridgeHandler)
+    server = ThreadingHTTPServer((BRIDGE_HOST, BRIDGE_PORT), BridgeHandler)
     print(f"Bridge listening on :{BRIDGE_PORT}")
     server.serve_forever()
 

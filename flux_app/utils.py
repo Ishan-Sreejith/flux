@@ -37,3 +37,11 @@ def sleep_ms(ms: int) -> None:
 
 def json_dumps(data) -> str:
     return json.dumps(data, ensure_ascii=True)
+
+
+def monotonic_ms() -> int:
+    return int(time.monotonic() * 1000)
+
+
+def clamp_int(value: int, low: int, high: int) -> int:
+    return max(low, min(high, int(value)))

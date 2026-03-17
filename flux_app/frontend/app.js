@@ -14,6 +14,17 @@ const trainFull = document.getElementById("train-full");
 const trainWord2Vec = document.getElementById("train-word2vec");
 
 const sessionKey = "flux_session_id";
+const apiOverrideKey = "flux_api_base";
+const bodyApiDefault = document.body ? document.body.dataset.apiDefault : "";
+const queryApi = new URLSearchParams(window.location.search).get("api");
+if (queryApi) {
+  localStorage.setItem(apiOverrideKey, queryApi);
+}
+const apiBase =
+  localStorage.getItem(apiOverrideKey) ||
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? bodyApiDefault || "http://127.0.0.1:3001"
+    : window.location.origin);
 let sessionId = localStorage.getItem(sessionKey);
 if (!sessionId) {
   sessionId = crypto.randomUUID();
@@ -99,7 +110,7 @@ async function syncParams() {
   nlpParams.forEach((param) => {
     payload.nlp_params[param.key] = param.value;
   });
-  await fetch("http://127.0.0.1:3001/config", {
+  await fetch(`${apiBase}/config`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -153,7 +164,7 @@ form.addEventListener("submit", (event) => {
     session_id: sessionId,
   });
 
-  const source = new EventSource(`http://127.0.0.1:3001/ask_stream?${params.toString()}`);
+  const source = new EventSource(`${apiBase}/ask_stream?${params.toString()}`);
   let buffer = "";
   source.onmessage = (event) => {
     const payload = JSON.parse(event.data);
@@ -191,7 +202,7 @@ trainButton.addEventListener("click", async () => {
   trainButton.disabled = true;
 
   try {
-    const response = await fetch("http://127.0.0.1:3001/train", {
+    const response = await fetch(`${apiBase}/train`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -6,7 +6,7 @@
     <title>Flux AI</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-api-default="http://127.0.0.1:3001">
     <main class="app">
       <header class="app__header">
         <h1>Flux AI</h1>
@@ -54,7 +54,7 @@
             Full pages
           </label>
           <label class="toggle">
-            <input id="train-word2vec" type="checkbox" checked />
+            <input id="train-word2vec" type="checkbox" />
             Update word2vec
           </label>
           <button id="train-submit" type="button">Train Now</button>

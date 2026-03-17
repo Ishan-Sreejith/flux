@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Iterable, List, Optional
 
 from .config import EMBED_DIM, W2V_DIR
+import hashlib
+
 from .utils import l2_normalize, tokenize
 
 try:
@@ -38,10 +40,12 @@ def embed_text(text: str, dim: int = EMBED_DIM) -> List[float]:
 
     model = load_model(dim)
     if model is None:
-        # Fallback to hashed bag-of-words if Word2Vec is unavailable.
+        # Fallback to stable hashed bag-of-words if Word2Vec is unavailable.
         vec = [0.0] * dim
         for tok in tokens:
-            vec[hash(tok) % dim] += 1.0
+            digest = hashlib.sha256(tok.encode("utf-8", errors="ignore")).hexdigest()
+            idx = int(digest[:8], 16) % dim
+            vec[idx] += 1.0
         return l2_normalize(vec)
 
     vectors = []

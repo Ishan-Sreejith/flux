@@ -51,7 +51,7 @@ DEFAULT_NLP_PARAMS = {
     "hedging_level": 30,
     "formality": 50,
     "readability_level": 10,
-    "max_sentences": 3,
+    "max_sentences": 4,
     "max_words_per_sentence": 24,
     "keyword_boost": 50,
     "entity_boost": 50,

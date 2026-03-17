@@ -4,6 +4,14 @@ const lexiconUrl = "./data/lexicon.json";
 const state = {
   taxonomy: null,
   lexicon: null,
+  vocab: [],
+  vocabIndex: {},
+  matrix: [],
+  entryVectors: [],
+  embedDim: 32,
+  lastQuery: "",
+  lastBest: "",
+  theme: "dark",
 };
 
 const PARAM_LABELS = {
@@ -85,6 +93,16 @@ const STOPWORDS = new Set([
   "who",
 ]);
 
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return function () {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 async function loadData() {
   const [taxonomy, lexicon] = await Promise.all([
     fetch(taxonomyUrl).then((r) => r.json()),
@@ -92,6 +110,9 @@ async function loadData() {
   ]);
   state.taxonomy = taxonomy;
   state.lexicon = lexicon;
+  buildVocab();
+  buildMatrix();
+  buildEntryVectors();
 }
 
 function tokenize(text) {
@@ -181,6 +202,107 @@ function encode(word) {
   return { prime, bitstring, params, path };
 }
 
+function buildVocab() {
+  const vocabSet = new Set();
+  const addTokens = (text) => {
+    tokenize(text).forEach((tok) => {
+      if (!STOPWORDS.has(tok)) vocabSet.add(tok);
+    });
+  };
+  Object.keys(state.lexicon || {}).forEach((word) => {
+    const entry = state.lexicon[word];
+    addTokens(word);
+    if (entry?.prime) addTokens(entry.prime);
+    if (entry?.path) addTokens(entry.path.join(" "));
+  });
+  const taxonomyText = JSON.stringify(state.taxonomy || {});
+  addTokens(taxonomyText);
+  state.vocab = Array.from(vocabSet).slice(0, 1200);
+  state.vocabIndex = Object.fromEntries(state.vocab.map((w, i) => [w, i]));
+}
+
+function buildMatrix() {
+  const embedDim = state.embedDim;
+  const vocabSize = state.vocab.length;
+  const stored = loadMatrix(embedDim);
+  if (stored && stored.length === embedDim && stored[0]?.length === vocabSize) {
+    state.matrix = stored;
+    return;
+  }
+  const rng = mulberry32(1337);
+  const matrix = [];
+  for (let i = 0; i < embedDim; i++) {
+    const row = new Array(vocabSize).fill(0);
+    for (let j = 0; j < vocabSize; j++) {
+      row[j] = (rng() - 0.5) * 0.2;
+    }
+    matrix.push(row);
+  }
+  state.matrix = matrix;
+  saveMatrix();
+}
+
+function vectorize(text) {
+  const vec = new Array(state.vocab.length).fill(0);
+  for (const tok of tokenize(text)) {
+    if (STOPWORDS.has(tok)) continue;
+    const idx = state.vocabIndex[tok];
+    if (idx !== undefined) vec[idx] += 1;
+  }
+  return vec;
+}
+
+function matmul(matrix, vec) {
+  const out = new Array(matrix.length).fill(0);
+  for (let i = 0; i < matrix.length; i++) {
+    let sum = 0;
+    const row = matrix[i];
+    for (let j = 0; j < vec.length; j++) {
+      sum += row[j] * vec[j];
+    }
+    out[i] = Math.tanh(sum);
+  }
+  return out;
+}
+
+function normalize(vec) {
+  const norm = Math.sqrt(vec.reduce((acc, v) => acc + v * v, 0)) || 1;
+  return vec.map((v) => v / norm);
+}
+
+function embedText(text) {
+  const bow = vectorize(text);
+  return normalize(matmul(state.matrix, bow));
+}
+
+function buildEntryVectors() {
+  state.entryVectors = Object.keys(state.lexicon || {}).map((word) => {
+    const entry = state.lexicon[word];
+    const text = `${word} ${entry?.prime || ""} ${(entry?.path || []).join(" ")}`;
+    return {
+      word,
+      text,
+      vector: embedText(text),
+    };
+  });
+}
+
+function cosine(a, b) {
+  let sum = 0;
+  for (let i = 0; i < a.length; i++) sum += a[i] * b[i];
+  return sum;
+}
+
+function searchEntries(query, k = 5) {
+  const qvec = embedText(query);
+  const scored = state.entryVectors.map((item) => ({
+    ...item,
+    score: cosine(qvec, item.vector),
+  }));
+  scored.sort((a, b) => b.score - a.score);
+  return { qvec, results: scored.slice(0, k) };
+}
+
 function aggregateParams(results) {
   const out = {};
   if (!results.length) return out;
@@ -214,108 +336,298 @@ function traitList(params) {
   return traits;
 }
 
-function synthesizeAnswer(subject, prime, params) {
-  if (!subject) return "I need a specific subject to explain.";
-  const traits = traitList(params);
-  if (traits.length) {
-    return `${subject} is a ${prime.toLowerCase()} that tends to be ${traits.slice(0, 5).join(", ")}.`;
+async function wikiSummary(query) {
+  const title = encodeURIComponent(query.trim().replace(/\s+/g, "_"));
+  if (!title) return "";
+  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) return "";
+    const data = await res.json();
+    return data.extract || "";
+  } catch {
+    return "";
   }
-  return `${subject} is a ${prime.toLowerCase()} in this schema.`;
 }
 
-function simulateFlow(res) {
-  if (!res) return "Flowchart: no result.";
-  const steps = res.path.map((step, idx) => {
-    const bit = res.bitstring[idx] || "?";
-    return `${idx + 1}. ${step} -> bit ${bit}`;
-  });
-  const params = Object.entries(res.params || {})
-    .map(([k, v]) => `${k}(${PARAM_LABELS[k] || ""})=${Number(v).toFixed(2)}`)
-    .join(", ");
-  return [
-    `Prime: ${res.prime}`,
-    `Bitstring: ${res.bitstring}`,
-    `Path:`,
-    ...steps,
-    params ? `Params: ${params}` : "",
-  ]
-    .filter(Boolean)
-    .join("\n");
+function formatAnswer(question, matches, params, prime) {
+  const traits = traitList(params);
+  const sentences = [];
+  sentences.push(`Answer to: ${question}`);
+  sentences.push(`Prime: ${prime}`);
+  sentences.push(traits.length ? `Traits: ${traits.slice(0, 6).join(", ")}` : "Traits: mixed");
+  if (matches.length) {
+    const top = matches[0];
+    sentences.push(`Best match: ${top.word} (${top.score.toFixed(3)})`);
+  }
+  return sentences.join("\n");
 }
 
-function contentTokens(text) {
-  const tokens = tokenize(text);
-  return tokens.filter((t) => !STOPWORDS.has(t) && t.length > 2);
+function saveMatrix() {
+  const key = `flux_lite_matrix_v1_${state.embedDim}`;
+  const payload = {
+    vocabSig: state.vocab.slice(0, 200).join("|"),
+    matrix: state.matrix,
+  };
+  localStorage.setItem(key, JSON.stringify(payload));
 }
 
-function mainTerm(text) {
-  const tokens = contentTokens(text);
-  return tokens[0] || tokenize(text)[0] || text;
+function loadMatrix(dim) {
+  const key = `flux_lite_matrix_v1_${dim}`;
+  const raw = localStorage.getItem(key);
+  if (!raw) return null;
+  try {
+    const payload = JSON.parse(raw);
+    const sig = state.vocab.slice(0, 200).join("|");
+    if (payload.vocabSig !== sig) return null;
+    return payload.matrix;
+  } catch {
+    return null;
+  }
 }
 
-async function wikidataLookup(term) {
-  const params = new URLSearchParams({
-    action: "wbsearchentities",
-    format: "json",
-    language: "en",
-    limit: "1",
-    search: term,
-    origin: "*",
-  });
-  const url = `https://www.wikidata.org/w/api.php?${params.toString()}`;
-  const data = await fetch(url).then((r) => r.json());
-  const hit = data?.search?.[0];
-  if (!hit) return "";
-  return hit.description || "";
+function resetMatrix() {
+  const key = `flux_lite_matrix_v1_${state.embedDim}`;
+  localStorage.removeItem(key);
+  buildMatrix();
+  buildEntryVectors();
 }
 
-async function liveLookup(term) {
-  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`;
-  const data = await fetch(url).then((r) => r.json());
-  if (!data || data.type === "https://mediawiki.org/wiki/HyperSwitch/errors/not_found") return "";
-  return data.extract || "";
+function learnFrom(query, targetText, lr) {
+  const bow = vectorize(query);
+  const pred = embedText(query);
+  const target = embedText(targetText);
+  const error = target.map((v, i) => v - pred[i]);
+  for (let i = 0; i < state.matrix.length; i++) {
+    const row = state.matrix[i];
+    const e = error[i];
+    if (e === 0) continue;
+    for (let j = 0; j < row.length; j++) {
+      if (bow[j] !== 0) row[j] += lr * e * bow[j];
+    }
+  }
+  buildEntryVectors();
+  saveMatrix();
 }
 
-function bind() {
-  const btn = document.getElementById("qa-btn");
-  const input = document.getElementById("qa-input");
-  const output = document.getElementById("qa-output");
-  const liveToggle = document.getElementById("qa-live");
+const EVAL_PROMPTS = [
+  { prompt: "Explain dogs in simple terms", expected: ["animal", "dog", "pet"] },
+  { prompt: "What is a wolf?", expected: ["animal", "wolf", "wild"] },
+  { prompt: "Define apple", expected: ["food", "fruit", "sweet"] },
+  { prompt: "Describe fear", expected: ["feeling", "negative"] },
+  { prompt: "Explain running", expected: ["action", "move"] },
+];
 
-  btn.addEventListener("click", async () => {
-    const text = input.value.trim();
-    if (!text) return;
-    const tokens = contentTokens(text);
+function scoreAnswer(answer, expected) {
+  const low = answer.toLowerCase();
+  const hits = expected.filter((k) => low.includes(k)).length;
+  return hits / expected.length;
+}
+
+function runEvaluation() {
+  const list = document.getElementById("eval-list");
+  const scoreEl = document.getElementById("eval-score");
+  const statusEl = document.getElementById("eval-status");
+  if (list) list.innerHTML = "";
+  let total = 0;
+  EVAL_PROMPTS.forEach((item) => {
+    const tokens = tokenize(item.prompt).filter((t) => !STOPWORDS.has(t));
     const encoded = tokens.map((t) => encode(t)).filter(Boolean);
     const params = aggregateParams(encoded);
-    const subject = tokens[0] || mainTerm(text);
-    const main = encode(subject);
-    const prime = main?.prime || encoded[0]?.prime || "Object";
-    const synthesized = synthesizeAnswer(subject, prime, params);
+    const prime = encoded[0]?.prime || guessPrime(item.prompt);
+    const search = searchEntries(item.prompt, 3);
+    const summary = formatAnswer(item.prompt, search.results, params, prime);
+    const score = scoreAnswer(summary, item.expected);
+    total += score;
+    if (list) {
+      const li = document.createElement("li");
+      li.textContent = `${item.prompt} -> ${score.toFixed(2)}`;
+      list.appendChild(li);
+    }
+  });
+  const avg = total / EVAL_PROMPTS.length;
+  if (scoreEl) scoreEl.textContent = avg.toFixed(2);
+  if (statusEl) statusEl.textContent = `Completed in ${EVAL_PROMPTS.length} prompts.`;
+}
 
-    const useLive = liveToggle.checked;
-    const liveText = useLive ? await liveLookup(mainTerm(text)) : "";
-    const webHint = liveText || (await wikidataLookup(mainTerm(text)));
-
-    const flow = simulateFlow({
-      prime,
-      bitstring: main?.bitstring || encoded[0]?.bitstring || "",
-      params,
-      path: main?.path || encoded[0]?.path || [],
-    });
-
-    output.value = [
-      `Answer: ${synthesized}`,
-      webHint ? `Web hint: ${webHint}` : "",
-      useLive && liveText ? "Source: Live override" : "Source: Wikidata",
-      "",
-      "Flowchart Simulation:",
-      flow,
-    ]
-      .filter(Boolean)
-      .join("\n");
+function renderMatches(matches, target) {
+  if (!target) return;
+  target.innerHTML = "";
+  matches.forEach((m) => {
+    const li = document.createElement("li");
+    li.textContent = `${m.word} (${m.score.toFixed(3)})`;
+    target.appendChild(li);
   });
 }
 
-await loadData();
-bind();
+function renderStats(vec, target) {
+  if (!target) return;
+  const maxVal = Math.max(...vec);
+  const minVal = Math.min(...vec);
+  const mean = vec.reduce((acc, v) => acc + v, 0) / vec.length;
+  target.textContent = `dim=32\nmean=${mean.toFixed(3)}\nmin=${minVal.toFixed(3)}\nmax=${maxVal.toFixed(3)}`;
+}
+
+function runQuery() {
+  const input = document.getElementById("qa-input");
+  const output = document.getElementById("qa-output");
+  const matchesEl = document.getElementById("qa-matches");
+  const statsEl = document.getElementById("qa-stats");
+  const live = document.getElementById("qa-live");
+  const autoLearn = document.getElementById("auto-learn");
+  const learnRateEl = document.getElementById("learn-rate");
+  const learnStatus = document.getElementById("learn-status");
+  const question = input.value.trim();
+  if (!question) return;
+
+  const tokens = tokenize(question).filter((t) => !STOPWORDS.has(t));
+  const encoded = tokens.map((t) => encode(t)).filter(Boolean);
+  const params = aggregateParams(encoded);
+  const prime = encoded[0]?.prime || guessPrime(question);
+  const search = searchEntries(question, 5);
+  const summary = formatAnswer(question, search.results, params, prime);
+  state.lastQuery = question;
+  state.lastBest = search.results[0]?.word || "";
+
+  renderMatches(search.results, matchesEl);
+  renderStats(search.qvec, statsEl);
+
+  if (autoLearn?.checked && state.lastBest) {
+    const lr = Number(learnRateEl?.value || 0.03);
+    learnFrom(question, state.lastBest, lr);
+    if (learnStatus) learnStatus.textContent = `Auto-learned from ${state.lastBest}.`;
+  }
+
+  if (live.checked) {
+    output.value = summary + "\n\nFetching Wikipedia summary...";
+    wikiSummary(question).then((extra) => {
+      output.value = extra ? `${summary}\n\nWeb summary:\n${extra}` : summary;
+    });
+  } else {
+    output.value = summary;
+  }
+}
+
+function terminalWrite(message) {
+  const log = document.getElementById("term-log");
+  if (!log) return;
+  log.textContent += `${message}\n`;
+  log.scrollTop = log.scrollHeight;
+}
+
+function handleTerminalCommand(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return;
+  const [cmd, ...rest] = trimmed.split(" ");
+  const arg = rest.join(" ").trim();
+  if (cmd === "help") {
+    terminalWrite("Commands: help, ask <question>, search <query>, encode <word>, clear");
+    return;
+  }
+  if (cmd === "clear") {
+    const log = document.getElementById("term-log");
+    if (log) log.textContent = "";
+    return;
+  }
+  if (cmd === "encode") {
+    const res = encode(arg);
+    terminalWrite(res ? JSON.stringify(res, null, 2) : "No match.");
+    return;
+  }
+  if (cmd === "search") {
+    const search = searchEntries(arg || trimmed, 5);
+    search.results.forEach((r) => terminalWrite(`${r.word} (${r.score.toFixed(3)})`));
+    return;
+  }
+  if (cmd === "ask") {
+    const q = arg || trimmed;
+    const tokens = tokenize(q).filter((t) => !STOPWORDS.has(t));
+    const encoded = tokens.map((t) => encode(t)).filter(Boolean);
+    const params = aggregateParams(encoded);
+    const prime = encoded[0]?.prime || guessPrime(q);
+    const search = searchEntries(q, 5);
+    terminalWrite(formatAnswer(q, search.results, params, prime));
+    return;
+  }
+  terminalWrite("Unknown command. Type help.");
+}
+
+document.getElementById("qa-btn").addEventListener("click", runQuery);
+document.getElementById("qa-input").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") runQuery();
+});
+
+document.getElementById("term-input").addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
+  const line = event.target.value;
+  event.target.value = "";
+  terminalWrite(`flux> ${line}`);
+  handleTerminalCommand(line);
+});
+
+loadData().then(() => {
+  const sizeSelect = document.getElementById("model-size");
+  const learnBtn = document.getElementById("learn-btn");
+  const resetBtn = document.getElementById("reset-btn");
+  const learnStatus = document.getElementById("learn-status");
+  const evalBtn = document.getElementById("eval-btn");
+  const themeToggle = document.getElementById("theme-toggle");
+
+  const savedTheme = localStorage.getItem("flux_lite_theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light");
+    state.theme = "light";
+    if (themeToggle) themeToggle.checked = true;
+  }
+
+  if (sizeSelect) {
+    sizeSelect.value = String(state.embedDim);
+    sizeSelect.addEventListener("change", () => {
+      state.embedDim = Number(sizeSelect.value || 32);
+      buildMatrix();
+      buildEntryVectors();
+      if (learnStatus) learnStatus.textContent = `Model resized to ${state.embedDim}.`;
+    });
+  }
+  if (learnBtn) {
+    learnBtn.addEventListener("click", () => {
+      if (!state.lastQuery || !state.lastBest) {
+        if (learnStatus) learnStatus.textContent = "Ask a question first.";
+        return;
+      }
+      const lr = Number(document.getElementById("learn-rate")?.value || 0.03);
+      learnFrom(state.lastQuery, state.lastBest, lr);
+      if (learnStatus) learnStatus.textContent = `Learned from ${state.lastBest}.`;
+    });
+  }
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      resetMatrix();
+      if (learnStatus) learnStatus.textContent = "Model reset.";
+    });
+  }
+  if (evalBtn) {
+    evalBtn.addEventListener("click", () => {
+      const status = document.getElementById("eval-status");
+      if (status) status.textContent = "Running...";
+      setTimeout(runEvaluation, 50);
+    });
+  }
+  if (themeToggle) {
+    themeToggle.addEventListener("change", () => {
+      if (themeToggle.checked) {
+        document.body.classList.add("light");
+        state.theme = "light";
+        localStorage.setItem("flux_lite_theme", "light");
+      } else {
+        document.body.classList.remove("light");
+        state.theme = "dark";
+        localStorage.setItem("flux_lite_theme", "dark");
+      }
+    });
+  }
+  terminalWrite("Flux Lite terminal ready. Type help.");
+});

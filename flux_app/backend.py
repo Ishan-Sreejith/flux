@@ -1,16 +1,25 @@
 import json
+import time
 import urllib.request
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Dict, List
 from urllib.parse import parse_qs, urlparse
 
 from .config import (
+    ALLOW_ORIGINS,
+    BACKEND_HOST,
     BACKEND_PORT,
     BRIDGE_PORT,
     DEFAULT_WEIGHT_AUTO,
     EMBED_DIM,
     LOCAL_CONFIDENCE_THRESHOLD,
     LOCAL_MIN_SCORE,
+    MAX_REQUEST_BYTES,
+    MAX_TRAIN_QUESTIONS,
+    MAX_SESSIONS,
+    MAX_SESSION_HISTORY,
+    RATE_LIMIT_PER_MIN,
+    REQUEST_TIME_BUDGET_MS,
 )
 from .embeddings import embed_text, update_model
 from .nlp import clamp_params, compose_answer, rewrite_question
@@ -28,13 +37,14 @@ from .storage import (
     set_meta,
     update_knowledge,
 )
-from .utils import chunk_words, json_dumps
+from .utils import chunk_words, json_dumps, monotonic_ms
 from .web import web_answer
 
 
 FRESH_KEYWORDS = {
     "today",
     "latest",
+    "recent",
     "current",
     "now",
     "this week",
@@ -46,9 +56,28 @@ FRESH_KEYWORDS = {
 
 SESSION_CONTEXT: dict = {}
 SESSION_PARAMS: dict = {}
+RATE_BUCKETS: dict = {}
+
+
+def _allow_origin() -> str:
+    return ALLOW_ORIGINS[0] if len(ALLOW_ORIGINS) == 1 else "*"
+
+
+def _rate_limit(ip: str, limit_per_min: int = RATE_LIMIT_PER_MIN) -> bool:
+    now = time.time()
+    bucket = RATE_BUCKETS.get(ip)
+    if not bucket or now - bucket["ts"] > 60:
+        RATE_BUCKETS[ip] = {"ts": now, "count": 1}
+        return True
+    if bucket["count"] >= limit_per_min:
+        return False
+    bucket["count"] += 1
+    return True
 
 
 def _get_session(session_id: str) -> dict:
+    if session_id not in SESSION_CONTEXT and len(SESSION_CONTEXT) >= MAX_SESSIONS:
+        SESSION_CONTEXT.pop(next(iter(SESSION_CONTEXT)))
     return SESSION_CONTEXT.setdefault(session_id, {"history": [], "entities": [], "topics": []})
 
 
@@ -122,11 +151,13 @@ def _answer_with_web(question: str) -> Dict:
 
 
 class BackendHandler(BaseHTTPRequestHandler):
+    server_version = "FluxBackend/0.2"
+
     def _send_json(self, payload: dict, code: int = 200) -> None:
         body = json_dumps(payload).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", _allow_origin())
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
@@ -137,7 +168,7 @@ class BackendHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "text/event-stream")
         self.send_header("Cache-Control", "no-cache")
         self.send_header("Connection", "keep-alive")
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", _allow_origin())
         self.end_headers()
 
     def _sse_send(self, payload: dict) -> None:
@@ -146,6 +177,9 @@ class BackendHandler(BaseHTTPRequestHandler):
         self.wfile.flush()
 
     def do_GET(self):
+        if not _rate_limit(self.client_address[0]):
+            self._send_json({"error": "rate limit exceeded"}, code=429)
+            return
         parsed = urlparse(self.path)
         if parsed.path == "/health":
             self._send_json({"status": "ok", "service": "backend"})
@@ -159,6 +193,15 @@ class BackendHandler(BaseHTTPRequestHandler):
             total = count_knowledge(conn)
             conn.close()
             self._send_json({"knowledge": total})
+            return
+        if parsed.path == "/config":
+            self._send_json(
+                {
+                    "time_budget_ms": REQUEST_TIME_BUDGET_MS,
+                    "max_train_questions": MAX_TRAIN_QUESTIONS,
+                    "max_request_bytes": MAX_REQUEST_BYTES,
+                }
+            )
             return
         if parsed.path == "/ask_stream":
             qs = parse_qs(parsed.query)
@@ -185,13 +228,20 @@ class BackendHandler(BaseHTTPRequestHandler):
         self._send_json({"error": "not found"}, code=404)
 
     def do_POST(self):
+        if not _rate_limit(self.client_address[0]):
+            self._send_json({"error": "rate limit exceeded"}, code=429)
+            return
         parsed = urlparse(self.path)
         length = int(self.headers.get("Content-Length", "0"))
+        if length > MAX_REQUEST_BYTES:
+            self._send_json({"error": "payload too large"}, code=413)
+            return
         raw = self.rfile.read(length).decode("utf-8", errors="ignore")
         try:
             payload = json.loads(raw) if raw else {}
         except json.JSONDecodeError:
-            payload = {}
+            self._send_json({"error": "invalid json"}, code=400)
+            return
 
         if parsed.path == "/ask":
             question = str(payload.get("question", "")).strip()
@@ -229,6 +279,9 @@ class BackendHandler(BaseHTTPRequestHandler):
             if not isinstance(questions, list) or not questions:
                 self._send_json({"error": "questions list required"}, code=400)
                 return
+            if len(questions) > MAX_TRAIN_QUESTIONS:
+                self._send_json({"error": "too many questions"}, code=400)
+                return
             results = []
             conn = connect()
             init_db(conn)
@@ -240,7 +293,12 @@ class BackendHandler(BaseHTTPRequestHandler):
                 q = str(q).strip()
                 if not q:
                     continue
-                web = _answer_with_web(q) if full else web_answer(q, fast=True, max_sources=max_sources)
+                web = _answer_with_web(q) if full else web_answer(
+                    q,
+                    fast=True,
+                    max_sources=max_sources,
+                    time_budget_ms=REQUEST_TIME_BUDGET_MS,
+                )
                 answer_text = web.get("answer", "")
                 sources = web.get("sources", [])
                 if not answer_text or not sources:
@@ -320,7 +378,7 @@ class BackendHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", _allow_origin())
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.end_headers()
@@ -333,6 +391,7 @@ class BackendHandler(BaseHTTPRequestHandler):
         grade_level: int = 10,
         session_id: str = "default",
     ) -> Dict:
+        start_ms = monotonic_ms()
         conn = connect()
         init_db(conn)
         docs = all_knowledge(conn)
@@ -357,7 +416,9 @@ class BackendHandler(BaseHTTPRequestHandler):
                 "meta": {"badge": local["badge"], "confidence": local["confidence"]},
             }
 
-        web = _answer_with_web(rewritten)
+        elapsed_ms = monotonic_ms() - start_ms
+        budget_ms = max(250, REQUEST_TIME_BUDGET_MS - elapsed_ms)
+        web = web_answer(rewritten, fast=True, max_sources=3, time_budget_ms=budget_ms)
         answer_text = web.get("answer", "")
         sources = web.get("sources", [])
         if not answer_text or not sources:
@@ -372,6 +433,8 @@ class BackendHandler(BaseHTTPRequestHandler):
         session["entities"] = analysis.get("entities", [])
         session["topics"] = analysis.get("topics", [])
         session["history"].append({"q": question, "a": final_answer})
+        if len(session["history"]) > MAX_SESSION_HISTORY:
+            session["history"] = session["history"][-MAX_SESSION_HISTORY:]
 
         # Dedupe: if a very similar entry exists, update weight instead of inserting.
         best = _best_similarity(question, embeddings, dim=active_dim)
@@ -406,7 +469,7 @@ class BackendHandler(BaseHTTPRequestHandler):
 
 
 def run() -> None:
-    server = HTTPServer(("", BACKEND_PORT), BackendHandler)
+    server = ThreadingHTTPServer((BACKEND_HOST, BACKEND_PORT), BackendHandler)
     print(f"Backend listening on :{BACKEND_PORT}")
     server.serve_forever()
 

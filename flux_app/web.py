@@ -1,7 +1,9 @@
 import json
 import re
+import time
 import urllib.parse
 import urllib.request
+from functools import lru_cache
 from html.parser import HTMLParser
 from typing import Dict, List
 import urllib.error
@@ -10,11 +12,11 @@ from urllib.error import URLError
 from .config import (
     MAX_SUMMARY_SENTENCES,
     MAX_WEB_SOURCES,
+    MAX_PAGE_BYTES,
     PAGE_TIMEOUT_SECONDS,
     USER_AGENT,
     WEB_TIMEOUT_SECONDS,
 )
-from .utils import tokenize
 
 
 class _TextExtractor(HTMLParser):
@@ -39,16 +41,21 @@ class _TextExtractor(HTMLParser):
         return " ".join(self._parts)
 
 
+@lru_cache(maxsize=256)
 def _fetch_json(url: str) -> Dict:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=WEB_TIMEOUT_SECONDS) as resp:
-        return json.loads(resp.read().decode("utf-8", errors="ignore"))
+        data = resp.read().decode("utf-8", errors="ignore")
+    return json.loads(data)
 
 
 def _fetch_text(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=PAGE_TIMEOUT_SECONDS) as resp:
-        html = resp.read().decode("utf-8", errors="ignore")
+        content_type = resp.headers.get("Content-Type", "")
+        if content_type and "text" not in content_type and "html" not in content_type:
+            return ""
+        html = resp.read(MAX_PAGE_BYTES).decode("utf-8", errors="ignore")
     parser = _TextExtractor()
     parser.feed(html)
     return parser.text()
@@ -80,7 +87,9 @@ def _wiki_summary(query: str) -> Dict:
     return {}
 
 
-def duckduckgo_search(query: str, max_sources: int | None = None) -> List[Dict]:
+def duckduckgo_search(query: str, max_sources: int | None = None, deadline: float | None = None) -> List[Dict]:
+    if deadline is not None and time.time() >= deadline:
+        return []
     params = {
         "q": query,
         "format": "json",
@@ -90,7 +99,7 @@ def duckduckgo_search(query: str, max_sources: int | None = None) -> List[Dict]:
     url = "https://api.duckduckgo.com/?" + urllib.parse.urlencode(params)
     try:
         payload = _fetch_json(url)
-    except (URLError, TimeoutError):
+    except (URLError, TimeoutError, json.JSONDecodeError):
         return []
 
     sources = []
@@ -126,14 +135,28 @@ def duckduckgo_search(query: str, max_sources: int | None = None) -> List[Dict]:
     return sources
 
 
-def web_answer(query: str, fast: bool = False, max_sources: int | None = None) -> Dict:
-    sources = duckduckgo_search(query, max_sources=max_sources)
+def web_answer(
+    query: str,
+    fast: bool = False,
+    max_sources: int | None = None,
+    time_budget_ms: int | None = None,
+) -> Dict:
+    deadline = None
+    if time_budget_ms is not None:
+        deadline = time.time() + max(0.1, time_budget_ms / 1000.0)
+    sources = duckduckgo_search(query, max_sources=max_sources, deadline=deadline)
     enriched = []
     for src in sources:
+        if deadline is not None and time.time() >= deadline:
+            break
         url = src.get("url")
         text = src.get("text", "")
         if url and not fast:
             try:
+                if deadline is not None:
+                    remaining = deadline - time.time()
+                    if remaining <= 0:
+                        break
                 page_text = _fetch_text(url)
                 if page_text:
                     text = page_text
@@ -150,6 +173,8 @@ def web_answer(query: str, fast: bool = False, max_sources: int | None = None) -
             )
 
     if not enriched:
+        if deadline is not None and time.time() >= deadline:
+            return {"answer": "", "sources": [], "error": "timeout"}
         wiki = _wiki_summary(query)
         if wiki:
             return {"answer": wiki["summary"], "sources": [wiki]}

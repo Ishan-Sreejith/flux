@@ -5,6 +5,8 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 export PYTHONPATH="$ROOT"
 
+"$PYTHON_BIN" -c "from pathlib import Path; (Path('$ROOT')/'flux_app'/'logs').mkdir(parents=True, exist_ok=True)"
+
 "$PYTHON_BIN" -m flux_app.bridge > "$ROOT/flux_app/logs/bridge.log" 2>&1 &
 BRIDGE_PID=$!
 "$PYTHON_BIN" -m flux_app.backend > "$ROOT/flux_app/logs/backend.log" 2>&1 &
