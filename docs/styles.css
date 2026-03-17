@@ -189,6 +189,29 @@ button:hover {
   color: var(--muted);
 }
 
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 12px;
+  min-width: 48px;
+  text-align: center;
+}
+
 .controls__actions {
   margin-top: 14px;
   display: flex;

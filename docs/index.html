@@ -51,7 +51,10 @@
           </label>
           <label class="control">
             Learning rate
-            <input id="learn-rate" type="number" min="0.001" max="0.2" step="0.001" value="0.03" />
+            <div class="range-row">
+              <input id="learn-rate" type="range" min="0.005" max="0.12" step="0.005" value="0.03" />
+              <span id="learn-rate-val" class="pill">0.03</span>
+            </div>
           </label>
           <label class="toggle">
             <input id="auto-learn" type="checkbox" checked />

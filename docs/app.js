@@ -117,6 +117,8 @@ const STOPWORDS = new Set([
   "who",
 ]);
 
+const GREETINGS = new Set(["hello", "hi", "hey", "yo", "sup", "hola", "bonjour"]);
+
 function mulberry32(seed) {
   let t = seed >>> 0;
   return function () {
@@ -352,10 +354,13 @@ function cosine(a, b) {
 
 function searchEntries(query, k = 5) {
   const qvec = embedText(query);
-  const scored = state.entryVectors.map((item) => ({
-    ...item,
-    score: cosine(qvec, item.vector),
-  }));
+  const queryTokens = tokenize(query);
+  const scored = state.entryVectors.map((item) => {
+    let score = cosine(qvec, item.vector);
+    if (queryTokens.includes(item.word)) score += 0.4;
+    if (queryTokens.some((t) => item.word.includes(t) || t.includes(item.word))) score += 0.15;
+    return { ...item, score };
+  });
   scored.sort((a, b) => b.score - a.score);
   return { qvec, results: scored.slice(0, k) };
 }
@@ -540,7 +545,14 @@ function runQuery() {
   const question = input.value.trim();
   if (!question) return;
 
-  const tokens = tokenize(question).filter((t) => !STOPWORDS.has(t));
+  const rawTokens = tokenize(question);
+  if (rawTokens.length === 1 && GREETINGS.has(rawTokens[0])) {
+    output.value = "Hi. Ask a question about a concept, object, or topic.";
+    renderMatches([], matchesEl);
+    renderStats(new Array(state.embedDim).fill(0), statsEl);
+    return;
+  }
+  const tokens = rawTokens.filter((t) => !STOPWORDS.has(t));
   const encoded = tokens.map((t) => encode(t)).filter(Boolean);
   const params = aggregateParams(encoded);
   const prime = encoded[0]?.prime || guessPrime(question);
@@ -633,6 +645,8 @@ loadData()
   const learnStatus = document.getElementById("learn-status");
   const evalBtn = document.getElementById("eval-btn");
   const themeToggle = document.getElementById("theme-toggle");
+  const learnRate = document.getElementById("learn-rate");
+  const learnRateVal = document.getElementById("learn-rate-val");
 
   const savedTheme = localStorage.getItem("flux_lite_theme");
   if (savedTheme === "light") {
@@ -685,6 +699,12 @@ loadData()
         state.theme = "dark";
         localStorage.setItem("flux_lite_theme", "dark");
       }
+    });
+  }
+  if (learnRate && learnRateVal) {
+    learnRateVal.textContent = Number(learnRate.value).toFixed(3);
+    learnRate.addEventListener("input", () => {
+      learnRateVal.textContent = Number(learnRate.value).toFixed(3);
     });
   }
   terminalWrite("Flux Lite terminal ready. Type help.");
