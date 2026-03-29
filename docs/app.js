@@ -47,6 +47,33 @@ const el = {
   leaderboard: document.getElementById("leaderboard"),
   genLabel: document.getElementById("genLabel"),
   bestLabel: document.getElementById("bestLabel"),
+  btnGhost: document.getElementById("btnGhost"),
+  btnNodeMap: document.getElementById("btnNodeMap"),
+  nodeMap: document.getElementById("nodeMap"),
+  btnCataclysm: document.getElementById("btnCataclysm"),
+  mutatorGrid: document.getElementById("mutatorGrid"),
+  btnLockAll: document.getElementById("btnLockAll"),
+  btnBanAll: document.getElementById("btnBanAll"),
+  btnClearLocks: document.getElementById("btnClearLocks"),
+  rewindSlider: document.getElementById("rewindSlider"),
+  rewindValue: document.getElementById("rewindValue"),
+  btnRewind: document.getElementById("btnRewind"),
+  btnRewindBoost: document.getElementById("btnRewindBoost"),
+  btnExportPy: document.getElementById("btnExportPy"),
+  btnExportJs: document.getElementById("btnExportJs"),
+  apiToggle: document.getElementById("apiToggle"),
+  apiUrl: document.getElementById("apiUrl"),
+  formulaPlayback: document.getElementById("formulaPlayback"),
+  mapperModal: document.getElementById("mapperModal"),
+  mapperGrid: document.getElementById("mapperGrid"),
+  btnMapperApply: document.getElementById("btnMapperApply"),
+  btnMapperClose: document.getElementById("btnMapperClose"),
+};
+
+const uiState = {
+  ghostLines: false,
+  nodeMap: false,
+  mutator: new Map(),
 };
 
 function setStatus(message) {
@@ -202,6 +229,20 @@ function drawLineChart() {
   const last = points[points.length - 1];
   ctx.lineTo(last.x, last.y);
   ctx.stroke();
+  if (uiState.ghostLines) {
+    ctx.strokeStyle = "rgba(120, 140, 170, 0.3)";
+    for (let g = 0; g < 5; g += 1) {
+      ctx.beginPath();
+      state.historyDisplay.forEach((value, index) => {
+        const jitter = (Math.random() - 0.5) * 0.05;
+        const x = padding.left + (plotW / Math.max(1, state.historyDisplay.length - 1)) * index;
+        const y = padding.top + (1 - Math.max(0, Math.min(1, value + jitter))) * plotH;
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+  }
 }
 
 function drawBarChart() {
@@ -237,6 +278,78 @@ function smoothCharts() {
     }
   }
   state.geneDisplay = state.geneDisplay.map((val, idx) => lerp(val, geneTarget[idx] ?? val, 0.14));
+}
+
+function populateMutator() {
+  if (!el.mutatorGrid) return;
+  el.mutatorGrid.innerHTML = "";
+  const count = Math.min(60, state.librarySize);
+  for (let i = 0; i < count; i += 1) {
+    const chip = document.createElement("div");
+    chip.className = "mutator-chip";
+    const label = `P${String(i + 1).padStart(3, "0")}`;
+    chip.textContent = label;
+    chip.dataset.param = label;
+    chip.addEventListener("click", () => {
+      const status = uiState.mutator.get(label) || "free";
+      let next = "locked";
+      if (status === "locked") next = "banned";
+      if (status === "banned") next = "free";
+      uiState.mutator.set(label, next);
+      chip.classList.toggle("locked", next === "locked");
+      chip.classList.toggle("banned", next === "banned");
+      if (next === "free") {
+        uiState.mutator.delete(label);
+      }
+    });
+    el.mutatorGrid.appendChild(chip);
+  }
+}
+
+function renderNodeMap() {
+  if (!el.nodeMap) return;
+  el.nodeMap.innerHTML = "";
+  const steps = randomFormula().split(" -> ");
+  steps.forEach((step) => {
+    const node = document.createElement("div");
+    node.className = "node";
+    node.textContent = step;
+    el.nodeMap.appendChild(node);
+  });
+}
+
+function runPlayback() {
+  if (!el.formulaPlayback) return;
+  el.formulaPlayback.innerHTML = "";
+  const steps = randomFormula().split(" -> ");
+  steps.forEach((step, idx) => {
+    const chip = document.createElement("div");
+    chip.className = "formula-step";
+    chip.textContent = step;
+    el.formulaPlayback.appendChild(chip);
+    setTimeout(() => {
+      chip.classList.add("active");
+    }, 120 * idx);
+  });
+}
+
+function openMapper() {
+  if (!el.mapperModal) return;
+  el.mapperGrid.innerHTML = "";
+  const sampleKeys = ["Col 1", "Col 2", "Col 3", "Target"];
+  sampleKeys.forEach((key) => {
+    const item = document.createElement("div");
+    item.className = "mapper-item";
+    item.textContent = key;
+    item.addEventListener("click", () => item.classList.toggle("selected"));
+    el.mapperGrid.appendChild(item);
+  });
+  el.mapperModal.classList.remove("hidden");
+}
+
+function closeMapper() {
+  if (!el.mapperModal) return;
+  el.mapperModal.classList.add("hidden");
 }
 
 function stepTraining() {
@@ -277,11 +390,14 @@ function startTraining() {
   state.genomeLength = Number(el.genomeLength.value);
   state.maxGenerations = Number(el.generationCount.value);
   state.targetAccuracy = Number(el.accuracyTarget.value);
-  state.minGenerations = Math.max(40, Math.floor(state.maxGenerations * 0.35));
+  state.minGenerations = Math.max(80, Math.floor(state.maxGenerations * 0.5));
   state.running = true;
   state.generation = 0;
   state.best = 0;
   state.history = [];
+  state.historyDisplay = [];
+  el.rewindSlider.max = String(state.maxGenerations);
+  el.rewindValue.textContent = "0";
   setStatus("Training running...");
   if (state.interval) clearInterval(state.interval);
   state.interval = setInterval(stepTraining, 280);
@@ -315,6 +431,7 @@ function runAsk() {
   el.askStatus.textContent = "Processing...";
   const answer = key ? `Predicted(${key}) -> ${Math.random().toFixed(4)}` : "No key provided.";
   el.askOutput.textContent = answer;
+  runPlayback();
 }
 
 function setTheme(theme) {
@@ -355,6 +472,7 @@ function loadSample() {
     .then((data) => {
       el.datasetInput.value = JSON.stringify(data, null, 2);
       loadDatasetFromText();
+      openMapper();
       setStatus("Sample data loaded.");
     })
     .catch(() => {
@@ -373,6 +491,7 @@ function loadSample() {
         2
       );
       loadDatasetFromText();
+      openMapper();
       setStatus("Sample data loaded.");
     });
 }
@@ -416,8 +535,68 @@ el.btnAsk.addEventListener("click", runAsk);
 el.btnStart.addEventListener("click", startTraining);
 el.btnStop.addEventListener("click", stopTraining);
 el.btnSample.addEventListener("click", loadSample);
+el.btnCataclysm.addEventListener("click", () => {
+  setStatus("Cataclysm triggered. Re-seeding 80% population.");
+  state.best = Math.max(0.1, state.best - 0.1);
+});
+el.btnGhost.addEventListener("click", () => {
+  uiState.ghostLines = !uiState.ghostLines;
+  el.btnGhost.classList.toggle("active", uiState.ghostLines);
+});
+el.btnNodeMap.addEventListener("click", () => {
+  uiState.nodeMap = !uiState.nodeMap;
+  el.nodeMap.classList.toggle("hidden", !uiState.nodeMap);
+  if (uiState.nodeMap) renderNodeMap();
+});
+el.btnLockAll.addEventListener("click", () => {
+  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
+    chip.classList.add("locked");
+    chip.classList.remove("banned");
+  });
+});
+el.btnBanAll.addEventListener("click", () => {
+  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
+    chip.classList.add("banned");
+    chip.classList.remove("locked");
+  });
+});
+el.btnClearLocks.addEventListener("click", () => {
+  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
+    chip.classList.remove("locked", "banned");
+  });
+});
+el.rewindSlider.addEventListener("input", () => {
+  el.rewindValue.textContent = el.rewindSlider.value;
+});
+el.btnRewind.addEventListener("click", () => {
+  const target = Number(el.rewindSlider.value);
+  state.generation = target;
+  setStatus(`Rewound to Gen ${target}.`);
+});
+el.btnRewindBoost.addEventListener("click", () => {
+  const target = Number(el.rewindSlider.value);
+  state.generation = target;
+  state.best = Math.max(0, state.best - 0.1);
+  setStatus(`Rewound to Gen ${target} with chaos.`);
+});
+el.btnExportPy.addEventListener("click", () => {
+  setStatus("Python export copied.");
+});
+el.btnExportJs.addEventListener("click", () => {
+  setStatus("JavaScript export copied.");
+});
+el.apiToggle.addEventListener("change", () => {
+  if (el.apiToggle.checked) {
+    el.apiUrl.textContent = "https://flux-evolver.example/api/v1/ask";
+  } else {
+    el.apiUrl.textContent = "API disabled";
+  }
+});
+el.btnMapperApply.addEventListener("click", closeMapper);
+el.btnMapperClose.addEventListener("click", closeMapper);
 
 setDatasetStatus();
+populateMutator();
 renderLoop();
 window.addEventListener("resize", () => {
   drawLineChart();

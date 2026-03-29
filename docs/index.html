@@ -22,6 +22,15 @@
           <button class="icon-btn" data-panel="metrics" aria-label="Metrics">
             <span>📊</span>
           </button>
+          <button class="icon-btn" data-panel="mutator" aria-label="Gene Mutator">
+            <span>🧪</span>
+          </button>
+          <button class="icon-btn" data-panel="rewind" aria-label="Epoch Rewind">
+            <span>⏪</span>
+          </button>
+          <button class="icon-btn" data-panel="export" aria-label="Export">
+            <span>⬆</span>
+          </button>
         </div>
         <div class="slide-panel" id="slidePanel">
           <section class="panel-section active" data-panel-section="settings">
@@ -77,6 +86,41 @@
               <button id="btnStart">Start Training</button>
               <button id="btnStop" class="ghost">Stop</button>
             </div>
+            <button id="btnCataclysm" class="danger">Population Cataclysm</button>
+          </section>
+          <section class="panel-section" data-panel-section="mutator">
+            <h3>Gene Mutator Brush</h3>
+            <p class="hint">Lock or ban parameters to steer evolution.</p>
+            <div class="mutator-grid" id="mutatorGrid"></div>
+            <div class="panel-actions">
+              <button id="btnLockAll" class="ghost">Lock Selected</button>
+              <button id="btnBanAll" class="ghost">Ban Selected</button>
+              <button id="btnClearLocks">Clear All</button>
+            </div>
+          </section>
+          <section class="panel-section" data-panel-section="rewind">
+            <h3>Epoch Rewind</h3>
+            <label>Rewind to generation <span id="rewindValue">0</span></label>
+            <input id="rewindSlider" type="range" min="0" max="300" value="0" />
+            <div class="panel-actions">
+              <button id="btnRewind" class="ghost">Branch From Here</button>
+              <button id="btnRewindBoost">Rewind + Chaos</button>
+            </div>
+          </section>
+          <section class="panel-section" data-panel-section="export">
+            <h3>Export & Implement</h3>
+            <div class="panel-actions">
+              <button id="btnExportPy" class="ghost">Export Python</button>
+              <button id="btnExportJs" class="ghost">Export JavaScript</button>
+            </div>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" id="apiToggle" />
+                <span class="slider"></span>
+              </label>
+              <span>Enable API Endpoint</span>
+            </div>
+            <div class="api-url" id="apiUrl">API disabled</div>
           </section>
         </div>
       </aside>
@@ -97,11 +141,16 @@
           <section class="card liquid">
             <div class="card-header">
               <h2>Fitness Convergence</h2>
-              <span id="genLabel">Gen 0</span>
+              <div class="card-actions">
+                <button id="btnGhost" class="ghost tiny">Ghost Lines</button>
+                <button id="btnNodeMap" class="ghost tiny">Node Map</button>
+                <span id="genLabel">Gen 0</span>
+              </div>
             </div>
             <div class="chart-area">
               <canvas id="fitnessChart" height="220"></canvas>
             </div>
+            <div class="node-map hidden" id="nodeMap"></div>
           </section>
 
           <section class="card liquid">
@@ -128,10 +177,23 @@
               <button id="btnAsk">Ask</button>
             </div>
             <div class="ask-output" id="askOutput">Awaiting question...</div>
+            <div class="formula-playback" id="formulaPlayback"></div>
           </section>
         </div>
       </section>
     </main>
+
+    <div class="mapper hidden" id="mapperModal">
+      <div class="mapper-card">
+        <h3>CSV/JSON Mapper</h3>
+        <p>Select the input keys and target value columns.</p>
+        <div class="mapper-grid" id="mapperGrid"></div>
+        <div class="panel-actions">
+          <button id="btnMapperApply">Apply</button>
+          <button id="btnMapperClose" class="ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>
