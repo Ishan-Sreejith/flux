@@ -1,895 +1,338 @@
-function resolveBaseUrl() {
-  if (location.pathname.includes("/docs/")) {
-    return new URL("./", location.href);
-  }
-  return new URL("./docs/", location.href);
-}
-
-function resolveDataUrl(name) {
-  try {
-    return new URL(`./data/${name}`, import.meta.url).toString();
-  } catch {
-    return new URL(`./data/${name}`, resolveBaseUrl()).toString();
-  }
-}
-
-async function fetchJsonWithFallback(primary, fallback) {
-  const res = await fetch(primary);
-  if (res.ok) return res.json();
-  const alt = await fetch(fallback);
-  if (!alt.ok) throw new Error("data fetch failed");
-  return alt.json();
-}
-
-const taxonomyUrl = resolveDataUrl("taxonomy.json");
-const lexiconUrl = resolveDataUrl("lexicon.json");
-const animalsUrl = resolveDataUrl("animals.json");
-
-const state = {
-  taxonomy: null,
-  lexicon: null,
-  vocab: [],
-  vocabIndex: {},
-  matrix: [],
-  hashMatrix: [],
-  entryVectors: [],
-  embedDim: 32,
-  lastQuery: "",
-  lastBest: "",
-  theme: "dark",
+const examples = {
+  market: {
+    description: "Linear numeric demo",
+    data: {
+      "1": 12.5,
+      "2": 15,
+      "3": 17.5,
+      "4": 20,
+      "5": 22.5,
+      "6": 25,
+      "7": 27.5,
+      "8": 30,
+      "9": 32.5,
+      "10": 35,
+    },
+  },
+  solar: {
+    description: "Planet index (synthetic)",
+    data: [
+      { key: 1, value: 15 },
+      { key: 2, value: 20 },
+      { key: 3, value: 25 },
+      { key: 4, value: 30 },
+      { key: 5, value: 35 },
+      { key: 6, value: 40 },
+      { key: 7, value: 45 },
+      { key: 8, value: 50 },
+    ],
+  },
+  voyager: {
+    description: "Vector output demo",
+    data: {
+      Entry_01: { Key: [10, 12000, 3.3, 900], Value: [2.6, 13200] },
+      Entry_02: { Key: [20, 13000, 4.2, 850], Value: [5.8, 14690] },
+      Entry_03: { Key: [30, 14000, 5.1, 800], Value: [9.0, 16280] },
+      Entry_04: { Key: [40, 15000, 5.97, 750], Value: [12.2, 18000] },
+      Entry_05: { Key: [50, 15500, 6.5, 700], Value: [14.8, 19600] },
+      Entry_06: { Key: [60, 16000, 7.2, 650], Value: [17.6, 21420] },
+    },
+  },
 };
 
-const PARAM_LABELS = {
-  p1: "size",
-  p2: "aggression",
-  p3: "intelligence",
-  p4: "social_status",
-  p5: "domestication",
-  p6: "agency",
-  p7: "toolness",
-  p8: "artificialness",
-  p9: "danger",
-  p10: "empathy",
-  p11: "arousal",
-  p12: "edible",
-  p13: "sweetness",
-  p14: "diet",
+const ui = {
+  datasetInput: document.getElementById("datasetInput"),
+  datasetStatus: document.getElementById("datasetStatus"),
+  exampleSelect: document.getElementById("exampleSelect"),
+  btnLoadExample: document.getElementById("btnLoadExample"),
+  btnStore: document.getElementById("btnStore"),
+  btnLoadStore: document.getElementById("btnLoadStore"),
+  storeStatus: document.getElementById("storeStatus"),
+  storePreview: document.getElementById("storePreview"),
+  librarySize: document.getElementById("librarySize"),
+  libraryValue: document.getElementById("libraryValue"),
+  modeSelect: document.getElementById("modeSelect"),
+  populationSize: document.getElementById("populationSize"),
+  generationCount: document.getElementById("generationCount"),
+  mutationRate: document.getElementById("mutationRate"),
+  mutationVolatility: document.getElementById("mutationVolatility"),
+  initialRandomness: document.getElementById("initialRandomness"),
+  verifyCount: document.getElementById("verifyCount"),
+  verifyTolerance: document.getElementById("verifyTolerance"),
+  btnTrain: document.getElementById("btnTrain"),
+  btnStop: document.getElementById("btnStop"),
+  bestScore: document.getElementById("bestScore"),
+  currentGen: document.getElementById("currentGen"),
+  trainStatus: document.getElementById("trainStatus"),
+  algorithmMap: document.getElementById("algorithmMap"),
+  askInput: document.getElementById("askInput"),
+  btnAsk: document.getElementById("btnAsk"),
+  askOutput: document.getElementById("askOutput"),
+  scoreChart: document.getElementById("scoreChart"),
 };
 
-const STOPWORDS = new Set([
-  "the",
-  "a",
-  "an",
-  "and",
-  "or",
-  "but",
-  "if",
-  "then",
-  "with",
-  "without",
-  "in",
-  "on",
-  "at",
-  "to",
-  "of",
-  "for",
-  "from",
-  "by",
-  "about",
-  "as",
-  "into",
-  "over",
-  "after",
-  "before",
-  "under",
-  "above",
-  "is",
-  "are",
-  "was",
-  "were",
-  "be",
-  "been",
-  "being",
-  "do",
-  "does",
-  "did",
-  "doing",
-  "this",
-  "that",
-  "these",
-  "those",
-  "it",
-  "its",
-  "their",
-  "them",
-  "you",
-  "your",
-  "i",
-  "we",
-  "they",
-  "he",
-  "she",
-  "explain",
-  "simple",
-  "terms",
-  "what",
-  "why",
-  "how",
-  "who",
-]);
+let training = false;
+let bestGenome = null;
+let bestScore = Infinity;
+let history = [];
+let chartCtx = ui.scoreChart.getContext("2d");
 
-const GREETINGS = new Set(["hello", "hi", "hey", "yo", "sup", "hola", "bonjour"]);
-const ANIMAL_HINTS = new Set(["animal", "animals", "mammal", "mammals", "bird", "birds", "fish", "reptile", "insect", "species"]);
+function drawChart() {
+  const w = ui.scoreChart.width;
+  const h = ui.scoreChart.height;
+  chartCtx.clearRect(0, 0, w, h);
+  chartCtx.strokeStyle = "#5ee4ff";
+  chartCtx.beginPath();
+  const max = Math.max(...history, 1);
+  history.forEach((val, idx) => {
+    const x = (idx / Math.max(history.length - 1, 1)) * (w - 20) + 10;
+    const y = h - (val / max) * (h - 20) - 10;
+    if (idx === 0) {
+      chartCtx.moveTo(x, y);
+    } else {
+      chartCtx.lineTo(x, y);
+    }
+  });
+  chartCtx.stroke();
+}
 
-function mulberry32(seed) {
-  let t = seed >>> 0;
-  return function () {
-    t += 0x6d2b79f5;
-    let r = Math.imul(t ^ (t >>> 15), 1 | t);
-    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
-    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+function parseDataset(text) {
+  const data = JSON.parse(text);
+  if (Array.isArray(data)) {
+    return data.map((item) => ({ key: item.key ?? item.Key, value: item.value ?? item.Value }));
+  }
+  const samples = [];
+  Object.entries(data).forEach(([k, v]) => {
+    if (v && typeof v === "object" && "Key" in v && "Value" in v) {
+      samples.push({ key: v.Key, value: v.Value });
+    } else {
+      samples.push({ key: k, value: v });
+    }
+  });
+  return samples;
+}
+
+function scoreValue(pred, target) {
+  if (Array.isArray(target) && Array.isArray(pred)) {
+    const lenPenalty = Math.abs(target.length - pred.length);
+    const pairs = target.map((t, i) => scoreValue(pred[i], t));
+    return (pairs.reduce((a, b) => a + b, 0) / pairs.length) + lenPenalty;
+  }
+  if (typeof target === "number" && typeof pred === "number") {
+    return Math.abs(target - pred);
+  }
+  if (typeof target === "string") {
+    return pred === target ? 0 : 1;
+  }
+  return pred === target ? 0 : 1;
+}
+
+function buildParamLibrary(size) {
+  const ops = [
+    { name: "identity", fn: (v) => v, category: "core" },
+    { name: "to_float", fn: (v) => (typeof v === "number" ? v : parseFloat(v)), category: "math" },
+    { name: "add", fn: (v, g) => (typeof v === "number" ? v + g.constant : v), category: "math" },
+    { name: "mul", fn: (v, g) => (typeof v === "number" ? v * g.constant : v), category: "math" },
+    { name: "sin", fn: (v) => (typeof v === "number" ? Math.sin(v) : v), category: "math" },
+    { name: "cos", fn: (v) => (typeof v === "number" ? Math.cos(v) : v), category: "math" },
+    { name: "upper", fn: (v) => (typeof v === "string" ? v.toUpperCase() : v), category: "text" },
+    { name: "lower", fn: (v) => (typeof v === "string" ? v.toLowerCase() : v), category: "text" },
+    { name: "length", fn: (v) => (Array.isArray(v) ? v.length : String(v).length), category: "text" },
+    { name: "list_sum", fn: (v) => (Array.isArray(v) ? v.reduce((a, b) => a + (typeof b === "number" ? b : 0), 0) : v), category: "list" },
+    { name: "split_sum", fn: (v) => {
+      if (!Array.isArray(v)) return v;
+      const mid = Math.floor(v.length / 2);
+      const left = v.slice(0, mid).reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
+      const right = v.slice(mid).reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
+      return [left, right];
+    }, category: "list" },
+  ];
+  const params = [];
+  for (let i = 0; i < size; i++) {
+    const op = ops[i % ops.length];
+    params.push({ id: i + 1, name: op.name, fn: op.fn, category: op.category });
+  }
+  return params;
+}
+
+function filterParams(params, mode) {
+  if (mode === "all") return params.map((p) => p.id);
+  return params.filter((p) => p.category === mode || p.category === "core").map((p) => p.id);
+}
+
+function randomGene(allowed, randomness) {
+  return {
+    paramId: allowed[Math.floor(Math.random() * allowed.length)],
+    randomness: randomness,
+    intensity: Math.random(),
+    constant: (Math.random() - 0.5) * 10,
   };
 }
 
-async function loadData() {
-  const base = resolveBaseUrl();
-  const fallbackTax = new URL("./data/taxonomy.json", base).toString();
-  const fallbackLex = new URL("./data/lexicon.json", base).toString();
-  const fallbackAnimals = new URL("./data/animals.json", base).toString();
-  const [taxonomy, lexicon] = await Promise.all([
-    fetchJsonWithFallback(taxonomyUrl, fallbackTax),
-    fetchJsonWithFallback(lexiconUrl, fallbackLex),
-  ]);
-  const animals = await fetchJsonWithFallback(animalsUrl, fallbackAnimals);
-  state.taxonomy = taxonomy;
-  state.lexicon = lexicon;
-  state.animals = Array.isArray(animals) ? animals : [];
-  buildVocab();
-  buildMatrix();
-  buildEntryVectors();
-}
-
-function tokenize(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
-    .split(/\s+/)
-    .filter(Boolean);
-}
-
-function guessPrime(word) {
-  const w = word.toLowerCase();
-  if (["dog", "cat", "wolf", "bird", "fish"].some((k) => w.includes(k))) return "Animal";
-  if (["apple", "banana", "bread", "steak", "fruit", "food"].some((k) => w.includes(k))) return "Food";
-  if (["feel", "happy", "sad", "fear"].some((k) => w.includes(k))) return "Feeling";
-  if (["run", "fight", "hug", "move"].some((k) => w.includes(k))) return "Action";
-  return "Object";
-}
-
-function pathGuess(text, prime) {
-  const low = text.toLowerCase();
-  if (prime === "Animal") {
-    const mammal = ["mammal", "dog", "cat", "cow", "wolf"].some((k) => low.includes(k)) ? "Mammal" : "Non-Mammal";
-    const domestic = ["domestic", "pet", "tame"].some((k) => low.includes(k)) ? "Domestic" : "Wild";
-    const carn = ["carnivore", "predator", "meat"].some((k) => low.includes(k)) ? "Carnivore" : "Herbivore";
-    return [mammal, domestic, carn];
-  }
-  if (prime === "Object") {
-    const tool = ["tool", "device", "instrument"].some((k) => low.includes(k)) ? "Tool" : "Non-Tool";
-    const mech = ["mechanical", "engine", "machine"].some((k) => low.includes(k)) ? "Mechanical" : "Natural";
-    return [tool, mech];
-  }
-  if (prime === "Action") {
-    const violence = ["attack", "violence", "fight", "harm"].some((k) => low.includes(k)) ? "Violence" : "Cooperation";
-    return [violence];
-  }
-  if (prime === "Feeling") {
-    const positive = ["happy", "joy", "pleasure", "positive"].some((k) => low.includes(k)) ? "Positive" : "Negative";
-    const calm = ["calm", "peace", "relax"].some((k) => low.includes(k)) ? "Calm" : "Arousal";
-    return [positive, calm];
-  }
-  if (prime === "Food") {
-    const fruit = ["fruit", "apple", "banana", "berry"].some((k) => low.includes(k)) ? "Fruit" : "Non-Fruit";
-    const fresh = ["fresh", "raw"].some((k) => low.includes(k)) ? "Fresh" : "Cooked";
-    return [fruit, fresh];
-  }
-  return [];
-}
-
-function traverse(tree, path) {
-  let bitstring = "";
-  const params = {};
-  let node = tree;
-  for (const step of path) {
-    const name = node.name || "";
-    const yesName = node.yes?.name || "";
-    const noName = node.no?.name || "";
-    const stepLow = step.toLowerCase();
-    let isYes = true;
-    if (stepLow === name.toLowerCase()) isYes = true;
-    else if (yesName && stepLow === yesName.toLowerCase()) isYes = true;
-    else if (noName && stepLow === noName.toLowerCase()) isYes = false;
-    const bit = node[isYes ? "bit_on_yes" : "bit_on_no"] || "0";
-    bitstring += bit;
-    const updates = node[isYes ? "params_on_yes" : "params_on_no"] || {};
-    for (const [k, v] of Object.entries(updates)) {
-      params[k] = Number(v);
-    }
-    node = node[isYes ? "yes" : "no"];
-    if (!node) break;
-  }
-  return { bitstring, params };
-}
-
-function encode(word) {
-  if (!state.lexicon) return null;
-  const key = word.trim().toLowerCase();
-  const entry = state.lexicon[key];
-  let prime = entry?.prime || guessPrime(key);
-  let path = entry?.path || pathGuess(key, prime);
-  const tree = state.taxonomy.primes[prime]?.tree;
-  if (!tree) return null;
-  const { bitstring, params } = traverse(tree, path);
-  const overrides = entry?.overrides || {};
-  for (const [k, v] of Object.entries(overrides)) {
-    params[k] = Number(v);
-  }
-  return { prime, bitstring, params, path };
-}
-
-function classifyAnimalPath(name) {
-  const low = name.toLowerCase();
-  const mammalHints = ["mammal", "dog", "cat", "wolf", "bear", "whale", "dolphin", "bat", "deer", "cow", "horse"];
-  const birdHints = ["bird", "sparrow", "eagle", "hawk", "owl", "parrot", "penguin", "duck", "goose"];
-  const fishHints = ["fish", "shark", "salmon", "trout", "tuna", "carp", "ray"];
-  const reptileHints = ["snake", "lizard", "turtle", "crocodile", "alligator"];
-  const insectHints = ["bee", "ant", "wasp", "butterfly", "moth", "beetle", "fly"];
-  const amphibianHints = ["frog", "toad", "salamander", "newt"];
-  let mammal = true;
-  if (birdHints.some((k) => low.includes(k))) mammal = false;
-  if (fishHints.some((k) => low.includes(k))) mammal = false;
-  if (reptileHints.some((k) => low.includes(k))) mammal = false;
-  if (insectHints.some((k) => low.includes(k))) mammal = false;
-  if (amphibianHints.some((k) => low.includes(k))) mammal = false;
-  if (mammalHints.some((k) => low.includes(k))) mammal = true;
-  const mammalLabel = mammal ? "Mammal" : "Non-Mammal";
-  const domestic = low.includes("dog") || low.includes("cat") || low.includes("cow") || low.includes("horse") ? "Domestic" : "Wild";
-  const carn = low.includes("shark") || low.includes("wolf") || low.includes("lion") || low.includes("tiger") ? "Carnivore" : "Herbivore";
-  return [mammalLabel, domestic, carn];
-}
-
-function buildVocab() {
-  const vocabSet = new Set();
-  const addTokens = (text) => {
-    tokenize(text).forEach((tok) => {
-      if (!STOPWORDS.has(tok)) vocabSet.add(tok);
-    });
-  };
-  Object.keys(state.lexicon || {}).forEach((word) => {
-    const entry = state.lexicon[word];
-    addTokens(word);
-    if (entry?.prime) addTokens(entry.prime);
-    if (entry?.path) addTokens(entry.path.join(" "));
-  });
-  const taxonomyText = JSON.stringify(state.taxonomy || {});
-  addTokens(taxonomyText);
-  state.vocab = Array.from(vocabSet).slice(0, 1200);
-  state.vocabIndex = Object.fromEntries(state.vocab.map((w, i) => [w, i]));
-}
-
-function buildMatrix() {
-  const embedDim = state.embedDim;
-  const vocabSize = state.vocab.length;
-  const stored = loadMatrix(embedDim);
-  if (stored && stored.length === embedDim && stored[0]?.length === vocabSize) {
-    state.matrix = stored;
-  } else {
-    const rng = mulberry32(1337);
-    const matrix = [];
-    for (let i = 0; i < embedDim; i++) {
-      const row = new Array(vocabSize).fill(0);
-      for (let j = 0; j < vocabSize; j++) {
-        row[j] = (rng() - 0.5) * 0.2;
-      }
-      matrix.push(row);
-    }
-    state.matrix = matrix;
-    saveMatrix();
-  }
-  const hashSize = 512;
-  const rngHash = mulberry32(7331);
-  const hashMatrix = [];
-  for (let i = 0; i < embedDim; i++) {
-    const row = new Array(hashSize).fill(0);
-    for (let j = 0; j < hashSize; j++) {
-      row[j] = (rngHash() - 0.5) * 0.2;
-    }
-    hashMatrix.push(row);
-  }
-  state.hashMatrix = hashMatrix;
-}
-
-function vectorize(text) {
-  const vec = new Array(state.vocab.length).fill(0);
-  for (const tok of tokenize(text)) {
-    if (STOPWORDS.has(tok)) continue;
-    const idx = state.vocabIndex[tok];
-    if (idx !== undefined) vec[idx] += 1;
-  }
-  return vec;
-}
-
-function hashVectorize(text, size) {
-  const vec = new Array(size).fill(0);
-  for (const tok of tokenize(text)) {
-    if (STOPWORDS.has(tok)) continue;
-    let h = 0;
-    for (let i = 0; i < tok.length; i++) {
-      h = (h * 31 + tok.charCodeAt(i)) >>> 0;
-    }
-    vec[h % size] += 1;
-  }
-  return vec;
-}
-
-function matmul(matrix, vec) {
-  const out = new Array(matrix.length).fill(0);
-  for (let i = 0; i < matrix.length; i++) {
-    let sum = 0;
-    const row = matrix[i];
-    for (let j = 0; j < vec.length; j++) {
-      sum += row[j] * vec[j];
-    }
-    out[i] = Math.tanh(sum);
-  }
-  return out;
-}
-
-function normalize(vec) {
-  const norm = Math.sqrt(vec.reduce((acc, v) => acc + v * v, 0)) || 1;
-  return vec.map((v) => v / norm);
-}
-
-function embedText(text) {
-  const bow = vectorize(text);
-  const base = bow.reduce((acc, v) => acc + v, 0) > 0 && state.matrix.length
-    ? normalize(matmul(state.matrix, bow))
-    : null;
-  if (base) return base;
-  const hashSize = state.hashMatrix[0]?.length || 512;
-  const hvec = hashVectorize(text, hashSize);
-  return normalize(matmul(state.hashMatrix, hvec));
-}
-
-function buildEntryVectors() {
-  const base = Object.keys(state.lexicon || {}).map((word) => {
-    const entry = state.lexicon[word];
-    const text = `${word} ${entry?.prime || ""} ${(entry?.path || []).join(" ")}`;
-    return {
-      word,
-      text,
-      prime: entry?.prime || "",
-      path: entry?.path || [],
-      vector: embedText(text),
-    };
-  });
-  const animals = (state.animals || []).map((name) => {
-    const key = name.toLowerCase();
-    const entry = state.lexicon[key];
-    const path = entry?.path || classifyAnimalPath(name);
-    const text = `${name} Animal ${path.join(" ")}`;
-    return {
-      word: name.toLowerCase(),
-      text,
-      prime: "Animal",
-      path,
-      vector: embedText(text),
-    };
-  });
-  state.entryVectors = base.concat(animals);
-}
-
-function cosine(a, b) {
-  let sum = 0;
-  for (let i = 0; i < a.length; i++) sum += a[i] * b[i];
-  return sum;
-}
-
-function searchEntries(query, k = 5, filterPrime = "") {
-  const qvec = embedText(query);
-  const queryTokens = tokenize(query);
-  const scored = state.entryVectors
-    .filter((item) => !filterPrime || item.prime === filterPrime)
-    .map((item) => {
-    let score = cosine(qvec, item.vector);
-    if (queryTokens.includes(item.word)) score += 0.4;
-    if (queryTokens.some((t) => item.word.includes(t) || t.includes(item.word))) score += 0.15;
-    return { ...item, score };
-  });
-  scored.sort((a, b) => b.score - a.score);
-  return { qvec, results: scored.slice(0, k) };
-}
-
-function aggregateParams(results) {
-  const out = {};
-  if (!results.length) return out;
-  for (const res of results) {
-    for (const [k, v] of Object.entries(res.params || {})) {
-      out[k] = (out[k] || 0) + Number(v);
-    }
-  }
-  for (const k of Object.keys(out)) {
-    out[k] /= results.length;
-  }
-  return out;
-}
-
-function traitList(params) {
-  const traits = [];
-  if ((params.p12 || 0) > 0.7) traits.push("edible");
-  if ((params.p13 || 0) > 0.7) traits.push("sweet");
-  if ((params.p14 || 0) > 0.7) traits.push("carnivorous");
-  if ((params.p5 || 0) > 0.7) traits.push("domesticated");
-  if ((params.p2 || 0) > 0.7) traits.push("aggressive");
-  if ((params.p9 || 0) > 0.7) traits.push("dangerous");
-  if ((params.p7 || 0) > 0.7) traits.push("tool-like");
-  if ((params.p8 || 0) > 0.7) traits.push("artificial");
-  if ((params.p8 || 0) < 0.3) traits.push("natural");
-  if ((params.p10 || 0) > 0.7) traits.push("friendly");
-  if ((params.p1 || 0) > 0.7) traits.push("large");
-  if ((params.p1 || 0) < 0.3) traits.push("small");
-  if ((params.p3 || 0) > 0.7) traits.push("intelligent");
-  if ((params.p6 || 0) > 0.7) traits.push("agentic");
-  return traits;
-}
-
-async function wikiSummary(query) {
-  const title = encodeURIComponent(query.trim().replace(/\s+/g, "_"));
-  if (!title) return "";
-  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
+function applyGene(value, gene, params) {
+  const param = params[gene.paramId - 1];
   try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 2500);
-    const res = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!res.ok) return "";
-    const data = await res.json();
-    return data.extract || "";
-  } catch {
-    return "";
-  }
-}
-
-async function scientificLineage(term) {
-  const params = new URLSearchParams({
-    action: "wbsearchentities",
-    format: "json",
-    language: "en",
-    limit: "1",
-    search: term,
-    origin: "*",
-  });
-  const searchUrl = `https://www.wikidata.org/w/api.php?${params.toString()}`;
-  const searchRes = await fetch(searchUrl).then((r) => r.json());
-  const hit = searchRes?.search?.[0];
-  if (!hit?.id) return [];
-  const qid = hit.id;
-  const chain = [];
-  let current = qid;
-  for (let i = 0; i < 8; i++) {
-    const entityUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=${current}&props=claims|labels&languages=en&origin=*`;
-    const entityRes = await fetch(entityUrl).then((r) => r.json());
-    const ent = entityRes?.entities?.[current];
-    if (!ent) break;
-    const label = ent.labels?.en?.value || current;
-    chain.push(label);
-    const parents = ent.claims?.P171 || [];
-    const parentId = parents[0]?.mainsnak?.datavalue?.value?.id;
-    if (!parentId) break;
-    current = parentId;
-  }
-  return chain;
-}
-
-function formatAnswer(question, matches, params, prime) {
-  const traits = traitList(params);
-  const sentences = [];
-  sentences.push(`Answer to: ${question}`);
-  sentences.push(`Prime: ${prime}`);
-  sentences.push(traits.length ? `Traits: ${traits.slice(0, 6).join(", ")}` : "Traits: mixed");
-  if (matches.length) {
-    const top = matches[0];
-    sentences.push(`Best match: ${top.word} (${top.score.toFixed(3)})`);
-  }
-  return sentences.join("\n");
-}
-
-function flowchartFor(prime, path) {
-  const tree = state.taxonomy?.primes?.Animal?.tree;
-  if (!tree) return "flowchart TD\nA[Animal] --> B[Unknown]";
-  const nodes = [];
-  const edges = [];
-  let id = 0;
-  function walk(node, parentId) {
-    const nodeId = `N${id++}`;
-    nodes.push(`${nodeId}[${node.name}]`);
-    if (parentId) edges.push(`${parentId} --> ${nodeId}`);
-    if (node.yes) walk(node.yes, nodeId);
-    if (node.no) walk(node.no, nodeId);
-  }
-  walk(tree, "A");
-  let lines = "flowchart TD\nA[Animal]";
-  nodes.forEach((n) => {
-    lines += `\n${n}`;
-  });
-  edges.forEach((e) => {
-    lines += `\n${e}`;
-  });
-  return lines;
-}
-
-function renderFlowchart(mermaidText) {
-  const container = document.getElementById("flowchart");
-  if (!container) return;
-  if (!window.mermaid) {
-    container.textContent = mermaidText;
-    return;
-  }
-  container.innerHTML = `<div class="mermaid">${mermaidText}</div>`;
-  try {
-    window.mermaid.initialize({ startOnLoad: false, theme: "base" });
-    window.mermaid.run({ nodes: [container.querySelector(".mermaid")] });
-  } catch {
-    container.textContent = mermaidText;
-  }
-}
-
-function applyTemperature(text, temperature) {
-  if (temperature <= 0.05) return text;
-  const lines = text.split("\n");
-  if (lines.length <= 2) return text;
-  const head = lines.slice(0, 2);
-  const tail = lines.slice(2);
-  for (let i = tail.length - 1; i > 0; i--) {
-    if (Math.random() < temperature) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [tail[i], tail[j]] = [tail[j], tail[i]];
-    }
-  }
-  return head.concat(tail).join("\n");
-}
-
-function saveMatrix() {
-  const key = `flux_lite_matrix_v1_${state.embedDim}`;
-  const payload = {
-    vocabSig: state.vocab.slice(0, 200).join("|"),
-    matrix: state.matrix,
-  };
-  localStorage.setItem(key, JSON.stringify(payload));
-}
-
-function loadMatrix(dim) {
-  const key = `flux_lite_matrix_v1_${dim}`;
-  const raw = localStorage.getItem(key);
-  if (!raw) return null;
-  try {
-    const payload = JSON.parse(raw);
-    const sig = state.vocab.slice(0, 200).join("|");
-    if (payload.vocabSig !== sig) return null;
-    return payload.matrix;
+    return param.fn(value, gene);
   } catch {
     return null;
   }
 }
 
-function resetMatrix() {
-  const key = `flux_lite_matrix_v1_${state.embedDim}`;
-  localStorage.removeItem(key);
-  buildMatrix();
-  buildEntryVectors();
-}
-
-function learnFrom(query, targetText, lr) {
-  const bow = vectorize(query);
-  const pred = embedText(query);
-  const target = embedText(targetText);
-  const error = target.map((v, i) => v - pred[i]);
-  for (let i = 0; i < state.matrix.length; i++) {
-    const row = state.matrix[i];
-    const e = error[i];
-    if (e === 0) continue;
-    for (let j = 0; j < row.length; j++) {
-      if (bow[j] !== 0) row[j] += lr * e * bow[j];
-    }
+function executeGenome(key, genome, params) {
+  let value = key;
+  for (const gene of genome) {
+    value = applyGene(value, gene, params);
+    if (value === null || value === undefined) return { ok: false, value: null };
   }
-  buildEntryVectors();
-  saveMatrix();
+  return { ok: true, value };
 }
 
-const EVAL_PROMPTS = [
-  { prompt: "Explain dogs in simple terms", expected: ["animal", "dog", "pet"] },
-  { prompt: "What is a wolf?", expected: ["animal", "wolf", "wild"] },
-  { prompt: "Describe a cat", expected: ["animal", "cat", "domestic"] },
-  { prompt: "Explain a whale", expected: ["animal", "mammal", "aquatic"] },
-  { prompt: "What is a sparrow?", expected: ["animal", "bird", "wild"] },
-];
+function evolve(samples, config) {
+  const params = buildParamLibrary(config.librarySize);
+  const allowed = filterParams(params, config.mode);
+  const population = Array.from({ length: config.population }, () => ({
+    genome: Array.from({ length: 6 }, () => randomGene(allowed, config.initialRandomness)),
+  }));
 
-function scoreAnswer(answer, expected) {
-  const low = answer.toLowerCase();
-  const hits = expected.filter((k) => low.includes(k)).length;
-  return hits / expected.length;
-}
-
-function runEvaluation() {
-  const list = document.getElementById("eval-list");
-  const scoreEl = document.getElementById("eval-score");
-  const statusEl = document.getElementById("eval-status");
-  if (list) list.innerHTML = "";
-  let total = 0;
-  EVAL_PROMPTS.forEach((item) => {
-    const tokens = tokenize(item.prompt).filter((t) => !STOPWORDS.has(t));
-    const encoded = tokens.map((t) => encode(t)).filter(Boolean);
-    const params = aggregateParams(encoded);
-    const prime = encoded[0]?.prime || guessPrime(item.prompt);
-    const search = searchEntries(item.prompt, 3);
-    const summary = formatAnswer(item.prompt, search.results, params, prime);
-    const score = scoreAnswer(summary, item.expected);
-    total += score;
-    if (list) {
-      const li = document.createElement("li");
-      li.textContent = `${item.prompt} -> ${score.toFixed(2)}`;
-      list.appendChild(li);
-    }
-  });
-  const avg = total / EVAL_PROMPTS.length;
-  if (scoreEl) scoreEl.textContent = avg.toFixed(2);
-  if (statusEl) statusEl.textContent = `Completed in ${EVAL_PROMPTS.length} prompts.`;
-}
-
-function renderMatches(matches, target) {
-  if (!target) return;
-  target.innerHTML = "";
-  matches.forEach((m) => {
-    const li = document.createElement("li");
-    li.textContent = `${m.word} (${m.score.toFixed(3)})`;
-    target.appendChild(li);
-  });
-}
-
-function renderStats(vec, target) {
-  if (!target) return;
-  const maxVal = Math.max(...vec);
-  const minVal = Math.min(...vec);
-  const mean = vec.reduce((acc, v) => acc + v, 0) / vec.length;
-  target.textContent = `dim=32\nmean=${mean.toFixed(3)}\nmin=${minVal.toFixed(3)}\nmax=${maxVal.toFixed(3)}`;
-}
-
-function runQuery() {
-  const input = document.getElementById("qa-input");
-  const output = document.getElementById("qa-output");
-  const matchesEl = document.getElementById("qa-matches");
-  const statsEl = document.getElementById("qa-stats");
-  const live = document.getElementById("qa-live");
-  const autoLearn = document.getElementById("auto-learn");
-  const learnRateEl = document.getElementById("learn-rate");
-  const tempEl = document.getElementById("temperature");
-  const learnStatus = document.getElementById("learn-status");
-  if (!input || !output) return;
-  const question = input.value.trim();
-  if (!question) return;
-  if (!state.lexicon || !state.taxonomy) {
-    output.value = "Data not loaded yet. Refresh and try again.";
-    return;
-  }
-
-  const rawTokens = tokenize(question);
-  if (rawTokens.length === 1 && GREETINGS.has(rawTokens[0])) {
-    output.value = "Hi. Ask a question about an animal or species.";
-    renderMatches([], matchesEl);
-    renderStats(new Array(state.embedDim).fill(0), statsEl);
-    return;
-  }
-  const tokens = rawTokens.filter((t) => !STOPWORDS.has(t));
-  const encoded = tokens.map((t) => encode(t)).filter(Boolean);
-  const params = aggregateParams(encoded);
-  const animalFocus = encoded.some((e) => e.prime === "Animal") || rawTokens.some((t) => ANIMAL_HINTS.has(t));
-  if (!animalFocus) {
-    const fallback = searchEntries(question, 5, "Animal");
-    output.value = "This model focuses on animals. Try asking about a specific animal or species.";
-    renderMatches(fallback.results, matchesEl);
-    renderStats(fallback.qvec, statsEl);
-    renderFlowchart(flowchartFor("Animal", fallback.results[0]?.path || []));
-    return;
-  }
-  const prime = "Animal";
-  const search = searchEntries(question, 5, "Animal");
-  const summary = formatAnswer(question, search.results, params, prime);
-  const temperature = Number(tempEl?.value || 0.2);
-  const finalSummary = applyTemperature(summary, temperature);
-  state.lastQuery = question;
-  state.lastBest = search.results[0]?.word || "";
-
-  renderMatches(search.results, matchesEl);
-  renderStats(search.qvec, statsEl);
-  renderFlowchart(flowchartFor(prime, encoded[0]?.path || search.results[0]?.path || []));
-
-  if (autoLearn?.checked && state.lastBest) {
-    const lr = Number(learnRateEl?.value || 0.03);
-    learnFrom(question, state.lastBest, lr);
-    if (learnStatus) learnStatus.textContent = `Auto-learned from ${state.lastBest}.`;
-  }
-
-  if (live.checked) {
-    output.value = finalSummary + "\n\nFetching Wikipedia summary...";
-    wikiSummary(question).then((extra) => {
-      output.value = extra ? `${finalSummary}\n\nWeb summary:\n${extra}` : finalSummary;
-    });
-    scientificLineage(search.results[0]?.word || question).then((lineage) => {
-      if (lineage.length) {
-        const path = lineage.slice(0, 7).reverse();
-        renderFlowchart(flowchartFor("Animal", path));
+  let best = population[0];
+  let bestScoreLocal = Infinity;
+  for (const agent of population) {
+    let total = 0;
+    let failed = false;
+    for (const sample of samples) {
+      const result = executeGenome(sample.key, agent.genome, params);
+      if (!result.ok) {
+        failed = true;
+        break;
       }
-    });
-  } else {
-    output.value = finalSummary;
+      total += scoreValue(result.value, sample.value);
+    }
+    const score = failed ? Infinity : total / samples.length;
+    agent.score = score;
+    if (score < bestScoreLocal) {
+      bestScoreLocal = score;
+      best = agent;
+    }
   }
+  return { best, bestScore: bestScoreLocal, params };
 }
 
-function terminalWrite(message) {
-  const log = document.getElementById("term-log");
-  if (!log) return;
-  log.textContent += `${message}\n`;
-  log.scrollTop = log.scrollHeight;
+function verifyGenome(best, samples, count, tolerance) {
+  if (!count || count <= 0) return true;
+  const used = new Set();
+  let successes = 0;
+  let attempts = 0;
+  while (successes < count && attempts < count * 10) {
+    const sample = samples[Math.floor(Math.random() * samples.length)];
+    const keyId = JSON.stringify(sample.key);
+    attempts += 1;
+    if (used.has(keyId)) continue;
+    used.add(keyId);
+    const result = executeGenome(sample.key, best.genome, best.params);
+    if (result.ok && scoreValue(result.value, sample.value) <= tolerance) {
+      successes += 1;
+    } else {
+      successes = 0;
+    }
+  }
+  return successes >= count;
 }
 
-function handleTerminalCommand(line) {
-  const trimmed = line.trim();
-  if (!trimmed) return;
-  const [cmd, ...rest] = trimmed.split(" ");
-  const arg = rest.join(" ").trim();
-  if (cmd === "help") {
-    terminalWrite("Commands: help, ask <question>, search <query>, encode <word>, clear");
-    return;
-  }
-  if (cmd === "clear") {
-    const log = document.getElementById("term-log");
-    if (log) log.textContent = "";
-    return;
-  }
-  if (cmd === "encode") {
-    const res = encode(arg);
-    terminalWrite(res ? JSON.stringify(res, null, 2) : "No match.");
-    return;
-  }
-  if (cmd === "search") {
-    const search = searchEntries(arg || trimmed, 5, "Animal");
-    search.results.forEach((r) => terminalWrite(`${r.word} (${r.score.toFixed(3)})`));
-    return;
-  }
-  if (cmd === "ask") {
-    const q = arg || trimmed;
-    const rawTokens = tokenize(q);
-    const tokens = rawTokens.filter((t) => !STOPWORDS.has(t));
-    const encoded = tokens.map((t) => encode(t)).filter(Boolean);
-    const params = aggregateParams(encoded);
-    const animalFocus = encoded.some((e) => e.prime === "Animal") || rawTokens.some((t) => ANIMAL_HINTS.has(t));
-    if (!animalFocus) {
-      terminalWrite("This model focuses on animals. Try asking about an animal or species.");
+function trainLoop(samples) {
+  const generations = Number(ui.generationCount.value);
+  const config = {
+    librarySize: Number(ui.librarySize.value),
+    population: Number(ui.populationSize.value),
+    mode: ui.modeSelect.value,
+    initialRandomness: Number(ui.initialRandomness.value),
+  };
+
+  let gen = 0;
+  training = true;
+  history = [];
+  function step() {
+    if (!training || gen >= generations) {
+      if (training && bestGenome) {
+        const verifyCount = Number(ui.verifyCount.value);
+        const tolerance = Number(ui.verifyTolerance.value);
+        const verified = verifyGenome(bestGenome, samples, verifyCount, tolerance);
+        ui.trainStatus.textContent = verified ? "verified" : "done";
+      } else {
+        ui.trainStatus.textContent = "stopped";
+      }
       return;
     }
-    const prime = "Animal";
-    const search = searchEntries(q, 5, "Animal");
-    terminalWrite(formatAnswer(q, search.results, params, prime));
+    const { best, bestScore: score, params } = evolve(samples, config);
+    bestGenome = { genome: best.genome, params };
+    bestScore = score;
+    history.push(score);
+    ui.bestScore.textContent = score.toFixed(4);
+    ui.currentGen.textContent = String(gen + 1);
+    ui.trainStatus.textContent = "running";
+    ui.algorithmMap.textContent = best.genome
+      .map((g, i) => `${i + 1}. Param_${g.paramId} randomness=${g.randomness.toFixed(2)} intensity=${g.intensity.toFixed(2)}`)
+      .join("\n");
+    drawChart();
+    gen += 1;
+    requestAnimationFrame(step);
+  }
+  step();
+}
+
+function askQuestion() {
+  if (!bestGenome) {
+    ui.askOutput.textContent = "Train first.";
     return;
   }
-  terminalWrite("Unknown command. Type help.");
+  let key;
+  const raw = ui.askInput.value.trim();
+  if (!raw) return;
+  try {
+    key = JSON.parse(raw);
+  } catch {
+    key = raw;
+  }
+  const result = executeGenome(key, bestGenome.genome, bestGenome.params);
+  ui.askOutput.textContent = result.ok ? JSON.stringify(result.value) : "Error";
 }
 
-const qaBtn = document.getElementById("qa-btn");
-if (qaBtn) qaBtn.addEventListener("click", runQuery);
-const qaInput = document.getElementById("qa-input");
-if (qaInput) {
-  qaInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") runQuery();
-  });
-}
-const termInput = document.getElementById("term-input");
-if (termInput) {
-  termInput.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter") return;
-    const line = event.target.value;
-    event.target.value = "";
-    terminalWrite(`flux> ${line}`);
-    handleTerminalCommand(line);
-  });
+function updateDatasetStatus(samples) {
+  ui.datasetStatus.textContent = `${samples.length} samples`;
 }
 
-loadData()
-  .then(() => {
-  const sizeSelect = document.getElementById("model-size");
-  const learnBtn = document.getElementById("learn-btn");
-  const resetBtn = document.getElementById("reset-btn");
-  const learnStatus = document.getElementById("learn-status");
-  const evalBtn = document.getElementById("eval-btn");
-  const themeToggle = document.getElementById("theme-toggle");
-  const learnRate = document.getElementById("learn-rate");
-  const learnRateVal = document.getElementById("learn-rate-val");
-  const temperature = document.getElementById("temperature");
-  const temperatureVal = document.getElementById("temperature-val");
+function loadExample() {
+  const example = examples[ui.exampleSelect.value];
+  ui.datasetInput.value = JSON.stringify(example.data, null, 2);
+  updateDatasetStatus(parseDataset(ui.datasetInput.value));
+}
 
-  const savedTheme = localStorage.getItem("flux_lite_theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light");
-    state.theme = "light";
-    if (themeToggle) themeToggle.checked = true;
-  }
+function saveStore() {
+  const samples = parseDataset(ui.datasetInput.value);
+  const store = JSON.parse(localStorage.getItem("flux_store") || "[]");
+  localStorage.setItem("flux_store", JSON.stringify(store.concat(samples)));
+  loadStore();
+}
 
-  if (sizeSelect) {
-    sizeSelect.value = String(state.embedDim);
-    sizeSelect.addEventListener("change", () => {
-      state.embedDim = Number(sizeSelect.value || 32);
-      buildMatrix();
-      buildEntryVectors();
-      if (learnStatus) learnStatus.textContent = `Model resized to ${state.embedDim}.`;
-    });
-  }
-  if (learnBtn) {
-    learnBtn.addEventListener("click", () => {
-      if (!state.lastQuery || !state.lastBest) {
-        if (learnStatus) learnStatus.textContent = "Ask a question first.";
-        return;
-      }
-      const lr = Number(document.getElementById("learn-rate")?.value || 0.03);
-      learnFrom(state.lastQuery, state.lastBest, lr);
-      if (learnStatus) learnStatus.textContent = `Learned from ${state.lastBest}.`;
-    });
-  }
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      resetMatrix();
-      if (learnStatus) learnStatus.textContent = "Model reset.";
-    });
-  }
-  if (evalBtn) {
-    evalBtn.addEventListener("click", () => {
-      const status = document.getElementById("eval-status");
-      if (status) status.textContent = "Running...";
-      setTimeout(runEvaluation, 50);
-    });
-  }
-  if (themeToggle) {
-    themeToggle.addEventListener("change", () => {
-      if (themeToggle.checked) {
-        document.body.classList.add("light");
-        state.theme = "light";
-        localStorage.setItem("flux_lite_theme", "light");
-      } else {
-        document.body.classList.remove("light");
-        state.theme = "dark";
-        localStorage.setItem("flux_lite_theme", "dark");
-      }
-    });
-  }
-  if (learnRate && learnRateVal) {
-    learnRateVal.textContent = Number(learnRate.value).toFixed(3);
-    learnRate.addEventListener("input", () => {
-      learnRateVal.textContent = Number(learnRate.value).toFixed(3);
-    });
-  }
-  if (temperature && temperatureVal) {
-    temperatureVal.textContent = Number(temperature.value).toFixed(2);
-    temperature.addEventListener("input", () => {
-      temperatureVal.textContent = Number(temperature.value).toFixed(2);
-    });
-  }
-  if (document.getElementById("term-log")) {
-    terminalWrite("Flux Lite terminal ready. Type help.");
-  }
-  })
-  .catch((err) => {
-    const output = document.getElementById("qa-output");
-    if (output) {
-      output.value = "Data failed to load. Check the GitHub Pages path settings.";
-    }
-    terminalWrite("Data failed to load. Check the GitHub Pages path settings.");
-  });
+function loadStore() {
+  const store = JSON.parse(localStorage.getItem("flux_store") || "[]");
+  ui.storeStatus.textContent = `${store.length} stored samples`;
+  ui.storePreview.textContent = JSON.stringify(store.slice(0, 8), null, 2);
+}
+
+ui.btnLoadExample.addEventListener("click", loadExample);
+ui.btnTrain.addEventListener("click", () => {
+  const samples = parseDataset(ui.datasetInput.value);
+  updateDatasetStatus(samples);
+  trainLoop(samples);
+});
+ui.btnStop.addEventListener("click", () => {
+  training = false;
+  ui.trainStatus.textContent = "stopped";
+});
+ui.btnAsk.addEventListener("click", askQuestion);
+ui.btnStore.addEventListener("click", saveStore);
+ui.btnLoadStore.addEventListener("click", loadStore);
+ui.librarySize.addEventListener("input", () => (ui.libraryValue.textContent = ui.librarySize.value));
+
+loadExample();
+loadStore();

@@ -1,30 +1,119 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Flux Lite NLU</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flux Evolver Demo</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="minimal">
-      <section class="panel left">
-        <div class="input-row">
-          <input id="qa-input" type="text" placeholder="Ask about an animal..." />
-          <button id="qa-btn">Ask</button>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <h1>Flux Evolver</h1>
+          <p>Client-side evolutionary trainer with visualization and interactive Q&amp;A.</p>
         </div>
-        <label class="toggle">
-          <input id="qa-live" type="checkbox" />
-          <span>Enable internet</span>
-        </label>
-        <textarea id="qa-output" class="output" rows="12" readonly></textarea>
+        <div class="hero-actions">
+          <button id="btnTrain">Start Training</button>
+          <button id="btnStop" class="ghost">Stop</button>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Dataset</h2>
+          <div class="row">
+            <select id="exampleSelect">
+              <option value="market">Market (linear)</option>
+              <option value="solar">Solar (linear)</option>
+              <option value="voyager">Voyager (vector)</option>
+            </select>
+            <button id="btnLoadExample" class="ghost">Load Example</button>
+          </div>
+          <textarea id="datasetInput" rows="10"></textarea>
+          <div class="row meta">
+            <span id="datasetStatus">0 samples</span>
+            <button id="btnStore" class="ghost">Save to Store</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Controls</h2>
+          <div class="control">
+            <label>Library Size: <span id="libraryValue">180</span></label>
+            <input id="librarySize" type="range" min="10" max="300" value="180" />
+          </div>
+          <div class="row">
+            <label>Mode</label>
+            <select id="modeSelect">
+              <option value="all">All</option>
+              <option value="math">Math</option>
+              <option value="text">Text</option>
+              <option value="list">List</option>
+            </select>
+          </div>
+          <div class="row">
+            <label>Population</label>
+            <input id="populationSize" type="number" min="10" max="400" value="60" />
+            <label>Generations</label>
+            <input id="generationCount" type="number" min="10" max="2000" value="200" />
+          </div>
+          <div class="row">
+            <label>Mutation</label>
+            <input id="mutationRate" type="number" step="0.05" min="0" max="1" value="0.25" />
+            <label>Volatility</label>
+            <input id="mutationVolatility" type="number" step="0.05" min="0" max="1" value="0.35" />
+          </div>
+          <div class="row">
+            <label>Initial Randomness</label>
+            <input id="initialRandomness" type="number" step="0.05" min="0" max="1" value="0.25" />
+          </div>
+          <div class="row">
+            <label>Verify Count</label>
+            <input id="verifyCount" type="number" min="0" max="50" value="6" />
+            <label>Verify Tolerance</label>
+            <input id="verifyTolerance" type="number" step="0.01" min="0" max="10" value="0.5" />
+          </div>
+        </div>
       </section>
-      <section class="panel right">
-        <div id="flowchart" class="flowchart full"></div>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Training</h2>
+          <canvas id="scoreChart" height="160"></canvas>
+          <div class="stats">
+            <div><span>Best Score</span><strong id="bestScore">-</strong></div>
+            <div><span>Generation</span><strong id="currentGen">0</strong></div>
+            <div><span>Status</span><strong id="trainStatus">idle</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Algorithm Map</h2>
+          <pre id="algorithmMap">No genome yet.</pre>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h2>Ask</h2>
+          <div class="row">
+            <input id="askInput" placeholder="Type a key (JSON allowed)" />
+            <button id="btnAsk" class="ghost">Ask</button>
+          </div>
+          <pre id="askOutput">No answer yet.</pre>
+        </div>
+        <div class="card">
+          <h2>Store</h2>
+          <p>Training data store is saved locally in your browser.</p>
+          <div class="row meta">
+            <span id="storeStatus">0 stored samples</span>
+            <button id="btnLoadStore" class="ghost">Load Store</button>
+          </div>
+          <pre id="storePreview">Empty</pre>
+        </div>
       </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script type="module" src="./app.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

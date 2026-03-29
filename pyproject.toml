@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flux"
+version = "0.1.0"
+description = "Evolutionary ecosystem simulation with autonomous agents, neural plasticity, and metacognition"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[tool.setuptools]
+packages = [
+    "eco_sim",
+    "eco_sim.world",
+    "eco_sim.agents",
+    "eco_sim.awareness",
+    "eco_sim.evolution",
+    "eco_sim.io",
+    "eco_sim.demo",
+    "flux_evolver",
+]
+
+[tool.setuptools.package-dir]
+"" = "src"
