@@ -66,6 +66,7 @@ const ui = {
   scoreChart: document.getElementById("scoreChart"),
   algoTitle: document.getElementById("algoTitle"),
   algoCount: document.getElementById("algoCount"),
+  algoKeyInput: document.getElementById("algoKeyInput"),
 };
 
 let training = false;
@@ -295,8 +296,21 @@ function trainLoop(samples) {
 }
 
 function askQuestion() {
-  if (!bestGenome) {
-    ui.askOutput.textContent = "Train first.";
+  const algoKeyRaw = ui.algoKeyInput.value.trim();
+  let genomeToUse = bestGenome;
+  if (algoKeyRaw) {
+    try {
+      const parsed = JSON.parse(algoKeyRaw);
+      if (Array.isArray(parsed)) {
+        genomeToUse = { genome: parsed, params: bestGenome ? bestGenome.params : buildParamLibrary(Number(ui.librarySize.value)) };
+      }
+    } catch {
+      ui.askOutput.textContent = "Invalid Algorithm Key JSON.";
+      return;
+    }
+  }
+  if (!genomeToUse) {
+    ui.askOutput.textContent = "Train first or paste an Algorithm Key.";
     return;
   }
   let key;
@@ -307,7 +321,7 @@ function askQuestion() {
   } catch {
     key = raw;
   }
-  const result = executeGenome(key, bestGenome.genome, bestGenome.params);
+  const result = executeGenome(key, genomeToUse.genome, genomeToUse.params);
   ui.askOutput.textContent = result.ok ? JSON.stringify(result.value) : "Error";
 }
 
@@ -330,6 +344,7 @@ function renderAlgorithm(genome) {
   }
   ui.algoTitle.textContent = "Algorithm Key";
   ui.algoCount.textContent = `${genome.length} steps`;
+  ui.algoKeyInput.value = JSON.stringify(genome, null, 2);
   genome.forEach((gene, idx) => {
     const row = document.createElement("div");
     row.className = "algo-step";
