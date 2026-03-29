@@ -13,6 +13,7 @@ const state = {
   genomeLength: 8,
   maxGenerations: 300,
   targetAccuracy: 0.95,
+  minGenerations: 30,
 };
 
 const el = {
@@ -151,22 +152,30 @@ function drawLineChart() {
   ctx.clearRect(0, 0, width, height);
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
+  const padding = { left: 44, right: 12, top: 12, bottom: 24 };
+  const plotW = Math.max(1, width - padding.left - padding.right);
+  const plotH = Math.max(1, height - padding.top - padding.bottom);
   ctx.strokeStyle = "#2c3342";
   ctx.lineWidth = 1;
+  ctx.font = "11px \"JetBrains Mono\", monospace";
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--muted");
   for (let i = 0; i <= 4; i += 1) {
-    const y = (height / 4) * i;
+    const value = 1 - i / 4;
+    const y = padding.top + plotH * (1 - value);
     ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(width, y);
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(width - padding.right, y);
     ctx.stroke();
+    const label = `${Math.round(value * 100)}%`;
+    ctx.fillText(label, 6, y + 4);
   }
   if (state.historyDisplay.length < 2) return;
   ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
   ctx.lineWidth = 2.5;
   ctx.beginPath();
   const points = state.historyDisplay.map((value, index) => {
-    const x = (width / (state.historyDisplay.length - 1)) * index;
-    const y = height - value * height;
+    const x = padding.left + (plotW / (state.historyDisplay.length - 1)) * index;
+    const y = padding.top + (1 - value) * plotH;
     return { x, y };
   });
   ctx.moveTo(points[0].x, points[0].y);
@@ -218,7 +227,7 @@ function smoothCharts() {
 function stepTraining() {
   if (!state.running) return;
   state.generation += 1;
-  const improvement = (1 - state.best) * (0.08 + Math.random() * 0.12);
+  const improvement = (1 - state.best) * (0.02 + Math.random() * 0.05);
   state.best = Math.min(1, state.best + improvement);
   state.avg = state.best * (0.65 + Math.random() * 0.1);
   state.history.push(state.best);
@@ -226,9 +235,14 @@ function stepTraining() {
   el.genLabel.textContent = `Gen ${state.generation}`;
   el.bestLabel.textContent = `Best ${state.best.toFixed(3)}`;
   updateLeaderboard();
-  if (state.best >= state.targetAccuracy || state.generation >= state.maxGenerations) {
+  if (state.generation >= state.maxGenerations) {
     stopTraining();
-    setStatus("Training complete.");
+    setStatus(`Training complete at Gen ${state.generation} (max generations).`);
+    return;
+  }
+  if (state.best >= state.targetAccuracy && state.generation >= state.minGenerations) {
+    stopTraining();
+    setStatus(`Training complete at Gen ${state.generation} (target reached).`);
   }
 }
 
