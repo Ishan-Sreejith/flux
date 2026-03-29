@@ -3,117 +3,123 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flux Evolver | Focus Mode</title>
+    <title>Flux Evolver IDE</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="focus-app" id="appRoot" data-mode="setup">
-      <header class="focus-header">
-        <div class="brand">
-          <span class="brand-mark"></span>
-          <div>
-            <h1>Flux Evolver</h1>
-            <p>Minimalist evolution canvas for high-signal training.</p>
-          </div>
+    <main class="ide theme-cyber" id="appRoot">
+      <aside class="sidebar">
+        <div class="icon-strip">
+          <button class="icon-btn active" data-panel="settings" aria-label="Settings">
+            <span>⚙</span>
+          </button>
+          <button class="icon-btn" data-panel="files" aria-label="Files">
+            <span>📂</span>
+          </button>
+          <button class="icon-btn" data-panel="library" aria-label="Library">
+            <span>🧬</span>
+          </button>
+          <button class="icon-btn" data-panel="metrics" aria-label="Metrics">
+            <span>📊</span>
+          </button>
         </div>
-        <nav class="menu-bar">
-          <button class="menu-item">File</button>
-          <button class="menu-item">Edit</button>
-          <button class="menu-item">View</button>
-          <button class="menu-item">Code</button>
-          <button class="menu-item">Run</button>
-          <button class="menu-item">Train</button>
-          <button class="menu-item">Tools</button>
-          <button class="menu-item">Window</button>
-          <button class="menu-item">Help</button>
-        </nav>
-        <div class="header-meta">
-          <button id="btnExample" class="ghost small">Example</button>
-          <span id="datasetStatus">0 samples</span>
-          <span id="statusMessage">Ready.</span>
-        </div>
-      </header>
-
-      <section class="stage stage-setup" id="setupStage">
-        <div class="setup-card">
-          <div class="setup-head">
-            <h2>Load Training Data</h2>
-            <p>Drop a JSON or CSV file, or paste data below.</p>
-          </div>
-          <div class="upload-zone">
-            <input type="file" id="fileInput" />
-            <div>
-              <strong>Drag & drop</strong>
-              <span>or click to upload</span>
-            </div>
-          </div>
-          <textarea id="datasetInput" rows="8" placeholder="Paste JSON or CSV here"></textarea>
-
-          <div class="slider-grid">
-            <div class="slider-card">
-              <label for="librarySize">Library Size</label>
-              <input id="librarySize" type="range" min="1" max="1000" value="300" />
-              <span id="libraryValue">300</span>
-            </div>
-            <div class="slider-card">
-              <label for="populationSize">Population</label>
+        <div class="slide-panel" id="slidePanel">
+          <section class="panel-section active" data-panel-section="settings">
+            <h3>Settings</h3>
+            <label>Library Size <span id="libraryValue">300</span></label>
+            <input id="librarySize" type="range" min="1" max="1000" value="300" />
+            <div class="form-grid">
+              <label>Population</label>
               <input id="populationSize" type="number" min="10" max="400" value="120" />
-            </div>
-            <div class="slider-card">
-              <label for="genomeLength">Genome Length</label>
+              <label>Genome Length</label>
               <input id="genomeLength" type="number" min="3" max="20" value="8" />
-            </div>
-            <div class="slider-card">
-              <label for="generationCount">Generations</label>
+              <label>Generations</label>
               <input id="generationCount" type="number" min="10" max="2000" value="300" />
-            </div>
-            <div class="slider-card">
-              <label for="accuracyTarget">Accuracy Target</label>
+              <label>Accuracy Target</label>
               <input id="accuracyTarget" type="number" min="0.1" max="1" step="0.01" value="0.95" />
             </div>
-          </div>
-
-          <div class="setup-actions">
-            <button id="btnSample" class="ghost">Load Sample</button>
-            <button id="btnStart">Start Evolution</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="stage stage-evolution hidden" id="evolutionStage">
-        <div class="evolution-center">
-          <div class="progress-ring">
-            <svg id="progressSvg" width="240" height="240" viewBox="0 0 240 240">
-              <circle class="ring-track" cx="120" cy="120" r="92" />
-              <circle class="ring-progress" cx="120" cy="120" r="92" />
-            </svg>
-            <div class="ring-label">
-              <span id="progressValue">0%</span>
-              <small>Generation <strong id="genValue">0</strong></small>
+            <div class="theme-row">
+              <span>Theme</span>
+              <div class="theme-pills">
+                <button class="theme-pill active" data-theme="theme-cyber">Cyber Synth</button>
+                <button class="theme-pill" data-theme="theme-matrix">Matrix Green</button>
+                <button class="theme-pill" data-theme="theme-solar">Solar Flare</button>
+                <button class="theme-pill" data-theme="theme-arctic">Arctic Frost</button>
+              </div>
             </div>
-          </div>
-          <div class="evolution-actions">
-            <button id="btnPause" class="ghost">Pause</button>
-            <button id="btnStop">Stop</button>
-          </div>
+          </section>
+          <section class="panel-section" data-panel-section="files">
+            <h3>Training Data</h3>
+            <div class="upload-zone">
+              <input type="file" id="fileInput" />
+              <div>
+                <strong>Upload dataset</strong>
+                <span>JSON or CSV</span>
+              </div>
+            </div>
+            <textarea id="datasetInput" rows="8" placeholder="Paste dataset JSON or CSV"></textarea>
+            <div class="panel-meta">
+              <span id="datasetStatus">0 samples</span>
+              <span id="statusMessage">Ready.</span>
+            </div>
+          </section>
+          <section class="panel-section" data-panel-section="library">
+            <h3>Gene Frequency</h3>
+            <canvas id="geneChart" height="200"></canvas>
+            <p class="hint">Top 10 agents gene usage distribution.</p>
+          </section>
+          <section class="panel-section" data-panel-section="metrics">
+            <h3>Quick Actions</h3>
+            <div class="panel-actions">
+              <button id="btnSample" class="ghost">Load Sample</button>
+              <button id="btnStart">Start Training</button>
+              <button id="btnStop" class="ghost">Stop</button>
+            </div>
+          </section>
         </div>
-        <div class="evolution-side">
-          <h2>Top 3 Formulas</h2>
-          <div id="topFormulas" class="formula-list"></div>
-          <div class="fitness-row">
-            <span>Best <strong id="bestFitness">0.000</strong></span>
-            <span>Avg <strong id="avgFitness">0.000</strong></span>
-          </div>
-          <div id="evolutionLog" class="log">Awaiting first generation...</div>
-        </div>
-      </section>
+      </aside>
 
-      <section class="stage stage-result hidden" id="resultStage">
-        <div class="result-card">
-          <h2>Winning Recipe</h2>
-          <div id="recipeChain" class="recipe-chain"></div>
-          <div class="result-meta" id="resultMeta"></div>
-          <button id="btnRestart" class="ghost">Run Again</button>
+      <section class="workspace">
+        <header class="workspace-header">
+          <div class="workspace-title">
+            <h1>Formula Maker</h1>
+            <p>Hyper-modern evolutionary IDE.</p>
+          </div>
+          <div class="mode-switch">
+            <button class="mode-pill active" data-mode="train">⚡ Training Mode</button>
+            <button class="mode-pill" data-mode="ask">🔍 Asking Mode</button>
+          </div>
+        </header>
+
+        <div class="bento">
+          <section class="card liquid">
+            <div class="card-header">
+              <h2>Fitness Convergence</h2>
+              <span id="genLabel">Gen 0</span>
+            </div>
+            <canvas id="fitnessChart" height="220"></canvas>
+          </section>
+
+          <section class="card liquid">
+            <div class="card-header">
+              <h2>Live Leaderboard</h2>
+              <span id="bestLabel">Best 0.000</span>
+            </div>
+            <div class="leaderboard" id="leaderboard"></div>
+          </section>
+
+          <section class="card liquid ask-panel hidden" id="askPanel">
+            <div class="card-header">
+              <h2>Ask the Formula</h2>
+              <span id="askStatus">Paste algorithm key to begin.</span>
+            </div>
+            <textarea id="algoKeyInput" rows="4" placeholder="Algorithm key JSON"></textarea>
+            <div class="ask-row">
+              <input id="askInput" placeholder="Type a key (JSON allowed)" />
+              <button id="btnAsk">Ask</button>
+            </div>
+            <div class="ask-output" id="askOutput">Awaiting question...</div>
+          </section>
         </div>
       </section>
     </main>
