@@ -82,6 +82,9 @@ body {
 .sidebar {
   display: flex;
   gap: 12px;
+  width: 360px;
+  flex: 0 0 360px;
+  transition: width 0.35s ease, flex-basis 0.35s ease;
 }
 
 .icon-strip {
@@ -137,6 +140,8 @@ body {
 
 .ide.panel-collapsed .sidebar {
   gap: 6px;
+  width: 64px;
+  flex-basis: 64px;
 }
 
 .panel-section {
@@ -254,6 +259,7 @@ button.ghost {
   flex-direction: column;
   gap: 16px;
   transition: width 0.35s ease;
+  min-height: calc(100vh - 32px);
 }
 
 .workspace-header {
@@ -299,7 +305,7 @@ button.ghost {
 
 .bento {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr 1fr;
   gap: 16px;
   height: calc(100vh - 140px);
 }
@@ -311,6 +317,9 @@ button.ghost {
   background: var(--panel-strong);
   border: 1px solid var(--border);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .card.liquid::before {
@@ -339,7 +348,6 @@ button.ghost {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
 }
 
 .card-header h2 {
@@ -354,7 +362,8 @@ button.ghost {
 }
 
 .leaderboard-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 46px 1fr 80px;
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
@@ -367,13 +376,31 @@ button.ghost {
 }
 
 .leaderboard-row span:first-child {
-  color: var(--text);
-  font-weight: 600;
+  color: #0a0f14;
+  font-weight: 700;
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: 11px;
 }
 
 .leaderboard-row span:last-child {
   font-family: "JetBrains Mono", monospace;
   color: var(--accent-2);
+  text-align: right;
+}
+
+.leaderboard-row span:nth-child(2) {
+  color: var(--text);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-row:nth-child(even) {
+  background: rgba(14, 16, 22, 0.8);
 }
 
 @keyframes rise {
@@ -413,6 +440,47 @@ button.ghost {
 
 .hidden {
   display: none;
+}
+
+.chart-area {
+  position: relative;
+  flex: 1;
+}
+
+.chart-area canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+button,
+.icon-btn,
+.mode-pill,
+.theme-pill {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:active,
+.icon-btn:active,
+.mode-pill:active,
+.theme-pill:active {
+  transform: scale(0.96);
+}
+
+button.press {
+  animation: press-bounce 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes press-bounce {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .hint {

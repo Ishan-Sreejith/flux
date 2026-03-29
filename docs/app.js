@@ -5,7 +5,9 @@ const state = {
   best: 0,
   avg: 0,
   history: [],
+  historyDisplay: [],
   geneFreq: [],
+  geneDisplay: [],
   dataset: [],
   librarySize: 300,
   genomeLength: 8,
@@ -107,13 +109,35 @@ function randomFormula() {
   return steps.join(" -> ");
 }
 
+function resizeCanvas(canvas) {
+  const parent = canvas.parentElement;
+  if (!parent) {
+    return null;
+  }
+  const rect = parent.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(1, rect.width);
+  const height = Math.max(1, rect.height);
+  if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+  }
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, width, height };
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
 function updateLeaderboard() {
   el.leaderboard.innerHTML = "";
   for (let i = 0; i < 5; i += 1) {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
     const score = Math.max(0, state.best - i * 0.03).toFixed(3);
-    row.innerHTML = `<span>#${i + 1} ${randomFormula()}</span><span>${score}</span>`;
+    row.innerHTML = `<span>#${i + 1}</span><span>${randomFormula()}</span><span>${score}</span>`;
     el.leaderboard.appendChild(row);
   }
 }
@@ -121,9 +145,9 @@ function updateLeaderboard() {
 function drawLineChart() {
   const canvas = el.fitnessChart;
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width;
-  const height = canvas.height;
+  const size = resizeCanvas(canvas);
+  if (!size) return;
+  const { ctx, width, height } = size;
   ctx.clearRect(0, 0, width, height);
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
@@ -136,35 +160,59 @@ function drawLineChart() {
     ctx.lineTo(width, y);
     ctx.stroke();
   }
-  if (state.history.length < 2) return;
+  if (state.historyDisplay.length < 2) return;
   ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
   ctx.lineWidth = 2.5;
   ctx.beginPath();
-  state.history.forEach((value, index) => {
-    const x = (width / (state.history.length - 1)) * index;
+  const points = state.historyDisplay.map((value, index) => {
+    const x = (width / (state.historyDisplay.length - 1)) * index;
     const y = height - value * height;
-    if (index === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    return { x, y };
   });
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length - 1; i += 1) {
+    const midX = (points[i].x + points[i + 1].x) / 2;
+    const midY = (points[i].y + points[i + 1].y) / 2;
+    ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+  }
+  const last = points[points.length - 1];
+  ctx.lineTo(last.x, last.y);
   ctx.stroke();
 }
 
 function drawBarChart() {
   const canvas = el.geneChart;
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width;
-  const height = canvas.height;
+  const size = resizeCanvas(canvas);
+  if (!size) return;
+  const { ctx, width, height } = size;
   ctx.clearRect(0, 0, width, height);
   const bars = 10;
   const gap = 8;
   const barWidth = (width - gap * (bars - 1)) / bars;
   for (let i = 0; i < bars; i += 1) {
-    const value = state.geneFreq[i] || Math.random();
+    const value = state.geneDisplay[i] ?? Math.random();
     const barHeight = value * height;
     ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent");
     ctx.fillRect(i * (barWidth + gap), height - barHeight, barWidth, barHeight);
   }
+}
+
+function smoothCharts() {
+  const target = state.history;
+  if (state.historyDisplay.length < target.length) {
+    while (state.historyDisplay.length < target.length) {
+      state.historyDisplay.push(target[state.historyDisplay.length] ?? 0);
+    }
+  }
+  state.historyDisplay = state.historyDisplay.map((val, idx) => lerp(val, target[idx] ?? val, 0.12));
+  const geneTarget = state.geneFreq;
+  if (state.geneDisplay.length < geneTarget.length) {
+    while (state.geneDisplay.length < geneTarget.length) {
+      state.geneDisplay.push(geneTarget[state.geneDisplay.length] ?? 0);
+    }
+  }
+  state.geneDisplay = state.geneDisplay.map((val, idx) => lerp(val, geneTarget[idx] ?? val, 0.18));
 }
 
 function stepTraining() {
@@ -178,12 +226,17 @@ function stepTraining() {
   el.genLabel.textContent = `Gen ${state.generation}`;
   el.bestLabel.textContent = `Best ${state.best.toFixed(3)}`;
   updateLeaderboard();
-  drawLineChart();
-  drawBarChart();
   if (state.best >= state.targetAccuracy || state.generation >= state.maxGenerations) {
     stopTraining();
     setStatus("Training complete.");
   }
+}
+
+function renderLoop() {
+  smoothCharts();
+  drawLineChart();
+  drawBarChart();
+  requestAnimationFrame(renderLoop);
 }
 
 function startTraining() {
@@ -249,6 +302,8 @@ function togglePanel(panel) {
     const willCollapse = !el.slidePanel.classList.contains("collapsed");
     el.slidePanel.classList.toggle("collapsed");
     el.appRoot.classList.toggle("panel-collapsed", willCollapse);
+    drawLineChart();
+    drawBarChart();
     return;
   }
   el.slidePanel.dataset.active = panel;
@@ -260,6 +315,8 @@ function togglePanel(panel) {
   el.panelSections.forEach((section) => {
     section.classList.toggle("active", section.dataset.panelSection === panel);
   });
+  drawLineChart();
+  drawBarChart();
 }
 
 function loadSample() {
@@ -283,6 +340,15 @@ function loadSample() {
 
 el.iconButtons.forEach((btn) => {
   btn.addEventListener("click", () => togglePanel(btn.dataset.panel));
+});
+
+document.querySelectorAll("button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    btn.classList.remove("press");
+    void btn.offsetWidth;
+    btn.classList.add("press");
+    setTimeout(() => btn.classList.remove("press"), 240);
+  });
 });
 
 el.librarySize.addEventListener("input", () => {
@@ -313,5 +379,8 @@ el.btnStop.addEventListener("click", stopTraining);
 el.btnSample.addEventListener("click", loadSample);
 
 setDatasetStatus();
-drawLineChart();
-drawBarChart();
+renderLoop();
+window.addEventListener("resize", () => {
+  drawLineChart();
+  drawBarChart();
+});
