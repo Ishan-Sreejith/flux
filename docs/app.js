@@ -36,6 +36,7 @@ const el = {
   askPanel: document.getElementById("askPanel"),
   askInput: document.getElementById("askInput"),
   algoKeyInput: document.getElementById("algoKeyInput"),
+  algoKeyAsk: document.getElementById("algoKeyAsk"),
   askOutput: document.getElementById("askOutput"),
   askStatus: document.getElementById("askStatus"),
   btnAsk: document.getElementById("btnAsk"),
@@ -168,6 +169,9 @@ function updateLeaderboard() {
   const topFormula = randomFormula();
   if (el.algoKeyBox) {
     el.algoKeyBox.value = topFormula;
+  }
+  if (el.algoKeyAsk) {
+    el.algoKeyAsk.value = topFormula;
   }
   for (let i = 0; i < 5; i += 1) {
     const row = document.createElement("div");
@@ -402,6 +406,7 @@ function startTraining() {
   state.targetAccuracy = Number(el.accuracyTarget.value);
   state.minGenerations = Math.max(80, Math.floor(state.maxGenerations * 0.5));
   state.running = true;
+  el.appRoot.classList.add("training-running");
   state.generation = 0;
   state.best = 0;
   state.history = [];
@@ -415,6 +420,7 @@ function startTraining() {
 
 function stopTraining() {
   state.running = false;
+  el.appRoot.classList.remove("training-running");
   if (state.interval) {
     clearInterval(state.interval);
     state.interval = null;
