@@ -165,12 +165,23 @@
               <h2>Live Leaderboard</h2>
               <span id="bestLabel">Best 0.000</span>
             </div>
-            <div class="leaderboard-head">
-              <span>Rank</span>
-              <span>Formula</span>
-              <span>Score</span>
+            <div class="leaderboard-layout">
+              <div>
+                <div class="leaderboard-head">
+                  <span>Rank</span>
+                  <span>Formula</span>
+                  <span>Score</span>
+                </div>
+                <div class="leaderboard" id="leaderboard"></div>
+              </div>
+              <div class="algo-box">
+                <div class="algo-header">
+                  <h3>Algorithm Key</h3>
+                  <button id="btnCopyAlgo" class="ghost tiny">Copy</button>
+                </div>
+                <textarea id="algoKeyBox" rows="10" placeholder="Algorithm key appears here"></textarea>
+              </div>
             </div>
-            <div class="leaderboard" id="leaderboard"></div>
           </section>
 
           <section class="card liquid ask-panel hidden" id="askPanel">

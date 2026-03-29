@@ -47,6 +47,8 @@ const el = {
   leaderboard: document.getElementById("leaderboard"),
   genLabel: document.getElementById("genLabel"),
   bestLabel: document.getElementById("bestLabel"),
+  algoKeyBox: document.getElementById("algoKeyBox"),
+  btnCopyAlgo: document.getElementById("btnCopyAlgo"),
   btnGhost: document.getElementById("btnGhost"),
   btnNodeMap: document.getElementById("btnNodeMap"),
   nodeMap: document.getElementById("nodeMap"),
@@ -162,11 +164,16 @@ function lerp(a, b, t) {
 
 function updateLeaderboard() {
   el.leaderboard.innerHTML = "";
+  const topFormula = randomFormula();
+  if (el.algoKeyBox) {
+    el.algoKeyBox.value = topFormula;
+  }
   for (let i = 0; i < 5; i += 1) {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
     const score = Math.max(0, state.best - i * 0.03).toFixed(3);
-    row.innerHTML = `<span>#${i + 1}</span><span>${randomFormula()}</span><span>${score}</span>`;
+    const formula = i === 0 ? topFormula : randomFormula();
+    row.innerHTML = `<span>#${i + 1}</span><span>${formula}</span><span>${score}</span>`;
     el.leaderboard.appendChild(row);
   }
 }
@@ -596,6 +603,12 @@ el.apiToggle.addEventListener("change", () => {
 });
 el.btnMapperApply.addEventListener("click", closeMapper);
 el.btnMapperClose.addEventListener("click", closeMapper);
+el.btnCopyAlgo.addEventListener("click", () => {
+  if (!el.algoKeyBox) return;
+  el.algoKeyBox.select();
+  document.execCommand("copy");
+  setStatus("Algorithm key copied.");
+});
 
 setDatasetStatus();
 populateMutator();
