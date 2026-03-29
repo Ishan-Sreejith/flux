@@ -51,7 +51,6 @@ const el = {
   genLabel: document.getElementById("genLabel"),
   bestLabel: document.getElementById("bestLabel"),
   trainCards: Array.from(document.querySelectorAll(".train-only")),
-  algoKeyBox: document.getElementById("algoKeyBox"),
   btnCopyAlgo: document.getElementById("btnCopyAlgo"),
   btnGhost: document.getElementById("btnGhost"),
   btnNodeMap: document.getElementById("btnNodeMap"),
@@ -210,9 +209,6 @@ function lerp(a, b, t) {
 function updateLeaderboard() {
   el.leaderboard.innerHTML = "";
   const topFormula = randomFormula();
-  if (el.algoKeyBox) {
-    el.algoKeyBox.value = topFormula;
-  }
   if (el.algoKeyAsk) {
     el.algoKeyAsk.value = topFormula;
   }
@@ -441,8 +437,8 @@ function loadExample(example) {
     slingshot: "data/slingshot_data.json",
   };
   const path = map[example];
-  if (!path) return;
-  fetch(path)
+  if (!path) return Promise.resolve();
+  return fetch(path)
     .then((res) => res.json())
     .then((data) => {
       el.datasetInput.value = JSON.stringify(data, null, 2);
@@ -500,7 +496,10 @@ async function runAutopilot() {
     },
   ];
   for (const step of sequence) {
-    step();
+    const result = step();
+    if (result && typeof result.then === "function") {
+      await result;
+    }
     await new Promise((resolve) => setTimeout(resolve, 700));
   }
 }
@@ -587,7 +586,6 @@ function runAsk() {
   const algo =
     (el.algoKeyAsk && el.algoKeyAsk.value.trim()) ||
     (el.algoKeyInput && el.algoKeyInput.value.trim()) ||
-    (el.algoKeyBox && el.algoKeyBox.value.trim()) ||
     "";
   el.askStatus.textContent = "Processing...";
   if (!key) {
@@ -747,8 +745,9 @@ el.exampleCards.forEach((card) => {
   card.addEventListener("click", () => loadExample(card.dataset.example));
 });
 el.btnCopyAlgo.addEventListener("click", () => {
-  if (!el.algoKeyBox) return;
-  el.algoKeyBox.select();
+  const target = el.algoKeyAsk || el.algoKeyInput;
+  if (!target) return;
+  target.select();
   document.execCommand("copy");
   setStatus("Algorithm key copied.");
 });
