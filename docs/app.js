@@ -30,6 +30,7 @@ const el = {
   accuracyTarget: document.getElementById("accuracyTarget"),
   btnStart: document.getElementById("btnStart"),
   btnSample: document.getElementById("btnSample"),
+  btnExample: document.getElementById("btnExample"),
   btnPause: document.getElementById("btnPause"),
   btnStop: document.getElementById("btnStop"),
   btnRestart: document.getElementById("btnRestart"),
@@ -293,6 +294,7 @@ el.btnRestart.addEventListener("click", () => {
   setStatus("Ready.");
 });
 el.btnSample.addEventListener("click", loadSample);
+el.btnExample.addEventListener("click", loadSample);
 
 initRing();
 updateDatasetStatus();

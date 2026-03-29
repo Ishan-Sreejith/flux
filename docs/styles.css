@@ -36,6 +36,11 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  padding: 12px 18px;
+  background: rgba(18, 22, 28, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 .brand {
@@ -68,6 +73,34 @@ body {
   gap: 16px;
   color: var(--muted);
   font-size: 12px;
+  align-items: center;
+}
+
+.menu-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(10, 12, 16, 0.6);
+  border: 1px solid var(--border);
+}
+
+.menu-item {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
 }
 
 .stage {
@@ -175,6 +208,11 @@ button.ghost {
   background: transparent;
   border: 1px solid var(--accent);
   color: var(--accent);
+}
+
+button.small {
+  padding: 6px 12px;
+  font-size: 12px;
 }
 
 .stage-evolution {
