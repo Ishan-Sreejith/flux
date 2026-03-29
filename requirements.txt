@@ -1,3 +1,0 @@
-# Core runtime dependencies
-gensim>=4.3.0
-numpy>=1.24.0
