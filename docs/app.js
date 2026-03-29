@@ -66,9 +66,9 @@ const ui = {
 
 let training = false;
 let bestGenome = null;
-let bestScore = Infinity;
 let history = [];
 let chartCtx = ui.scoreChart.getContext("2d");
+let engineState = null;
 
 function resizeChart() {
   ui.scoreChart.width = ui.scoreChart.clientWidth * window.devicePixelRatio;
@@ -128,11 +128,12 @@ function scoreValue(pred, target) {
 }
 
 function buildParamLibrary(size) {
+  const consts = [-10, -5, -2, -1, 1, 2, 5, 10];
   const ops = [
     { name: "identity", fn: (v) => v, category: "core" },
     { name: "to_float", fn: (v) => (typeof v === "number" ? v : parseFloat(v)), category: "math" },
-    { name: "add", fn: (v, g) => (typeof v === "number" ? v + g.constant : v), category: "math" },
-    { name: "mul", fn: (v, g) => (typeof v === "number" ? v * g.constant : v), category: "math" },
+    { name: "add", fn: (v, g, c) => (typeof v === "number" ? v + c * (1 + g.strength) : v), category: "math" },
+    { name: "mul", fn: (v, g, c) => (typeof v === "number" ? v * c * (1 + g.strength) : v), category: "math" },
     { name: "sin", fn: (v) => (typeof v === "number" ? Math.sin(v) : v), category: "math" },
     { name: "cos", fn: (v) => (typeof v === "number" ? Math.cos(v) : v), category: "math" },
     { name: "upper", fn: (v) => (typeof v === "string" ? v.toUpperCase() : v), category: "text" },
@@ -150,7 +151,9 @@ function buildParamLibrary(size) {
   const params = [];
   for (let i = 0; i < size; i++) {
     const op = ops[i % ops.length];
-    params.push({ id: i + 1, name: op.name, fn: op.fn, category: op.category });
+    const constant = consts[i % consts.length];
+    const fn = (value, gene) => op.fn(value, gene, constant);
+    params.push({ id: i + 1, name: op.name, fn, category: op.category });
   }
   return params;
 }
@@ -163,9 +166,7 @@ function filterParams(params, mode) {
 function randomGene(allowed, randomness) {
   return {
     paramId: allowed[Math.floor(Math.random() * allowed.length)],
-    randomness: randomness,
-    intensity: Math.random(),
-    constant: (Math.random() - 0.5) * 10,
+    strength: Math.random(),
   };
 }
 
@@ -187,34 +188,60 @@ function executeGenome(key, genome, params) {
   return { ok: true, value };
 }
 
-function evolve(samples, config) {
-  const params = buildParamLibrary(config.librarySize);
-  const allowed = filterParams(params, config.mode);
-  const population = Array.from({ length: config.population }, () => ({
-    genome: Array.from({ length: 6 }, () => randomGene(allowed, config.initialRandomness)),
+function evaluateAgent(agent, samples, params, tolerance) {
+  let total = 0;
+  let hits = 0;
+  for (const sample of samples) {
+    const result = executeGenome(sample.key, agent.genome, params);
+    if (!result.ok) {
+      total += 1e9;
+      continue;
+    }
+    const score = scoreValue(result.value, sample.value);
+    total += score;
+    if (score <= tolerance) hits += 1;
+  }
+  agent.score = total / samples.length;
+  agent.accuracy = hits / samples.length;
+}
+
+function evolveGeneration(samples, tolerance) {
+  const params = engineState.params;
+  for (const agent of engineState.population) {
+    evaluateAgent(agent, samples, params, tolerance);
+  }
+  engineState.population.sort((a, b) => a.score - b.score);
+  const survivors = engineState.population.slice(0, Math.ceil(engineState.population.length / 2));
+  const top10 = engineState.population.slice(0, Math.min(10, engineState.population.length));
+  const genePool = top10.flatMap((agent) => agent.genome);
+
+  const nextGen = survivors.map((agent) => ({
+    genome: agent.genome.map((g) => ({ ...g })),
+    score: agent.score,
+    accuracy: agent.accuracy,
   }));
 
-  let best = population[0];
-  let bestScoreLocal = Infinity;
-  for (const agent of population) {
-    let total = 0;
-    let failed = false;
-    for (const sample of samples) {
-      const result = executeGenome(sample.key, agent.genome, params);
-      if (!result.ok) {
-        failed = true;
-        break;
+  while (nextGen.length < engineState.population.length) {
+    const parent = survivors[Math.floor(Math.random() * survivors.length)];
+    const newGenome = parent.genome.map((gene) => {
+      let g = { ...gene };
+      if (genePool.length && Math.random() < 0.5) {
+        g = { ...genePool[Math.floor(Math.random() * genePool.length)] };
       }
-      total += scoreValue(result.value, sample.value);
-    }
-    const score = failed ? Infinity : total / samples.length;
-    agent.score = score;
-    if (score < bestScoreLocal) {
-      bestScoreLocal = score;
-      best = agent;
-    }
+      if (Math.random() < engineState.mutationRate) {
+        if (Math.random() < 0.5) {
+          g.paramId = engineState.allowed[Math.floor(Math.random() * engineState.allowed.length)];
+        }
+        g.strength = Math.max(0, Math.min(1, g.strength + (Math.random() - 0.5) * engineState.mutationStrength));
+      }
+      return g;
+    });
+    nextGen.push({ genome: newGenome, score: 0, accuracy: 0 });
   }
-  return { best, bestScore: bestScoreLocal, params };
+
+  engineState.population = nextGen;
+  const best = engineState.population[0];
+  return { best, params };
 }
 
 function trainLoop(samples) {
@@ -229,21 +256,34 @@ function trainLoop(samples) {
   let gen = 0;
   training = true;
   history = [];
+  const params = buildParamLibrary(config.librarySize);
+  const allowed = filterParams(params, config.mode);
+  engineState = {
+    params,
+    allowed,
+    population: Array.from({ length: config.population }, () => ({
+      genome: Array.from({ length: 8 }, () => randomGene(allowed, config.initialRandomness)),
+      score: 0,
+      accuracy: 0,
+    })),
+    mutationRate: 0.2,
+    mutationStrength: 0.35,
+  };
+  const tolerance = 0;
   function step() {
     if (!training || gen >= generations) {
       ui.trainStatus.textContent = training ? "done" : "stopped";
       ui.statusMessage.textContent = training ? "Training complete." : "Stopped.";
       return;
     }
-    const { best, bestScore: score, params } = evolve(samples, config);
+    const { best, params } = evolveGeneration(samples, tolerance);
     bestGenome = { genome: best.genome, params };
-    bestScore = score;
-    history.push(score);
-    ui.bestScore.textContent = score.toFixed(4);
+    history.push(best.accuracy);
+    ui.bestScore.textContent = best.accuracy.toFixed(3);
     ui.currentGen.textContent = String(gen + 1);
     ui.trainStatus.textContent = "running";
     ui.algorithmMap.textContent = best.genome
-      .map((g, i) => `${i + 1}. Param_${g.paramId} randomness=${g.randomness.toFixed(2)} intensity=${g.intensity.toFixed(2)}`)
+      .map((g, i) => `${i + 1}. Param_${g.paramId} strength=${g.strength.toFixed(2)}`)
       .join("\n");
     drawChart();
     gen += 1;
