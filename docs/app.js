@@ -11,10 +11,21 @@ const state = {
   dataset: [],
   datasetRaw: null,
   librarySize: 300,
+  numericParamCount: 600,
+  textParamCount: 400,
   genomeLength: 8,
   maxGenerations: 300,
   targetAccuracy: 0.95,
   minGenerations: 30,
+  mutationRate: 0.2,
+  mutationStrength: 0.35,
+  selectionStrategy: "roulette",
+  topK: 10,
+  eliteFraction: 0.1,
+  mutationPressure: true,
+  stagnationGenerations: 16,
+  stagnationCounter: 0,
+  domain: "numeric",
 };
 
 const el = {
@@ -163,11 +174,12 @@ function randomFormula() {
   const domain = inferDomain();
   const ops =
     domain === "text"
-      ? ["upper", "lower", "first", "last", "strip", "len", "concat", "slice"]
-      : ["add", "sub", "mul", "div", "abs", "round", "min", "max"];
+      ? ["upper", "lower", "capitalize", "swapcase", "first_letter", "last_letter", "strip", "concat", "replace"]
+      : ["add_const", "sub_const", "mul_const", "div_const", "round", "clamp"];
   const steps = [];
   for (let i = 0; i < state.genomeLength; i += 1) {
-    const paramId = String(randomInt(state.librarySize)).padStart(3, "0");
+    const poolSize = domain === "text" ? state.textParamCount : state.numericParamCount;
+    const paramId = String(randomInt(poolSize) + 1).padStart(3, "0");
     const op = ops[randomInt(ops.length)];
     steps.push(`Param_${paramId}:${op}`);
   }
@@ -181,6 +193,7 @@ function inferDomain() {
   const first = Array.isArray(state.dataset) ? state.dataset[0] : null;
   if (typeof first === "string") return "text";
   if (Array.isArray(first) && typeof first[0] === "string") return "text";
+  if (first && typeof first === "object") return "text";
   return "numeric";
 }
 
@@ -223,6 +236,14 @@ function updateLeaderboard() {
     row.innerHTML = `<span>#${i + 1}</span><span>${formula}</span><span>${score}</span>`;
     el.leaderboard.appendChild(row);
   }
+}
+
+function simulateGenePassing() {
+  const pool = [];
+  for (let i = 0; i < state.topK; i += 1) {
+    pool.push(randomFormula());
+  }
+  return pool;
 }
 
 function drawLineChart() {
@@ -511,10 +532,24 @@ function stepTraining() {
   state.best = Math.min(1, state.best + improvement);
   state.avg = state.best * (0.65 + Math.random() * 0.1);
   state.history.push(state.best);
+  const genePool = simulateGenePassing();
   state.geneFreq = Array.from({ length: 10 }, () => Math.random());
   el.genLabel.textContent = `Gen ${state.generation}`;
   el.bestLabel.textContent = `Best ${state.best.toFixed(3)}`;
   updateLeaderboard();
+  if (state.mutationPressure) {
+    const delta = state.history.length > 1 ? state.history[state.history.length - 1] - state.history[state.history.length - 2] : 0;
+    if (delta < 0.0005) {
+      state.stagnationCounter += 1;
+      if (state.stagnationCounter >= state.stagnationGenerations) {
+        state.mutationRate = Math.min(0.6, state.mutationRate * 1.2);
+        state.stagnationCounter = 0;
+      }
+    } else {
+      state.mutationRate = Math.max(0.05, state.mutationRate * 0.95);
+      state.stagnationCounter = 0;
+    }
+  }
   if (state.generation >= state.maxGenerations) {
     stopTraining();
     setStatus(`Training complete at Gen ${state.generation} (max generations).`);
@@ -540,6 +575,7 @@ function startTraining() {
     return;
   }
   state.librarySize = Number(el.librarySize.value);
+  state.domain = inferDomain();
   state.genomeLength = Number(el.genomeLength.value);
   state.maxGenerations = Number(el.generationCount.value);
   state.targetAccuracy = Number(el.accuracyTarget.value);
@@ -550,6 +586,7 @@ function startTraining() {
   state.best = 0;
   state.history = [];
   state.historyDisplay = [];
+  state.stagnationCounter = 0;
   el.rewindSlider.max = String(state.maxGenerations);
   el.rewindValue.textContent = "0";
   setStatus("Training running...");
