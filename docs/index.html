@@ -7,20 +7,29 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="page">
+    <main class="page theme-slate" id="appRoot">
       <header class="hero">
         <div>
           <h1>Flux Evolver</h1>
           <p>Client-side evolutionary trainer with visualization and interactive Q&amp;A.</p>
         </div>
         <div class="hero-actions">
+          <select id="themeSelect">
+            <option value="theme-slate">Slate</option>
+            <option value="theme-sand">Sand</option>
+            <option value="theme-oxide">Oxide</option>
+          </select>
           <button id="btnTrain">Start Training</button>
           <button id="btnStop" class="ghost">Stop</button>
         </div>
       </header>
 
       <section class="grid">
-        <div class="card">
+        <div class="card" data-panel="dataset">
+          <div class="card-header">
+            <h2>Dataset</h2>
+            <button class="close" data-close="dataset">Hide</button>
+          </div>
           <h2>Dataset</h2>
           <div class="row">
             <select id="exampleSelect">
@@ -37,8 +46,11 @@
           </div>
         </div>
 
-        <div class="card">
-          <h2>Controls</h2>
+        <div class="card" data-panel="controls">
+          <div class="card-header">
+            <h2>Controls</h2>
+            <button class="close" data-close="controls">Hide</button>
+          </div>
           <div class="control">
             <label>Library Size: <span id="libraryValue">500</span></label>
             <input id="librarySize" type="range" min="10" max="1000" value="500" />
@@ -66,8 +78,11 @@
       </section>
 
       <section class="grid">
-        <div class="card">
-          <h2>Training</h2>
+        <div class="card" data-panel="training">
+          <div class="card-header">
+            <h2>Training</h2>
+            <button class="close" data-close="training">Hide</button>
+          </div>
           <canvas id="scoreChart" height="160"></canvas>
           <div class="stats">
             <div><span>Best Score</span><strong id="bestScore">-</strong></div>
@@ -75,21 +90,41 @@
             <div><span>Status</span><strong id="trainStatus">idle</strong></div>
           </div>
         </div>
-        <div class="card">
-          <h2>Algorithm Map</h2>
-          <pre id="algorithmMap">No genome yet.</pre>
+        <div class="card" data-panel="algorithm">
+          <div class="card-header">
+            <h2>Algorithm Map</h2>
+            <button class="close" data-close="algorithm">Hide</button>
+          </div>
+          <div class="algo-wrap">
+            <div class="algo-meta">
+              <span id="algoTitle">No genome yet.</span>
+              <span id="algoCount">0 steps</span>
+            </div>
+            <div id="algorithmMap" class="algo-list"></div>
+          </div>
         </div>
       </section>
 
       <section class="grid">
-        <div class="card">
-          <h2>Ask</h2>
+        <div class="card" data-panel="ask">
+          <div class="card-header">
+            <h2>Ask</h2>
+            <button class="close" data-close="ask">Hide</button>
+          </div>
           <div class="row">
             <input id="askInput" placeholder="Type a key (JSON allowed)" />
             <button id="btnAsk" class="ghost">Ask</button>
           </div>
-          <pre id="askOutput">No answer yet.</pre>
+          <div class="answer" id="askOutput">No answer yet.</div>
         </div>
+      </section>
+
+      <section class="dock" id="panelDock">
+        <button data-open="dataset">Dataset</button>
+        <button data-open="controls">Controls</button>
+        <button data-open="training">Training</button>
+        <button data-open="algorithm">Algorithm</button>
+        <button data-open="ask">Ask</button>
       </section>
     </main>
 

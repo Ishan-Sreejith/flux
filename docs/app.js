@@ -44,6 +44,8 @@ const ui = {
   datasetInput: document.getElementById("datasetInput"),
   datasetStatus: document.getElementById("datasetStatus"),
   statusMessage: document.getElementById("statusMessage"),
+  themeSelect: document.getElementById("themeSelect"),
+  appRoot: document.getElementById("appRoot"),
   exampleSelect: document.getElementById("exampleSelect"),
   btnLoadExample: document.getElementById("btnLoadExample"),
   librarySize: document.getElementById("librarySize"),
@@ -62,6 +64,8 @@ const ui = {
   btnAsk: document.getElementById("btnAsk"),
   askOutput: document.getElementById("askOutput"),
   scoreChart: document.getElementById("scoreChart"),
+  algoTitle: document.getElementById("algoTitle"),
+  algoCount: document.getElementById("algoCount"),
 };
 
 let training = false;
@@ -282,9 +286,7 @@ function trainLoop(samples) {
     ui.bestScore.textContent = best.accuracy.toFixed(3);
     ui.currentGen.textContent = String(gen + 1);
     ui.trainStatus.textContent = "running";
-    ui.algorithmMap.textContent = best.genome
-      .map((g, i) => `${i + 1}. Param_${g.paramId} strength=${g.strength.toFixed(2)}`)
-      .join("\n");
+    renderAlgorithm(best.genome);
     drawChart();
     gen += 1;
     requestAnimationFrame(step);
@@ -319,6 +321,27 @@ function loadExample() {
   updateDatasetStatus(parseDataset(ui.datasetInput.value));
 }
 
+function renderAlgorithm(genome) {
+  ui.algorithmMap.innerHTML = "";
+  if (!genome || genome.length === 0) {
+    ui.algoTitle.textContent = "No genome yet.";
+    ui.algoCount.textContent = "0 steps";
+    return;
+  }
+  ui.algoTitle.textContent = "Algorithm Key";
+  ui.algoCount.textContent = `${genome.length} steps`;
+  genome.forEach((gene, idx) => {
+    const row = document.createElement("div");
+    row.className = "algo-step";
+    row.innerHTML = `
+      <strong>${String(idx + 1).padStart(2, "0")}</strong>
+      <div>Param ${gene.paramId}</div>
+      <span>strength ${gene.strength.toFixed(2)}</span>
+    `;
+    ui.algorithmMap.appendChild(row);
+  });
+}
+
 ui.btnLoadExample.addEventListener("click", loadExample);
 ui.datasetInput.addEventListener("input", () => {
   try {
@@ -346,6 +369,25 @@ ui.btnStop.addEventListener("click", () => {
 });
 ui.btnAsk.addEventListener("click", askQuestion);
 ui.librarySize.addEventListener("input", () => (ui.libraryValue.textContent = ui.librarySize.value));
+ui.themeSelect.addEventListener("change", () => {
+  ui.appRoot.className = `page ${ui.themeSelect.value}`;
+});
+
+document.querySelectorAll("[data-close]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const panel = btn.getAttribute("data-close");
+    const el = document.querySelector(`[data-panel='${panel}']`);
+    if (el) el.classList.add("hidden");
+  });
+});
+
+document.querySelectorAll("[data-open]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const panel = btn.getAttribute("data-open");
+    const el = document.querySelector(`[data-panel='${panel}']`);
+    if (el) el.classList.remove("hidden");
+  });
+});
 
 loadExample();
 resizeChart();
