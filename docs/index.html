@@ -3,159 +3,108 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flux Evolver Workspace</title>
+    <title>Flux Evolver | Focus Mode</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="workspace theme-slate" id="appRoot">
-      <header class="topbar">
-        <div>
-          <h1>Flux Evolver</h1>
-          <p>Evolutionary pattern search with live telemetry.</p>
+    <main class="focus-app" id="appRoot" data-mode="setup">
+      <header class="focus-header">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <div>
+            <h1>Flux Evolver</h1>
+            <p>Minimalist evolution canvas for high-signal training.</p>
+          </div>
         </div>
-        <div class="topbar-actions">
-          <select id="themeSelect">
-            <option value="theme-slate">Slate</option>
-            <option value="theme-sand">Sand</option>
-            <option value="theme-oxide">Oxide</option>
-          </select>
-          <button id="btnTrain">Start</button>
-          <button id="btnStop" class="ghost">Stop</button>
+        <div class="header-meta">
+          <span id="datasetStatus">0 samples</span>
+          <span id="statusMessage">Ready.</span>
         </div>
       </header>
 
-      <section class="columns">
-        <aside class="column panel" data-panel="controls">
-          <div class="panel-header">
-            <h2>Control Panel</h2>
-            <button class="ghost mini" data-close="controls">Hide</button>
+      <section class="stage stage-setup" id="setupStage">
+        <div class="setup-card">
+          <div class="setup-head">
+            <h2>Load Training Data</h2>
+            <p>Drop a JSON or CSV file, or paste data below.</p>
           </div>
-
-          <div class="card">
-            <h3>Training Data</h3>
-            <div id="dropZone" class="drop-zone">
-              <input type="file" id="fileInput" />
-              <p>Drop JSON/CSV here or click to upload</p>
-            </div>
-            <textarea id="datasetInput" rows="8" placeholder="Or paste JSON here"></textarea>
-            <div class="meta-row">
-              <span id="datasetStatus">0 samples</span>
-              <span id="statusMessage">Ready.</span>
+          <div class="upload-zone">
+            <input type="file" id="fileInput" />
+            <div>
+              <strong>Drag & drop</strong>
+              <span>or click to upload</span>
             </div>
           </div>
+          <textarea id="datasetInput" rows="8" placeholder="Paste JSON or CSV here"></textarea>
 
-          <div class="card">
-            <h3>Complexity</h3>
-            <label>Library Slider: <span id="libraryValue">300</span></label>
-            <input id="librarySize" type="range" min="1" max="1000" value="300" />
-            <div class="chip-row">
-              <button id="btnLibrary" class="ghost mini">Library</button>
-              <button id="btnToggleDrawer" class="ghost mini">Toggle Drawer</button>
+          <div class="slider-grid">
+            <div class="slider-card">
+              <label for="librarySize">Library Size</label>
+              <input id="librarySize" type="range" min="1" max="1000" value="300" />
+              <span id="libraryValue">300</span>
             </div>
-            <div id="paramDrawer" class="param-drawer"></div>
-          </div>
-
-          <div class="card">
-            <h3>Evolution Presets</h3>
-            <div class="radio-group" id="presetGroup">
-              <label><input type="radio" name="preset" value="speed" checked /> Favor Speed</label>
-              <label><input type="radio" name="preset" value="accuracy" /> Pure Accuracy</label>
-              <label><input type="radio" name="preset" value="chaos" /> Chaotic Exploration</label>
+            <div class="slider-card">
+              <label for="populationSize">Population</label>
+              <input id="populationSize" type="number" min="10" max="400" value="120" />
             </div>
-          </div>
-
-          <details class="card">
-            <summary>Advanced Toggles</summary>
-            <div class="row">
-              <label>Auto Conversion</label>
-              <input type="checkbox" id="autoConvert" checked />
-            </div>
-            <div class="row">
-              <label>Population</label>
-              <input id="populationSize" type="number" min="10" max="400" value="100" />
-            </div>
-            <div class="row">
-              <label>Genome Length</label>
+            <div class="slider-card">
+              <label for="genomeLength">Genome Length</label>
               <input id="genomeLength" type="number" min="3" max="20" value="8" />
             </div>
-            <div class="row">
-              <label>Generations</label>
-              <input id="generationCount" type="number" min="10" max="2000" value="200" />
+            <div class="slider-card">
+              <label for="generationCount">Generations</label>
+              <input id="generationCount" type="number" min="10" max="2000" value="300" />
             </div>
-          </details>
-        </aside>
-
-        <section class="column panel center" data-panel="evolution">
-          <div class="panel-header">
-            <h2>Live Evolution Hub</h2>
-            <button class="ghost mini" data-close="evolution">Hide</button>
-          </div>
-
-          <div class="card">
-            <h3>Leaderboard</h3>
-            <div class="leaderboard" id="leaderboardBody"></div>
-          </div>
-
-          <div class="card split">
-            <div>
-              <h3>Graveyard</h3>
-              <div class="graveyard">
-                <strong id="graveyardCount">0</strong>
-                <span>zero-score agents</span>
-              </div>
-              <div id="salvageLog" class="log">No salvage events yet.</div>
-            </div>
-            <div>
-              <h3>Fitness Trends</h3>
-              <canvas id="scoreChart" height="180"></canvas>
+            <div class="slider-card">
+              <label for="accuracyTarget">Accuracy Target</label>
+              <input id="accuracyTarget" type="number" min="0.1" max="1" step="0.01" value="0.95" />
             </div>
           </div>
-        </section>
 
-        <aside class="column panel" data-panel="output">
-          <div class="panel-header">
-            <h2>Results &amp; Output</h2>
-            <button class="ghost mini" data-close="output">Hide</button>
+          <div class="setup-actions">
+            <button id="btnSample" class="ghost">Load Sample</button>
+            <button id="btnStart">Start Evolution</button>
           </div>
-
-          <div class="card">
-            <h3>Winning Recipe</h3>
-            <div class="algo-meta">
-              <span id="algoTitle">No genome yet.</span>
-              <span id="algoCount">0 steps</span>
-            </div>
-            <div id="algorithmMap" class="algo-cards"></div>
-            <textarea id="algoKeyInput" rows="4" placeholder="Algorithm Key JSON"></textarea>
-          </div>
-
-          <div class="card">
-            <h3>Question Terminal</h3>
-            <div class="row">
-              <input id="askInput" placeholder="Type a key (JSON allowed)" />
-              <button id="btnAsk" class="ghost">Ask</button>
-            </div>
-            <div class="answer" id="askOutput">No answer yet.</div>
-          </div>
-        </aside>
+        </div>
       </section>
 
-      <section class="dock" id="panelDock">
-        <button data-open="controls">Controls</button>
-        <button data-open="evolution">Evolution</button>
-        <button data-open="output">Output</button>
+      <section class="stage stage-evolution hidden" id="evolutionStage">
+        <div class="evolution-center">
+          <div class="progress-ring">
+            <svg id="progressSvg" width="240" height="240" viewBox="0 0 240 240">
+              <circle class="ring-track" cx="120" cy="120" r="92" />
+              <circle class="ring-progress" cx="120" cy="120" r="92" />
+            </svg>
+            <div class="ring-label">
+              <span id="progressValue">0%</span>
+              <small>Generation <strong id="genValue">0</strong></small>
+            </div>
+          </div>
+          <div class="evolution-actions">
+            <button id="btnPause" class="ghost">Pause</button>
+            <button id="btnStop">Stop</button>
+          </div>
+        </div>
+        <div class="evolution-side">
+          <h2>Top 3 Formulas</h2>
+          <div id="topFormulas" class="formula-list"></div>
+          <div class="fitness-row">
+            <span>Best <strong id="bestFitness">0.000</strong></span>
+            <span>Avg <strong id="avgFitness">0.000</strong></span>
+          </div>
+          <div id="evolutionLog" class="log">Awaiting first generation...</div>
+        </div>
+      </section>
+
+      <section class="stage stage-result hidden" id="resultStage">
+        <div class="result-card">
+          <h2>Winning Recipe</h2>
+          <div id="recipeChain" class="recipe-chain"></div>
+          <div class="result-meta" id="resultMeta"></div>
+          <button id="btnRestart" class="ghost">Run Again</button>
+        </div>
       </section>
     </main>
-
-    <div id="libraryModal" class="modal hidden">
-      <div class="modal-content">
-        <header>
-          <h3>Parameter Library</h3>
-          <button id="closeLibrary" class="ghost mini">Close</button>
-        </header>
-        <input id="librarySearch" placeholder="Search parameters..." />
-        <div id="libraryList" class="library-list"></div>
-      </div>
-    </div>
 
     <script src="app.js"></script>
   </body>
