@@ -9,6 +9,7 @@ const state = {
   geneFreq: [],
   geneDisplay: [],
   dataset: [],
+  datasetRaw: null,
   librarySize: 300,
   genomeLength: 8,
   maxGenerations: 300,
@@ -68,11 +69,16 @@ const el = {
   apiToggle: document.getElementById("apiToggle"),
   apiUrl: document.getElementById("apiUrl"),
   formulaPlayback: document.getElementById("formulaPlayback"),
+  fileName: document.getElementById("fileName"),
+  jsonPreview: document.getElementById("jsonPreview"),
   mapperModal: document.getElementById("mapperModal"),
   mapperGrid: document.getElementById("mapperGrid"),
   btnMapperApply: document.getElementById("btnMapperApply"),
   btnMapperClose: document.getElementById("btnMapperClose"),
   stopOnTarget: document.getElementById("stopOnTarget"),
+  exampleModal: document.getElementById("exampleModal"),
+  btnExampleClose: document.getElementById("btnExampleClose"),
+  exampleCards: Array.from(document.querySelectorAll(".example-card")),
 };
 
 const uiState = {
@@ -112,8 +118,27 @@ function parseDataset(text) {
 }
 
 function loadDatasetFromText() {
-  state.dataset = parseDataset(el.datasetInput.value);
+  state.datasetRaw = null;
+  const trimmed = el.datasetInput.value.trim();
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    try {
+      const payload = JSON.parse(trimmed);
+      if (Array.isArray(payload)) {
+        state.dataset = payload;
+      } else if (payload && typeof payload === "object") {
+        state.datasetRaw = payload;
+        state.dataset = Object.values(payload);
+      } else {
+        state.dataset = [];
+      }
+    } catch (err) {
+      state.dataset = parseDataset(el.datasetInput.value);
+    }
+  } else {
+    state.dataset = parseDataset(el.datasetInput.value);
+  }
   setDatasetStatus();
+  updatePreview();
   return state.dataset.length > 0;
 }
 
@@ -121,7 +146,9 @@ function handleFileUpload(file) {
   const reader = new FileReader();
   reader.onload = () => {
     el.datasetInput.value = reader.result;
+    if (el.fileName) el.fileName.textContent = file.name;
     loadDatasetFromText();
+    openMapper();
     setStatus("Dataset loaded.");
   };
   reader.readAsText(file);
@@ -172,6 +199,9 @@ function updateLeaderboard() {
   }
   if (el.algoKeyAsk) {
     el.algoKeyAsk.value = topFormula;
+  }
+  if (el.algoKeyInput && !el.algoKeyInput.value.trim()) {
+    el.algoKeyInput.value = topFormula;
   }
   for (let i = 0; i < 5; i += 1) {
     const row = document.createElement("div");
@@ -365,6 +395,50 @@ function closeMapper() {
   el.mapperModal.classList.add("hidden");
 }
 
+function updatePreview() {
+  if (!el.jsonPreview) return;
+  try {
+    const payload = JSON.parse(el.datasetInput.value);
+    el.jsonPreview.textContent = JSON.stringify(payload, null, 2).slice(0, 1200);
+  } catch (err) {
+    el.jsonPreview.textContent = "Preview unavailable (invalid JSON).";
+  }
+}
+
+function openExampleModal() {
+  if (!el.exampleModal) return;
+  el.exampleModal.classList.remove("hidden");
+}
+
+function closeExampleModal() {
+  if (!el.exampleModal) return;
+  el.exampleModal.classList.add("hidden");
+}
+
+function loadExample(example) {
+  const map = {
+    animals: "data/animals.json",
+    taxonomy: "data/taxonomy.json",
+    lexicon: "data/lexicon.json",
+  };
+  const path = map[example];
+  if (!path) return;
+  fetch(path)
+    .then((res) => res.json())
+    .then((data) => {
+      el.datasetInput.value = JSON.stringify(data, null, 2);
+      loadDatasetFromText();
+      if (el.fileName) el.fileName.textContent = path.split("/").pop();
+      openMapper();
+      setStatus("Sample data loaded.");
+      closeExampleModal();
+    })
+    .catch(() => {
+      setStatus("Failed to load example.");
+      closeExampleModal();
+    });
+}
+
 function stepTraining() {
   if (!state.running) return;
   state.generation += 1;
@@ -450,8 +524,17 @@ function runAsk() {
     return;
   }
   el.askStatus.textContent = "Processing...";
-  const answer = key ? `Predicted(${key}) -> ${Math.random().toFixed(4)}` : "No key provided.";
-  el.askOutput.textContent = answer;
+  if (!key) {
+    el.askOutput.textContent = "No key provided.";
+    return;
+  }
+  if (state.datasetRaw && Object.prototype.hasOwnProperty.call(state.datasetRaw, key)) {
+    el.askOutput.textContent = JSON.stringify(state.datasetRaw[key], null, 2);
+  } else if (state.dataset && state.dataset[key]) {
+    el.askOutput.textContent = JSON.stringify(state.dataset[key], null, 2);
+  } else {
+    el.askOutput.textContent = `No match for "${key}".`;
+  }
   runPlayback();
 }
 
@@ -488,33 +571,7 @@ function togglePanel(panel) {
 }
 
 function loadSample() {
-  fetch("data/lexicon.json")
-    .then((res) => res.json())
-    .then((data) => {
-      el.datasetInput.value = JSON.stringify(data, null, 2);
-      loadDatasetFromText();
-      openMapper();
-      setStatus("Sample data loaded.");
-    })
-    .catch(() => {
-      el.datasetInput.value = JSON.stringify(
-        {
-          Entry_01: { Key: [12, 4, "mars"], Value: 28.5 },
-          Entry_02: { Key: [18, 2, "venus"], Value: 32.1 },
-          Entry_03: { Key: [7, 9, "jupiter"], Value: 24.7 },
-          Entry_04: { Key: [3, 5, "saturn"], Value: 18.2 },
-          Entry_05: { Key: [21, 1, "neptune"], Value: 36.9 },
-          Entry_06: { Key: [10, 7, "uranus"], Value: 27.4 },
-          Entry_07: { Key: [5, 6, "earth"], Value: 19.6 },
-          Entry_08: { Key: [16, 3, "mercury"], Value: 30.2 },
-        },
-        null,
-        2
-      );
-      loadDatasetFromText();
-      openMapper();
-      setStatus("Sample data loaded.");
-    });
+  openExampleModal();
 }
 
 el.iconButtons.forEach((btn) => {
@@ -615,6 +672,10 @@ el.apiToggle.addEventListener("change", () => {
 });
 el.btnMapperApply.addEventListener("click", closeMapper);
 el.btnMapperClose.addEventListener("click", closeMapper);
+el.btnExampleClose.addEventListener("click", closeExampleModal);
+el.exampleCards.forEach((card) => {
+  card.addEventListener("click", () => loadExample(card.dataset.example));
+});
 el.btnCopyAlgo.addEventListener("click", () => {
   if (!el.algoKeyBox) return;
   el.algoKeyBox.select();

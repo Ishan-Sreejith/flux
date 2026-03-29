@@ -73,7 +73,12 @@
                 <span>JSON or CSV</span>
               </div>
             </div>
+            <div class="file-meta">
+              <span>Loaded file:</span>
+              <strong id="fileName">None</strong>
+            </div>
             <textarea id="datasetInput" rows="8" placeholder="Paste dataset JSON or CSV"></textarea>
+            <div class="json-preview" id="jsonPreview">Preview will appear here.</div>
             <div class="panel-meta">
               <span id="datasetStatus">0 samples</span>
               <span id="statusMessage">Ready.</span>
@@ -89,7 +94,7 @@
           <section class="panel-section" data-panel-section="metrics">
             <h3>Quick Actions</h3>
             <div class="panel-actions">
-              <button id="btnSample" class="ghost">Load Sample</button>
+              <button id="btnSample" class="ghost">Load Example</button>
               <button id="btnStart">Start Training</button>
               <button id="btnStop" class="ghost">Stop</button>
             </div>
@@ -210,6 +215,21 @@
         <div class="panel-actions">
           <button id="btnMapperApply">Apply</button>
           <button id="btnMapperClose" class="ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mapper hidden" id="exampleModal">
+      <div class="mapper-card">
+        <h3>Load Example Dataset</h3>
+        <p>Select a preset to populate training data.</p>
+        <div class="example-grid">
+          <button class="example-card" data-example="animals">Animals Taxonomy</button>
+          <button class="example-card" data-example="taxonomy">Object Taxonomy</button>
+          <button class="example-card" data-example="lexicon">Lexicon Signals</button>
+        </div>
+        <div class="panel-actions">
+          <button id="btnExampleClose" class="ghost">Close</button>
         </div>
       </div>
     </div>
