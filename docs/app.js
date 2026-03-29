@@ -43,22 +43,15 @@ const examples = {
 const ui = {
   datasetInput: document.getElementById("datasetInput"),
   datasetStatus: document.getElementById("datasetStatus"),
+  statusMessage: document.getElementById("statusMessage"),
   exampleSelect: document.getElementById("exampleSelect"),
   btnLoadExample: document.getElementById("btnLoadExample"),
-  btnStore: document.getElementById("btnStore"),
-  btnLoadStore: document.getElementById("btnLoadStore"),
-  storeStatus: document.getElementById("storeStatus"),
-  storePreview: document.getElementById("storePreview"),
   librarySize: document.getElementById("librarySize"),
   libraryValue: document.getElementById("libraryValue"),
   modeSelect: document.getElementById("modeSelect"),
   populationSize: document.getElementById("populationSize"),
   generationCount: document.getElementById("generationCount"),
-  mutationRate: document.getElementById("mutationRate"),
-  mutationVolatility: document.getElementById("mutationVolatility"),
   initialRandomness: document.getElementById("initialRandomness"),
-  verifyCount: document.getElementById("verifyCount"),
-  verifyTolerance: document.getElementById("verifyTolerance"),
   btnTrain: document.getElementById("btnTrain"),
   btnStop: document.getElementById("btnStop"),
   bestScore: document.getElementById("bestScore"),
@@ -77,9 +70,16 @@ let bestScore = Infinity;
 let history = [];
 let chartCtx = ui.scoreChart.getContext("2d");
 
+function resizeChart() {
+  ui.scoreChart.width = ui.scoreChart.clientWidth * window.devicePixelRatio;
+  ui.scoreChart.height = 160 * window.devicePixelRatio;
+  chartCtx = ui.scoreChart.getContext("2d");
+  chartCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
 function drawChart() {
-  const w = ui.scoreChart.width;
-  const h = ui.scoreChart.height;
+  const w = ui.scoreChart.clientWidth;
+  const h = 160;
   chartCtx.clearRect(0, 0, w, h);
   chartCtx.strokeStyle = "#5ee4ff";
   chartCtx.beginPath();
@@ -217,27 +217,6 @@ function evolve(samples, config) {
   return { best, bestScore: bestScoreLocal, params };
 }
 
-function verifyGenome(best, samples, count, tolerance) {
-  if (!count || count <= 0) return true;
-  const used = new Set();
-  let successes = 0;
-  let attempts = 0;
-  while (successes < count && attempts < count * 10) {
-    const sample = samples[Math.floor(Math.random() * samples.length)];
-    const keyId = JSON.stringify(sample.key);
-    attempts += 1;
-    if (used.has(keyId)) continue;
-    used.add(keyId);
-    const result = executeGenome(sample.key, best.genome, best.params);
-    if (result.ok && scoreValue(result.value, sample.value) <= tolerance) {
-      successes += 1;
-    } else {
-      successes = 0;
-    }
-  }
-  return successes >= count;
-}
-
 function trainLoop(samples) {
   const generations = Number(ui.generationCount.value);
   const config = {
@@ -252,14 +231,8 @@ function trainLoop(samples) {
   history = [];
   function step() {
     if (!training || gen >= generations) {
-      if (training && bestGenome) {
-        const verifyCount = Number(ui.verifyCount.value);
-        const tolerance = Number(ui.verifyTolerance.value);
-        const verified = verifyGenome(bestGenome, samples, verifyCount, tolerance);
-        ui.trainStatus.textContent = verified ? "verified" : "done";
-      } else {
-        ui.trainStatus.textContent = "stopped";
-      }
+      ui.trainStatus.textContent = training ? "done" : "stopped";
+      ui.statusMessage.textContent = training ? "Training complete." : "Stopped.";
       return;
     }
     const { best, bestScore: score, params } = evolve(samples, config);
@@ -306,33 +279,34 @@ function loadExample() {
   updateDatasetStatus(parseDataset(ui.datasetInput.value));
 }
 
-function saveStore() {
-  const samples = parseDataset(ui.datasetInput.value);
-  const store = JSON.parse(localStorage.getItem("flux_store") || "[]");
-  localStorage.setItem("flux_store", JSON.stringify(store.concat(samples)));
-  loadStore();
-}
-
-function loadStore() {
-  const store = JSON.parse(localStorage.getItem("flux_store") || "[]");
-  ui.storeStatus.textContent = `${store.length} stored samples`;
-  ui.storePreview.textContent = JSON.stringify(store.slice(0, 8), null, 2);
-}
-
 ui.btnLoadExample.addEventListener("click", loadExample);
+ui.datasetInput.addEventListener("input", () => {
+  try {
+    const samples = parseDataset(ui.datasetInput.value);
+    updateDatasetStatus(samples);
+    ui.statusMessage.textContent = "Dataset loaded.";
+  } catch {
+    ui.datasetStatus.textContent = "0 samples";
+    ui.statusMessage.textContent = "Invalid JSON dataset.";
+  }
+});
 ui.btnTrain.addEventListener("click", () => {
-  const samples = parseDataset(ui.datasetInput.value);
-  updateDatasetStatus(samples);
-  trainLoop(samples);
+  try {
+    const samples = parseDataset(ui.datasetInput.value);
+    updateDatasetStatus(samples);
+    ui.statusMessage.textContent = "Training...";
+    trainLoop(samples);
+  } catch (err) {
+    ui.statusMessage.textContent = "Invalid JSON dataset.";
+  }
 });
 ui.btnStop.addEventListener("click", () => {
   training = false;
   ui.trainStatus.textContent = "stopped";
 });
 ui.btnAsk.addEventListener("click", askQuestion);
-ui.btnStore.addEventListener("click", saveStore);
-ui.btnLoadStore.addEventListener("click", loadStore);
 ui.librarySize.addEventListener("input", () => (ui.libraryValue.textContent = ui.librarySize.value));
 
 loadExample();
-loadStore();
+resizeChart();
+window.addEventListener("resize", resizeChart);
