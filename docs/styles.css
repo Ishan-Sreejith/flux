@@ -90,20 +90,22 @@ body {
 
 .columns {
   display: grid;
-  grid-template-columns: 1fr 1.6fr 1fr;
+  grid-template-columns: minmax(280px, 1fr) minmax(420px, 1.6fr) minmax(280px, 1fr);
   gap: 18px;
   padding: 18px;
+  align-items: start;
 }
 
 .column.panel {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 16px;
-  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(24, 30, 39, 0.6);
+  border-radius: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 74vh;
+  gap: 14px;
+  min-height: 78vh;
+  backdrop-filter: blur(10px);
 }
 
 .panel-header {
@@ -121,10 +123,11 @@ body {
 }
 
 .card {
-  border: 1px solid var(--border);
-  background: var(--panel-strong);
-  border-radius: 14px;
-  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 26, 36, 0.75);
+  border-radius: 16px;
+  padding: 14px;
+  backdrop-filter: blur(12px);
 }
 
 .card h3 {
@@ -212,20 +215,48 @@ button.mini {
 
 .leaderboard {
   width: 100%;
-  border-collapse: collapse;
+  display: grid;
+  gap: 8px;
   font-size: 12px;
 }
 
-.leaderboard th,
-.leaderboard td {
-  text-align: left;
-  padding: 6px;
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
+.leaderboard-header,
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 90px 80px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(15, 20, 28, 0.7);
 }
 
-.leaderboard th {
+.leaderboard-header {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+}
+
+.leaderboard-row {
   color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.leaderboard-row.good {
+  border-color: rgba(124, 255, 176, 0.5);
+  color: #a9ffcb;
+}
+
+.leaderboard-row.warn {
+  border-color: rgba(94, 228, 255, 0.5);
+  color: #8de9ff;
+}
+
+.leaderboard-row.bad {
+  border-color: rgba(255, 124, 80, 0.5);
+  color: #ffb199;
 }
 
 .graveyard {
@@ -270,53 +301,71 @@ canvas {
 }
 
 .algo-cards {
-  display: grid;
+  display: flex;
   gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
 .algo-card {
-  display: grid;
-  grid-template-columns: 40px 1fr auto;
-  gap: 10px;
+  display: inline-flex;
   align-items: center;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--panel);
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(124, 255, 176, 0.5);
+  background: rgba(15, 20, 28, 0.8);
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
+  color: #c6ffe0;
+  box-shadow: 0 0 12px rgba(124, 255, 176, 0.2);
+  position: relative;
+}
+
+.algo-card::after {
+  content: "➔";
+  position: absolute;
+  right: -14px;
+  color: var(--muted);
+}
+
+.algo-card:last-child::after {
+  content: "";
 }
 
 .answer {
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 12px;
   min-height: 80px;
-  background: var(--panel);
+  background: rgba(15, 20, 28, 0.7);
   font-family: "JetBrains Mono", ui-monospace, monospace;
 }
 
 .param-drawer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(18px, 1fr));
   gap: 6px;
-  margin-top: 10px;
-  max-height: 180px;
+  margin-top: 12px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
 .param-block {
   width: 100%;
-  padding-bottom: 100%;
-  border-radius: 4px;
-  border: 1px solid var(--border);
+  padding-bottom: 70%;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: #2a3240;
-  opacity: 0.25;
+  opacity: 0.2;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .param-block.active {
   opacity: 1;
+  transform: scale(1.05);
+  border-color: rgba(94, 228, 255, 0.6);
+  box-shadow: 0 0 12px rgba(94, 228, 255, 0.35);
 }
 
 .dock {
@@ -329,6 +378,18 @@ canvas {
   background: transparent;
   color: var(--text);
   border: 1px dashed var(--border);
+}
+
+.status-green {
+  color: #7cffb0;
+}
+
+.status-blue {
+  color: #5ee4ff;
+}
+
+.status-red {
+  color: #ff7a50;
 }
 
 .hidden {

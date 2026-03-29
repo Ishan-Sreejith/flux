@@ -263,13 +263,21 @@ function evolveGeneration(samples) {
 
 function renderLeaderboard(agents) {
   ui.leaderboardBody.innerHTML = "";
+  const header = document.createElement("div");
+  header.className = "leaderboard-header";
+  header.innerHTML = "<span>Rank</span><span>Agent</span><span>Fitness</span><span>Genome</span>";
+  ui.leaderboardBody.appendChild(header);
   agents.slice(0, 5).forEach((agent, idx) => {
-    const row = document.createElement("tr");
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
+    if (agent.score <= 0.05) row.classList.add("good");
+    else if (agent.score <= 0.5) row.classList.add("warn");
+    else row.classList.add("bad");
     row.innerHTML = `
-      <td>#${idx + 1}</td>
-      <td>A${agent.id}</td>
-      <td>${agent.score.toFixed(3)}</td>
-      <td>${agent.genome.length}</td>
+      <span>#${idx + 1}</span>
+      <span>A${agent.id}</span>
+      <span>${agent.score.toFixed(3)}</span>
+      <span>${agent.genome.length}</span>
     `;
     ui.leaderboardBody.appendChild(row);
   });
@@ -291,7 +299,7 @@ function renderAlgorithm(genome) {
     row.innerHTML = `
       <strong>${String(idx + 1).padStart(2, "0")}</strong>
       <div>Param ${gene.paramId}</div>
-      <span>strength ${gene.strength.toFixed(2)}</span>
+      <span class="status-blue">strength ${gene.strength.toFixed(2)}</span>
     `;
     ui.algorithmMap.appendChild(row);
   });
@@ -309,7 +317,7 @@ function initDrawer() {
   for (let i = 0; i < 1000; i++) {
     const block = document.createElement("div");
     block.className = "param-block";
-    block.style.background = i % 3 === 0 ? "var(--accent)" : i % 3 === 1 ? "var(--accent-2)" : "var(--panel)";
+    block.style.background = i % 3 === 0 ? "var(--accent)" : i % 3 === 1 ? "var(--accent-2)" : "#ff7a50";
     ui.paramDrawer.appendChild(block);
   }
   updateDrawer();
@@ -372,6 +380,9 @@ function startTraining(samples) {
     ui.graveyardCount.textContent = zeroCount;
     if (salvageEvents > 0) {
       ui.salvageLog.textContent = `Salvage injected ${salvageEvents} genes this generation.`;
+      ui.salvageLog.className = "log status-red";
+    } else {
+      ui.salvageLog.className = "log status-blue";
     }
     bestGenome = { genome: best.genome, params: engineState.params };
     renderAlgorithm(best.genome);
