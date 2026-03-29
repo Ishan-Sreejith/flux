@@ -125,6 +125,8 @@ function drawLineChart() {
   const width = canvas.width;
   const height = canvas.height;
   ctx.clearRect(0, 0, width, height);
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
   ctx.strokeStyle = "#2c3342";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i += 1) {
@@ -136,7 +138,7 @@ function drawLineChart() {
   }
   if (state.history.length < 2) return;
   ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
   state.history.forEach((value, index) => {
     const x = (width / (state.history.length - 1)) * index;
@@ -244,11 +246,14 @@ function setTheme(theme) {
 function togglePanel(panel) {
   const isActive = el.slidePanel.dataset.active === panel;
   if (isActive) {
+    const willCollapse = !el.slidePanel.classList.contains("collapsed");
     el.slidePanel.classList.toggle("collapsed");
+    el.appRoot.classList.toggle("panel-collapsed", willCollapse);
     return;
   }
   el.slidePanel.dataset.active = panel;
   el.slidePanel.classList.remove("collapsed");
+  el.appRoot.classList.remove("panel-collapsed");
   el.iconButtons.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.panel === panel);
   });

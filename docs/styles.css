@@ -123,13 +123,20 @@ body {
   flex-direction: column;
   gap: 16px;
   transform: translateX(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.35s ease, width 0.35s ease, opacity 0.2s ease;
 }
 
 .slide-panel.collapsed {
   transform: translateX(-320px);
   opacity: 0;
   pointer-events: none;
+  width: 0;
+  padding: 0;
+  border: none;
+}
+
+.ide.panel-collapsed .sidebar {
+  gap: 6px;
 }
 
 .panel-section {
@@ -246,6 +253,7 @@ button.ghost {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  transition: width 0.35s ease;
 }
 
 .workspace-header {
@@ -348,11 +356,35 @@ button.ghost {
 .leaderboard-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 12px;
   border-radius: 12px;
   background: rgba(10, 12, 16, 0.6);
   border: 1px solid var(--border);
   font-size: 12px;
+  transition: transform 0.35s ease, background 0.35s ease, border 0.35s ease;
+  animation: rise 0.4s ease;
+}
+
+.leaderboard-row span:first-child {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.leaderboard-row span:last-child {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--accent-2);
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(6px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .ask-panel {
