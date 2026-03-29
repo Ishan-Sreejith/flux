@@ -169,12 +169,27 @@ function drawLineChart() {
     const label = `${Math.round(value * 100)}%`;
     ctx.fillText(label, 6, y + 4);
   }
+  ctx.strokeStyle = "#3a4150";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top);
+  ctx.lineTo(padding.left, height - padding.bottom);
+  ctx.lineTo(width - padding.right, height - padding.bottom);
+  ctx.stroke();
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--muted");
+  ctx.fillText("Accuracy", padding.left, padding.top - 4);
+  ctx.fillText("Generations", width - 110, height - 6);
+  for (let i = 0; i <= 4; i += 1) {
+    const x = padding.left + plotW * (i / 4);
+    const label = Math.round(state.generation * (i / 4));
+    ctx.fillText(String(label), x - 6, height - 6);
+  }
   if (state.historyDisplay.length < 2) return;
   ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
   ctx.lineWidth = 2.5;
   ctx.beginPath();
   const points = state.historyDisplay.map((value, index) => {
-    const x = padding.left + (plotW / (state.historyDisplay.length - 1)) * index;
+    const x = padding.left + (plotW / Math.max(1, state.historyDisplay.length - 1)) * index;
     const y = padding.top + (1 - value) * plotH;
     return { x, y };
   });
@@ -214,14 +229,14 @@ function smoothCharts() {
       state.historyDisplay.push(target[state.historyDisplay.length] ?? 0);
     }
   }
-  state.historyDisplay = state.historyDisplay.map((val, idx) => lerp(val, target[idx] ?? val, 0.12));
+  state.historyDisplay = state.historyDisplay.map((val, idx) => lerp(val, target[idx] ?? val, 0.08));
   const geneTarget = state.geneFreq;
   if (state.geneDisplay.length < geneTarget.length) {
     while (state.geneDisplay.length < geneTarget.length) {
       state.geneDisplay.push(geneTarget[state.geneDisplay.length] ?? 0);
     }
   }
-  state.geneDisplay = state.geneDisplay.map((val, idx) => lerp(val, geneTarget[idx] ?? val, 0.18));
+  state.geneDisplay = state.geneDisplay.map((val, idx) => lerp(val, geneTarget[idx] ?? val, 0.14));
 }
 
 function stepTraining() {
@@ -262,6 +277,7 @@ function startTraining() {
   state.genomeLength = Number(el.genomeLength.value);
   state.maxGenerations = Number(el.generationCount.value);
   state.targetAccuracy = Number(el.accuracyTarget.value);
+  state.minGenerations = Math.max(40, Math.floor(state.maxGenerations * 0.35));
   state.running = true;
   state.generation = 0;
   state.best = 0;
@@ -343,7 +359,16 @@ function loadSample() {
     })
     .catch(() => {
       el.datasetInput.value = JSON.stringify(
-        { A: { Key: 1, Value: 2 }, B: { Key: 2, Value: 4 } },
+        {
+          Entry_01: { Key: [12, 4, "mars"], Value: 28.5 },
+          Entry_02: { Key: [18, 2, "venus"], Value: 32.1 },
+          Entry_03: { Key: [7, 9, "jupiter"], Value: 24.7 },
+          Entry_04: { Key: [3, 5, "saturn"], Value: 18.2 },
+          Entry_05: { Key: [21, 1, "neptune"], Value: 36.9 },
+          Entry_06: { Key: [10, 7, "uranus"], Value: 27.4 },
+          Entry_07: { Key: [5, 6, "earth"], Value: 19.6 },
+          Entry_08: { Key: [16, 3, "mercury"], Value: 30.2 },
+        },
         null,
         2
       );

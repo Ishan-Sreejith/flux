@@ -361,6 +361,14 @@ button.ghost {
   gap: 10px;
 }
 
+.leaderboard-head {
+  display: grid;
+  grid-template-columns: 46px 1fr 80px;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
 .leaderboard-row {
   display: grid;
   grid-template-columns: 46px 1fr 80px;
