@@ -244,6 +244,14 @@ button.mini {
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
+.leaderboard-row.bump {
+  animation: bump 0.25s ease-out;
+}
+
+.leaderboard-row.fadeout {
+  animation: fadeout 0.4s ease forwards;
+}
+
 .leaderboard-row.good {
   border-color: rgba(124, 255, 176, 0.5);
   color: #a9ffcb;
@@ -257,6 +265,28 @@ button.mini {
 .leaderboard-row.bad {
   border-color: rgba(255, 124, 80, 0.5);
   color: #ffb199;
+}
+
+@keyframes bump {
+  0% {
+    transform: translateY(6px);
+    background: rgba(94, 228, 255, 0.12);
+  }
+  100% {
+    transform: translateY(0);
+    background: rgba(15, 20, 28, 0.7);
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    background: rgba(255, 124, 80, 0.18);
+    opacity: 1;
+  }
+  100% {
+    background: rgba(255, 124, 80, 0.05);
+    opacity: 0.35;
+  }
 }
 
 .graveyard {

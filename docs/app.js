@@ -78,6 +78,7 @@ let engineState = null;
 let bestGenome = null;
 let history = { best: [], avg: [] };
 let chartCtx = ui.scoreChart.getContext("2d");
+let lastLeaderboard = new Map();
 
 function resizeChart() {
   const ratio = window.devicePixelRatio || 1;
@@ -273,6 +274,10 @@ function renderLeaderboard(agents) {
     if (agent.score <= 0.05) row.classList.add("good");
     else if (agent.score <= 0.5) row.classList.add("warn");
     else row.classList.add("bad");
+    const prevRank = lastLeaderboard.get(agent.id);
+    if (prevRank !== undefined && prevRank > idx) {
+      row.classList.add("bump");
+    }
     row.innerHTML = `
       <span>#${idx + 1}</span>
       <span>A${agent.id}</span>
@@ -280,6 +285,10 @@ function renderLeaderboard(agents) {
       <span>${agent.genome.length}</span>
     `;
     ui.leaderboardBody.appendChild(row);
+  });
+  lastLeaderboard.clear();
+  agents.slice(0, 5).forEach((agent, idx) => {
+    lastLeaderboard.set(agent.id, idx);
   });
 }
 
@@ -383,6 +392,10 @@ function startTraining(samples) {
       ui.salvageLog.className = "log status-red";
     } else {
       ui.salvageLog.className = "log status-blue";
+    }
+    if (zeroCount > 0) {
+      const rows = ui.leaderboardBody.querySelectorAll(".leaderboard-row.bad");
+      rows.forEach((row) => row.classList.add("fadeout"));
     }
     bestGenome = { genome: best.genome, params: engineState.params };
     renderAlgorithm(best.genome);
