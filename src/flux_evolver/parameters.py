@@ -12,6 +12,7 @@ class Parameter:
     id: int
     name: str
     apply: Callable[[Any, Gene], Any]
+    domain: str
 
 
 NUM_CONSTS = [-10, -5, -2, -1, 1, 2, 5, 10]
@@ -149,6 +150,18 @@ def _apply_replace(value: Any, gene: Gene, token: str) -> Any:
     return str(value).replace(token, "")
 
 
+def _apply_capitalize(value: Any, gene: Gene) -> Any:
+    return str(value).capitalize()
+
+
+def _apply_swapcase(value: Any, gene: Gene) -> Any:
+    return str(value).swapcase()
+
+
+def _apply_concat(value: Any, gene: Gene, token: str) -> Any:
+    return f"{value}{token}"
+
+
 def _apply_if_gt_add(value: Any, gene: Gene, threshold: float, const: float) -> Any:
     num = _coerce_number(value)
     if num > threshold:
@@ -170,41 +183,28 @@ def _apply_if_contains(value: Any, gene: Gene, token: str) -> Any:
     return text
 
 
-def build_parameter_library(size: int = 1000) -> List[Parameter]:
-    if size < 1:
-        raise ValueError("size must be positive")
-
+def _build_numeric_templates() -> List[Callable[[int], Parameter]]:
     templates: List[Callable[[int], Parameter]] = []
 
     def add_param(name: str, builder: Callable[[int], Callable[[Any, Gene], Any]]) -> None:
         def _build(pid: int) -> Parameter:
-            return Parameter(pid, name, builder(pid))
+            return Parameter(pid, name, builder(pid), "numeric")
 
         templates.append(_build)
 
     add_param("identity", lambda _: (lambda v, g: v))
-    add_param("add", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_add(v, g, c)))
-    add_param("sub", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_sub(v, g, c)))
-    add_param("mul", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_mul(v, g, c)))
-    add_param("div", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_div(v, g, c)))
-    add_param("mod", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_mod(v, g, c)))
-    add_param("pow", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_pow(v, g, c)))
+    add_param("add_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_add(v, g, c)))
+    add_param("sub_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_sub(v, g, c)))
+    add_param("mul_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_mul(v, g, c)))
+    add_param("div_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_div(v, g, c)))
+    add_param("mod_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_mod(v, g, c)))
+    add_param("pow_const", lambda pid: (lambda v, g, c=NUM_CONSTS[pid % len(NUM_CONSTS)]: _apply_pow(v, g, c)))
     add_param("sin", lambda _: _apply_sin)
     add_param("cos", lambda _: _apply_cos)
     add_param("tan", lambda _: _apply_tan)
     add_param("abs", lambda _: _apply_abs)
     add_param("round", lambda pid: (lambda v, g, d=pid % 3: _apply_round(v, g, d)))
     add_param("clamp", lambda _: _apply_clamp)
-    add_param("to_str", lambda _: _apply_to_str)
-    add_param("lower", lambda _: _apply_lower)
-    add_param("upper", lambda _: _apply_upper)
-    add_param("strip", lambda _: _apply_strip)
-    add_param("reverse", lambda _: _apply_reverse)
-    add_param("first_letter", lambda _: _apply_first_letter)
-    add_param("last_letter", lambda _: _apply_last_letter)
-    add_param("append", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_append(v, g, t)))
-    add_param("prepend", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_prepend(v, g, t)))
-    add_param("replace", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_replace(v, g, t)))
     add_param(
         "if_gt_add",
         lambda pid: (
@@ -221,11 +221,43 @@ def build_parameter_library(size: int = 1000) -> List[Parameter]:
             )
         ),
     )
+    return templates
+
+
+def _build_text_templates() -> List[Callable[[int], Parameter]]:
+    templates: List[Callable[[int], Parameter]] = []
+
+    def add_param(name: str, builder: Callable[[int], Callable[[Any, Gene], Any]]) -> None:
+        def _build(pid: int) -> Parameter:
+            return Parameter(pid, name, builder(pid), "text")
+
+        templates.append(_build)
+
+    add_param("identity", lambda _: (lambda v, g: v))
+    add_param("to_str", lambda _: _apply_to_str)
+    add_param("lower", lambda _: _apply_lower)
+    add_param("upper", lambda _: _apply_upper)
+    add_param("capitalize", lambda _: _apply_capitalize)
+    add_param("swapcase", lambda _: _apply_swapcase)
+    add_param("strip", lambda _: _apply_strip)
+    add_param("reverse", lambda _: _apply_reverse)
+    add_param("first_letter", lambda _: _apply_first_letter)
+    add_param("last_letter", lambda _: _apply_last_letter)
+    add_param("concat", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_concat(v, g, t)))
+    add_param("append", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_append(v, g, t)))
+    add_param("prepend", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_prepend(v, g, t)))
+    add_param("replace", lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_replace(v, g, t)))
     add_param(
         "if_contains",
         lambda pid: (lambda v, g, t=TOKENS[pid % len(TOKENS)]: _apply_if_contains(v, g, t)),
     )
+    return templates
 
+
+def build_parameter_library(size: int = 1000, domain: str = "numeric") -> List[Parameter]:
+    if size < 1:
+        raise ValueError("size must be positive")
+    templates = _build_numeric_templates() if domain == "numeric" else _build_text_templates()
     params: List[Parameter] = []
     for idx in range(1, size + 1):
         builder = templates[(idx - 1) % len(templates)]
@@ -233,8 +265,11 @@ def build_parameter_library(size: int = 1000) -> List[Parameter]:
     return params
 
 
+def build_parameter_pools(numeric_count: int, text_count: int) -> tuple[List[Parameter], List[Parameter]]:
+    return build_parameter_library(numeric_count, "numeric"), build_parameter_library(text_count, "text")
+
+
 def parameter_by_id(params: List[Parameter], param_id: int) -> Parameter:
     if param_id < 1 or param_id > len(params):
         raise ValueError("param_id out of range")
     return params[param_id - 1]
-

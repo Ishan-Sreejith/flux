@@ -16,8 +16,16 @@ def run_train(args: argparse.Namespace) -> int:
         population_size=args.population,
         genome_length=args.genome_length,
         param_count=args.param_count,
+        numeric_param_count=args.numeric_params,
+        text_param_count=args.text_params,
+        domain=args.domain,
         mutation_rate=args.mutation_rate,
         mutation_strength=args.mutation_strength,
+        elite_fraction=args.elite_fraction,
+        top_k=args.top_k,
+        selection_strategy=args.selection,
+        mutation_pressure=not args.no_mutation_pressure,
+        stagnation_generations=args.stagnation,
         accuracy_target=args.accuracy_target,
         max_generations=args.generations,
         tolerance=args.tolerance,
@@ -42,6 +50,9 @@ def run_question(args: argparse.Namespace) -> int:
             population_size=1,
             genome_length=len(genome.genes),
             param_count=args.param_count,
+            numeric_param_count=args.numeric_params,
+            text_param_count=args.text_params,
+            domain=args.domain,
             max_generations=1,
             tolerance=args.tolerance,
             seed=args.seed,
@@ -51,6 +62,11 @@ def run_question(args: argparse.Namespace) -> int:
         key = json.loads(args.key)
     except json.JSONDecodeError:
         key = args.key
+    if args.domain == "auto":
+        if isinstance(key, str):
+            engine.set_domain("text")
+        else:
+            engine.set_domain("numeric")
     result = engine.execute_genome(key, genome)
     if not result.ok:
         print("Error executing genome.")
@@ -97,8 +113,16 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--population", type=int, default=200)
     train.add_argument("--genome-length", type=int, default=8)
     train.add_argument("--param-count", type=int, default=1000)
+    train.add_argument("--numeric-params", type=int, default=500)
+    train.add_argument("--text-params", type=int, default=500)
+    train.add_argument("--domain", choices=["auto", "numeric", "text"], default="auto")
     train.add_argument("--mutation-rate", type=float, default=0.2)
     train.add_argument("--mutation-strength", type=float, default=0.35)
+    train.add_argument("--elite-fraction", type=float, default=0.1)
+    train.add_argument("--top-k", type=int, default=10)
+    train.add_argument("--selection", choices=["roulette", "tournament"], default="roulette")
+    train.add_argument("--no-mutation-pressure", action="store_true")
+    train.add_argument("--stagnation", type=int, default=20)
     train.add_argument("--accuracy-target", type=float, default=1.0)
     train.add_argument("--generations", type=int, default=500)
     train.add_argument("--tolerance", type=float, default=0.0)
@@ -110,6 +134,9 @@ def build_parser() -> argparse.ArgumentParser:
     question.add_argument("--model", required=True)
     question.add_argument("--key", required=True)
     question.add_argument("--param-count", type=int, default=1000)
+    question.add_argument("--numeric-params", type=int, default=500)
+    question.add_argument("--text-params", type=int, default=500)
+    question.add_argument("--domain", choices=["auto", "numeric", "text"], default="auto")
     question.add_argument("--tolerance", type=float, default=0.0)
     question.add_argument("--seed", type=int, default=42)
     question.set_defaults(func=run_question)
@@ -132,4 +159,3 @@ def main(argv: List[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
