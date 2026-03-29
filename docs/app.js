@@ -68,6 +68,7 @@ const el = {
   mapperGrid: document.getElementById("mapperGrid"),
   btnMapperApply: document.getElementById("btnMapperApply"),
   btnMapperClose: document.getElementById("btnMapperClose"),
+  stopOnTarget: document.getElementById("stopOnTarget"),
 };
 
 const uiState = {
@@ -368,7 +369,8 @@ function stepTraining() {
     setStatus(`Training complete at Gen ${state.generation} (max generations).`);
     return;
   }
-  if (state.best >= state.targetAccuracy && state.generation >= state.minGenerations) {
+  const shouldStopOnTarget = el.stopOnTarget && el.stopOnTarget.checked;
+  if (shouldStopOnTarget && state.best >= state.targetAccuracy && state.generation >= state.minGenerations) {
     stopTraining();
     setStatus(`Training complete at Gen ${state.generation} (target reached).`);
   }
