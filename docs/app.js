@@ -44,6 +44,7 @@ const el = {
   btnStart: document.getElementById("btnStart"),
   btnStop: document.getElementById("btnStop"),
   btnSample: document.getElementById("btnSample"),
+  btnAutopilot: document.getElementById("btnAutopilot"),
   fitnessChart: document.getElementById("fitnessChart"),
   geneChart: document.getElementById("geneChart"),
   leaderboard: document.getElementById("leaderboard"),
@@ -85,6 +86,7 @@ const uiState = {
   ghostLines: false,
   nodeMap: false,
   mutator: new Map(),
+  autopilot: false,
 };
 
 function setStatus(message) {
@@ -456,6 +458,53 @@ function loadExample(example) {
     });
 }
 
+async function runAutopilot() {
+  if (uiState.autopilot) return;
+  uiState.autopilot = true;
+  setStatus("Autopilot running...");
+  const sequence = [
+    () => togglePanel("files"),
+    () => loadExample("animals"),
+    () => setMode("train"),
+    () => startTraining(),
+    () => togglePanel("metrics"),
+    () => el.btnGhost.click(),
+    () => el.btnNodeMap.click(),
+    () => el.btnCataclysm.click(),
+    () => setMode("ask"),
+    () => {
+      if (el.algoKeyAsk) el.algoKeyAsk.value = randomFormula();
+      if (el.algoKeyInput) el.algoKeyInput.value = randomFormula();
+      if (el.askInput) el.askInput.value = "dog";
+      runAsk();
+    },
+    () => togglePanel("mutator"),
+    () => el.btnLockAll.click(),
+    () => togglePanel("rewind"),
+    () => {
+      el.rewindSlider.value = "20";
+      el.rewindValue.textContent = "20";
+      el.btnRewind.click();
+    },
+    () => togglePanel("export"),
+    () => el.btnExportPy.click(),
+    () => {
+      el.apiToggle.checked = true;
+      el.apiToggle.dispatchEvent(new Event("change"));
+    },
+    () => {
+      stopTraining();
+      setMode("train");
+      setStatus("Autopilot complete.");
+      uiState.autopilot = false;
+    },
+  ];
+  for (const step of sequence) {
+    step();
+    await new Promise((resolve) => setTimeout(resolve, 700));
+  }
+}
+
 function stepTraining() {
   if (!state.running) return;
   state.generation += 1;
@@ -633,6 +682,7 @@ el.btnAsk.addEventListener("click", runAsk);
 el.btnStart.addEventListener("click", startTraining);
 el.btnStop.addEventListener("click", stopTraining);
 el.btnSample.addEventListener("click", loadSample);
+el.btnAutopilot.addEventListener("click", runAutopilot);
 el.btnCataclysm.addEventListener("click", () => {
   setStatus("Cataclysm triggered. Re-seeding 80% population.");
   state.best = Math.max(0.1, state.best - 0.1);
