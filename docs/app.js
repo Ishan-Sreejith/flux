@@ -518,11 +518,11 @@ function setMode(mode) {
 
 function runAsk() {
   const key = el.askInput.value.trim();
-  const algo = el.algoKeyInput.value.trim();
-  if (!algo) {
-    el.askStatus.textContent = "Algorithm key required.";
-    return;
-  }
+  const algo =
+    (el.algoKeyAsk && el.algoKeyAsk.value.trim()) ||
+    (el.algoKeyInput && el.algoKeyInput.value.trim()) ||
+    (el.algoKeyBox && el.algoKeyBox.value.trim()) ||
+    "";
   el.askStatus.textContent = "Processing...";
   if (!key) {
     el.askOutput.textContent = "No key provided.";
@@ -534,6 +534,9 @@ function runAsk() {
     el.askOutput.textContent = JSON.stringify(state.dataset[key], null, 2);
   } else {
     el.askOutput.textContent = `No match for "${key}".`;
+  }
+  if (!algo) {
+    el.askStatus.textContent = "Answer from dataset match (no algorithm key).";
   }
   runPlayback();
 }
