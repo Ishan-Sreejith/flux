@@ -47,6 +47,7 @@ const el = {
   leaderboard: document.getElementById("leaderboard"),
   genLabel: document.getElementById("genLabel"),
   bestLabel: document.getElementById("bestLabel"),
+  trainCards: Array.from(document.querySelectorAll(".train-only")),
   algoKeyBox: document.getElementById("algoKeyBox"),
   btnCopyAlgo: document.getElementById("btnCopyAlgo"),
   btnGhost: document.getElementById("btnGhost"),
@@ -425,8 +426,13 @@ function setMode(mode) {
     pill.classList.toggle("active", pill.dataset.mode === mode);
   });
   el.askPanel.classList.toggle("hidden", mode !== "ask");
+  el.trainCards.forEach((card) => {
+    card.classList.toggle("hidden", mode === "ask");
+  });
   if (mode === "ask") {
     setStatus("Ask mode active.");
+  } else {
+    setStatus("Training mode active.");
   }
 }
 
