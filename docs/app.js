@@ -215,6 +215,7 @@ function evolveGeneration(samples, tolerance) {
     evaluateAgent(agent, samples, params, tolerance);
   }
   engineState.population.sort((a, b) => a.score - b.score);
+  const bestEvaluated = engineState.population[0];
   const survivors = engineState.population.slice(0, Math.ceil(engineState.population.length / 2));
   const top10 = engineState.population.slice(0, Math.min(10, engineState.population.length));
   const genePool = top10.flatMap((agent) => agent.genome);
@@ -244,8 +245,7 @@ function evolveGeneration(samples, tolerance) {
   }
 
   engineState.population = nextGen;
-  const best = engineState.population[0];
-  return { best, params };
+  return { best: bestEvaluated, params };
 }
 
 function trainLoop(samples) {
