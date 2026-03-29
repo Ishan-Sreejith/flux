@@ -1,0 +1,10 @@
+{
+  "mercury": { "prime": "Planet", "path": ["Inner", "Rocky"], "index": 1 },
+  "venus": { "prime": "Planet", "path": ["Inner", "Rocky"], "index": 2 },
+  "earth": { "prime": "Planet", "path": ["Inner", "Rocky"], "index": 3 },
+  "mars": { "prime": "Planet", "path": ["Inner", "Rocky"], "index": 4 },
+  "jupiter": { "prime": "Planet", "path": ["Outer", "Gas Giant"], "index": 5 },
+  "saturn": { "prime": "Planet", "path": ["Outer", "Gas Giant"], "index": 6 },
+  "uranus": { "prime": "Planet", "path": ["Outer", "Ice Giant"], "index": 7 },
+  "neptune": { "prime": "Planet", "path": ["Outer", "Ice Giant"], "index": 8 }
+}

@@ -159,7 +159,11 @@ function randomInt(max) {
 }
 
 function randomFormula() {
-  const ops = ["add", "sub", "mul", "div", "upper", "lower", "first", "last", "abs"];
+  const domain = inferDomain();
+  const ops =
+    domain === "text"
+      ? ["upper", "lower", "first", "last", "strip", "len", "concat", "slice"]
+      : ["add", "sub", "mul", "div", "abs", "round", "min", "max"];
   const steps = [];
   for (let i = 0; i < state.genomeLength; i += 1) {
     const paramId = String(randomInt(state.librarySize)).padStart(3, "0");
@@ -167,6 +171,16 @@ function randomFormula() {
     steps.push(`Param_${paramId}:${op}`);
   }
   return steps.join(" -> ");
+}
+
+function inferDomain() {
+  if (state.datasetRaw && Object.keys(state.datasetRaw).length > 0) {
+    return "text";
+  }
+  const first = Array.isArray(state.dataset) ? state.dataset[0] : null;
+  if (typeof first === "string") return "text";
+  if (Array.isArray(first) && typeof first[0] === "string") return "text";
+  return "numeric";
 }
 
 function resizeCanvas(canvas) {
@@ -420,6 +434,9 @@ function loadExample(example) {
     animals: "data/animals.json",
     taxonomy: "data/taxonomy.json",
     lexicon: "data/lexicon.json",
+    market: "data/market_linear.json",
+    solar: "data/solar_system.json",
+    slingshot: "data/slingshot_data.json",
   };
   const path = map[example];
   if (!path) return;

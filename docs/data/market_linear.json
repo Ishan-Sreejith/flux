@@ -1,0 +1,12 @@
+{
+  "Entry_01": { "Key": 1, "Value": 12.5 },
+  "Entry_02": { "Key": 2, "Value": 15.0 },
+  "Entry_03": { "Key": 3, "Value": 17.5 },
+  "Entry_04": { "Key": 4, "Value": 20.0 },
+  "Entry_05": { "Key": 5, "Value": 22.5 },
+  "Entry_06": { "Key": 6, "Value": 25.0 },
+  "Entry_07": { "Key": 7, "Value": 27.5 },
+  "Entry_08": { "Key": 8, "Value": 30.0 },
+  "Entry_09": { "Key": 9, "Value": 32.5 },
+  "Entry_10": { "Key": 10, "Value": 35.0 }
+}
