@@ -14,13 +14,6 @@ dev = ["pytest>=7.0", "pytest-cov>=4.0"]
 
 [tool.setuptools]
 packages = [
-    "eco_sim",
-    "eco_sim.world",
-    "eco_sim.agents",
-    "eco_sim.awareness",
-    "eco_sim.evolution",
-    "eco_sim.io",
-    "eco_sim.demo",
     "flux_evolver",
 ]
 
