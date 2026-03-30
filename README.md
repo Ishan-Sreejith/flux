@@ -15,8 +15,8 @@ Quick start
 Install locally and run:
 
 ```
-export PYTHONPATH="/Users/ishan/flux/src:$PYTHONPATH"
-flux train --dataset /Users/ishan/flux/example_data.json --output-model /tmp/flux_model.json
+python3 -m pip install -e .
+flux train --dataset ./example_data.json --output-model /tmp/flux_model.json
 flux question --model /tmp/flux_model.json --key 6
 ```
 
@@ -59,5 +59,7 @@ flux
 
 Web demo
 --------
-The GitHub Pages demo is in the `docs/` folder. Set Pages to the `master` branch and `/docs` folder.
-
+The GitHub Pages demo is in the `docs/` folder. In GitHub Pages settings, use:
+- Source: `Deploy from a branch`
+- Branch: `main`
+- Folder: `/docs`

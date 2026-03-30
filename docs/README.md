@@ -3,7 +3,7 @@
 Hyper-modern evolutionary algorithm IDE for the browser. This project implements a web-based simulation UI for the "Formula Maker" system.
 
 ## Version
-Current Version: **v0.0.3**
+Current Version: **v0.1.0**
 
 ## Features
 - **Smooth Animations**: High-refresh-feel UI with liquid borders and 60fps chart rendering.
@@ -27,3 +27,7 @@ Run the development server:
 ```
 
 The `.nojekyll` file ensures that the `data/` folder is accessible in the deployed environment.
+
+## Runtime Notes
+- The app loads preset datasets from relative `data/*.json` paths, which works for both root domains and project pages.
+- No build step is required; this is a static HTML/CSS/JS site.

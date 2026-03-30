@@ -1,6 +1,6 @@
 /**
- * Flux Evolver Core v0.0.3
- * Improved Neural Formula Studio
+ * Flux Evolver Web IDE v0.1.0
+ * GitHub Pages friendly, defensive UI wiring.
  */
 
 const state = {
@@ -12,141 +12,131 @@ const state = {
   historyDisplay: [],
   dataset: [],
   librarySize: 300,
+  populationSize: 120,
   genomeLength: 8,
   maxGenerations: 300,
   targetAccuracy: 0.95,
-  appVersion: "0.0.3",
+  appVersion: "0.1.0",
   changeCounter: 0,
+  activeTheme: "theme-cyber",
 };
 
 const uiState = {
-  activePanel: 'settings',
-  guideIndex: 0
+  activePanel: "settings",
+  guideIndex: 0,
+  autoplay: false,
 };
 
 const guideSteps = [
-  { title: "Protocol 1: Data Link", text: "Ingest a dataset via Data Architect to initialize search space." },
-  { title: "Protocol 2: Logic Decompile", text: "Autoformat raw signals and decompile to human-readable strategies." },
-  { title: "Protocol 3: Seed Evolution", text: "Configure population density and genome length to begin training." },
-  { title: "Protocol 4: Interactive Mutator", text: "Pin or ban specific alleles to influence evolution in real-time." },
-  { title: "Protocol 5: Deploy SDK", text: "Export optimized neural sequences as Python or JS modules." },
+  { title: "Protocol 1: Data Link", text: "Ingest a dataset from presets or upload a file to start." },
+  { title: "Protocol 2: Normalize", text: "Use Autoformat to clean and validate raw JSON input." },
+  { title: "Protocol 3: Decompile", text: "Generate a human-readable algorithm summary from the dataset." },
+  { title: "Protocol 4: Evolve", text: "Run training and monitor convergence in the telemetry chart." },
+  { title: "Protocol 5: Export", text: "Export generated logic as JavaScript or Python templates." },
 ];
 
-// Helper to get elements
 const $ = (id) => document.getElementById(id);
 
-/**
- * Log to system console
- */
-function log(msg, type = 'default') {
-  const consoleOut = $('consoleOutput');
-  if (!consoleOut) return;
-  const line = document.createElement("div");
-  line.className = `log-line ${type}`;
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text != null) node.textContent = text;
+  return node;
+}
+
+function nowTimeString() {
   const now = new Date();
-  const time = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
-  line.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
+  return [
+    now.getHours().toString().padStart(2, "0"),
+    now.getMinutes().toString().padStart(2, "0"),
+    now.getSeconds().toString().padStart(2, "0"),
+  ].join(":");
+}
+
+function log(msg, type = "default") {
+  const consoleOut = $("consoleOutput");
+  if (!consoleOut) return;
+  const line = el("div", `log-line ${type}`);
+  line.innerHTML = `<span class="log-time">[${nowTimeString()}]</span> ${msg}`;
   consoleOut.prepend(line);
 }
 
-/**
- * Resize canvas for high DPI
- */
+function setText(id, value) {
+  const node = $(id);
+  if (node) node.textContent = value;
+}
+
+function setValue(id, value) {
+  const node = $(id);
+  if (node) node.value = value;
+}
+
+function updateStatus(message) {
+  setText("statusMessage", message);
+}
+
+function updateBuildBadges() {
+  setText("buildVersion", `v${state.appVersion}`);
+}
+
+function clamp01(v) {
+  return Math.max(0, Math.min(1, v));
+}
+
+function updateLeaderboard() {
+  const lb = $("leaderboard");
+  if (!lb) return;
+  lb.innerHTML = "";
+  for (let i = 0; i < 6; i += 1) {
+    const row = el("div", "leaderboard-row");
+    const fitness = Math.max(0, state.best * 100 - i * 1.8);
+    const seq = `P${Math.floor(Math.random() * 250)}:${["add", "mul", "sub", "round"][i % 4]} -> P${Math.floor(Math.random() * 250)}:${["if", "clamp", "div", "pow"][i % 4]}`;
+    row.innerHTML = `
+      <span class="rank">#${i + 1}</span>
+      <span class="formula">${seq}</span>
+      <span class="score">${fitness.toFixed(2)}%</span>
+    `;
+    lb.appendChild(row);
+  }
+}
+
 function resizeCanvas(canvas) {
-  const parent = canvas.parentElement;
-  if (!parent) return null;
+  const parent = canvas?.parentElement;
+  if (!canvas || !parent) return null;
   const rect = parent.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
-  const width = rect.width;
-  const height = rect.height;
-  
-  if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
+  const width = Math.max(1, rect.width);
+  const height = Math.max(1, rect.height);
+  const targetWidth = Math.floor(width * dpr);
+  const targetHeight = Math.floor(height * dpr);
+  if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
   }
-  
   const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, width, height };
 }
 
-/**
- * Main Training Loop
- */
-function stepTraining() {
-  if (!state.running) return;
-  state.generation += 1;
-  
-  // Simulated fitness improvement (shrinking distance to target)
-  const improvement = (1 - state.best) * (0.02 + Math.random() * 0.03);
-  state.best = Math.min(1, state.best + improvement);
-  state.history.push(state.best);
-  
-  if ($('genLabel')) $('genLabel').textContent = `GEN ${state.generation}`;
-  if ($('bestLabel')) $('bestLabel').textContent = `${(state.best * 100).toFixed(2)}%`;
-  
-  updateLeaderboard();
-  
-  if (state.generation % 10 === 0) {
-    log(`Epoch ${state.generation}: Alpha stabilizing at ${(state.best * 100).toFixed(2)}%`, "default");
-  }
-
-  const stopChecked = $('stopOnTarget') ? $('stopOnTarget').checked : false;
-  if (state.generation >= state.maxGenerations || (stopChecked && state.best >= state.targetAccuracy)) {
-    stopTraining();
-    log("Simulation stabilized. Optimal formula found.", "success");
-  }
-}
-
-function startTraining() {
-  if (state.dataset.length === 0) {
-    log("Inversion failed: No telemetry data linked.", "error");
-    togglePanel('files');
-    return;
-  }
-  
-  state.running = true;
-  state.generation = 0;
-  state.best = 0;
-  state.history = [];
-  state.historyDisplay = [];
-  
-  $('appRoot').classList.add("training-running");
-  log("Initializing neural evolution kernel...", "system");
-  
-  if (state.interval) clearInterval(state.interval);
-  state.interval = setInterval(stepTraining, 150);
-}
-
-function stopTraining() {
-  state.running = false;
-  $('appRoot').classList.remove("training-running");
-  if (state.interval) clearInterval(state.interval);
-  if ($('statusMessage')) $('statusMessage').textContent = "System Standby";
-}
-
-/**
- * Charts
- */
 function drawFitness() {
-  const canvas = $('fitnessChart');
+  const canvas = $("fitnessChart");
   if (!canvas) return;
   const size = resizeCanvas(canvas);
   if (!size) return;
   const { ctx, width, height } = size;
-  
+
   ctx.clearRect(0, 0, width, height);
-  const padding = { left: 40, right: 10, top: 10, bottom: 25 };
+  const padding = { left: 38, right: 10, top: 10, bottom: 24 };
   const pW = width - padding.left - padding.right;
   const pH = height - padding.top - padding.bottom;
 
-  // Grid
-  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+  ctx.strokeStyle = "rgba(255,255,255,0.07)";
   ctx.lineWidth = 1;
-  for(let i=0; i<=4; i++) {
-    const y = padding.top + (pH * (1 - i/4));
+  for (let i = 0; i <= 4; i += 1) {
+    const y = padding.top + pH * (1 - i / 4);
     ctx.beginPath();
     ctx.moveTo(padding.left, y);
     ctx.lineTo(width - padding.right, y);
@@ -155,12 +145,9 @@ function drawFitness() {
 
   if (state.historyDisplay.length < 2) return;
 
-  // Line
   ctx.beginPath();
   ctx.lineWidth = 2.5;
   ctx.strokeStyle = "#00d2ff";
-  ctx.lineJoin = "round";
-
   const stepX = pW / (state.historyDisplay.length - 1);
   state.historyDisplay.forEach((v, i) => {
     const x = padding.left + i * stepX;
@@ -170,146 +157,456 @@ function drawFitness() {
   });
   ctx.stroke();
 
-  // Area
   ctx.lineTo(padding.left + pW, padding.top + pH);
   ctx.lineTo(padding.left, padding.top + pH);
-  ctx.fillStyle = "rgba(0, 210, 255, 0.05)";
+  ctx.fillStyle = "rgba(0, 210, 255, 0.08)";
   ctx.fill();
 }
 
-function updateLeaderboard() {
-  const lb = $('leaderboard');
-  if (!lb) return;
-  lb.innerHTML = "";
-  for(let i=0; i<6; i++) {
-    const row = document.createElement('div');
-    row.className = "leaderboard-row";
-    const fitness = (state.best * 100 - i * 2.1).toFixed(2);
-    row.innerHTML = `
-      <span class="rank">#${i+1}</span>
-      <span class="formula">P${Math.floor(Math.random()*999)}:mul → P${Math.floor(Math.random()*999)}:add</span>
-      <span class="score">${Math.max(0, fitness)}%</span>
-    `;
-    lb.appendChild(row);
+function refreshChartState() {
+  if (state.history.length > 0) {
+    if (state.historyDisplay.length < state.history.length) {
+      state.historyDisplay.push(state.history[state.historyDisplay.length]);
+    }
+    state.historyDisplay = state.historyDisplay.map((v, i) => v + (state.history[i] - v) * 0.18);
+  }
+  drawFitness();
+}
+
+function syncNumericSettings() {
+  const pop = Number($("populationSize")?.value || state.populationSize);
+  const genome = Number($("genomeLength")?.value || state.genomeLength);
+  const generations = Number($("generationCount")?.value || state.maxGenerations);
+  const accuracy = Number($("accuracyTarget")?.value || state.targetAccuracy);
+  const library = Number($("librarySize")?.value || state.librarySize);
+
+  state.populationSize = Number.isFinite(pop) ? Math.max(2, pop) : state.populationSize;
+  state.genomeLength = Number.isFinite(genome) ? Math.max(1, genome) : state.genomeLength;
+  state.maxGenerations = Number.isFinite(generations) ? Math.max(1, generations) : state.maxGenerations;
+  state.targetAccuracy = Number.isFinite(accuracy) ? clamp01(accuracy) : state.targetAccuracy;
+  state.librarySize = Number.isFinite(library) ? Math.max(10, library) : state.librarySize;
+
+  setText("libraryValue", String(state.librarySize));
+}
+
+function parseDataset(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return [];
+  try {
+    const parsed = JSON.parse(text);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === "object") return Object.values(parsed);
+    return [];
+  } catch {
+    return [];
   }
 }
 
-/**
- * Presets & Data
- */
-function loadExample(id) {
+function normalizeDataset(input) {
+  const rows = Array.isArray(input) ? input : [];
+  return rows
+    .map((entry, index) => {
+      if (entry && typeof entry === "object") {
+        const key = entry.Key ?? entry.key ?? entry.input ?? entry.x ?? index;
+        const value = entry.Value ?? entry.value ?? entry.output ?? entry.y ?? entry;
+        return { Key: key, Value: value };
+      }
+      return { Key: index, Value: entry };
+    })
+    .filter((entry) => entry.Key !== undefined && entry.Value !== undefined);
+}
+
+function updateDatasetState(data, sourceName = "inline") {
+  state.dataset = normalizeDataset(data);
+  setText("datasetStatus", `${state.dataset.length} items`);
+  setText("fileName", sourceName);
+  if (state.dataset.length > 0) {
+    updateStatus("Dataset Linked");
+    log(`Dataset loaded (${state.dataset.length} rows).`, "success");
+  } else {
+    log("Dataset is empty after normalization.", "error");
+  }
+}
+
+function autoformatDataset() {
+  const input = $("datasetInput");
+  if (!input) return;
+  const parsed = parseDataset(input.value);
+  if (parsed.length === 0) {
+    log("Autoformat skipped. Provide valid JSON first.", "error");
+    return;
+  }
+  const normalized = normalizeDataset(parsed);
+  input.value = JSON.stringify(normalized, null, 2);
+  updateDatasetState(normalized, $("fileName")?.textContent || "formatted.json");
+  log("Dataset normalized and formatted.", "success");
+}
+
+function deriveRuleFromDataset(dataset) {
+  if (!dataset.length) return "No deterministic rule could be inferred from empty data.";
+  const pairs = dataset.slice(0, 6).map((item) => `${JSON.stringify(item.Key)} -> ${JSON.stringify(item.Value)}`);
+  return [
+    "Likely mapping strategy:",
+    "1. Parse input key as primitive token.",
+    "2. Apply deterministic transform sequence.",
+    "3. Emit value domain-specific target.",
+    "",
+    "Sample traces:",
+    ...pairs,
+  ].join("\n");
+}
+
+function generateHumanAlgorithm() {
+  const output = deriveRuleFromDataset(state.dataset);
+  const target = $("fullVersionInput");
+  if (target) {
+    target.classList.remove("hidden");
+    target.value = output;
+  }
+  log("Generated human-readable algorithm draft.", "system");
+  return output;
+}
+
+function executeInference() {
+  const input = $("askInput");
+  const out = $("askOutput");
+  if (!input || !out) return;
+  const raw = input.value.trim();
+  if (!raw) {
+    out.textContent = "Provide a key first.";
+    setText("askStatus", "Missing Input");
+    return;
+  }
+
+  const maybeNumber = Number(raw);
+  const key = Number.isNaN(maybeNumber) ? raw : maybeNumber;
+  const match = state.dataset.find((row) => row.Key === key || String(row.Key) === String(key));
+  const value = match ? match.Value : `No exact match. Heuristic: ${raw}`;
+  out.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+  setText("askStatus", match ? "Exact Match" : "Heuristic Output");
+  log(`Inference executed for key "${raw}".`, "default");
+}
+
+function toDataUrl(content, mimeType) {
+  return `data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`;
+}
+
+function downloadText(filename, text, mimeType = "text/plain") {
+  const link = document.createElement("a");
+  link.href = toDataUrl(text, mimeType);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+function exportModel(kind) {
+  const readable = generateHumanAlgorithm();
+  if (kind === "py") {
+    const py = `# Flux export v${state.appVersion}\nalgorithm = """\n${readable}\n"""\n`;
+    downloadText("flux_algorithm.py", py, "text/x-python");
+  } else {
+    const js = `// Flux export v${state.appVersion}\nexport const algorithm = ${JSON.stringify(readable)};\n`;
+    downloadText("flux_algorithm.js", js, "text/javascript");
+  }
+  log(`Exported ${kind.toUpperCase()} SDK template.`, "success");
+}
+
+function resolveDataPath(relativePath) {
+  return new URL(relativePath, window.location.href).toString();
+}
+
+async function loadExample(id) {
   const paths = {
     animals: "data/animals.json",
     taxonomy: "data/taxonomy.json",
     lexicon: "data/lexicon.json",
     market: "data/market_linear.json",
     solar: "data/solar_system.json",
-    slingshot: "data/slingshot_data.json"
+    slingshot: "data/slingshot_data.json",
   };
-  
   const path = paths[id];
   if (!path) {
-    log(`Preset ID "${id}" not found.`, "error");
+    log(`Preset "${id}" not found.`, "error");
     return;
   }
-
-  log(`Linking telemetry stream: ${id}...`, "system");
-  
-  fetch(path)
-    .then(r => {
-      if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
-      return r.json();
-    })
-    .then(data => {
-      if ($('datasetInput')) {
-        $('datasetInput').value = JSON.stringify(data, null, 2);
-        state.dataset = Array.isArray(data) ? data : Object.values(data);
-        
-        if ($('datasetStatus')) $('datasetStatus').textContent = `${state.dataset.length} items`;
-        if ($('fileName')) $('fileName').textContent = `${id}.json`;
-        
-        if ($('exampleModal')) $('exampleModal').classList.add('hidden');
-        log(`Data stream "${id}" linked and validated.`, "success");
-      }
-    })
-    .catch(e => {
-      log(`Stream failed: ${e.message}`, "error");
-      console.error("Fetch error:", e);
-    });
+  try {
+    log(`Loading preset "${id}"...`, "system");
+    const response = await fetch(resolveDataPath(path), { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    const normalized = normalizeDataset(Array.isArray(data) ? data : Object.values(data));
+    setValue("datasetInput", JSON.stringify(normalized, null, 2));
+    updateDatasetState(normalized, `${id}.json`);
+    $("exampleModal")?.classList.add("hidden");
+  } catch (error) {
+    log(`Preset load failed: ${error.message}`, "error");
+  }
 }
 
-/**
- * UI Controls
- */
-function togglePanel(panel) {
-  const sp = $('slidePanel');
-  if (uiState.activePanel === panel && sp && !sp.classList.contains('collapsed')) {
-    sp.classList.add('collapsed');
-  } else {
-    sp.classList.remove('collapsed');
-    uiState.activePanel = panel;
-    document.querySelectorAll('.icon-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === panel));
-    document.querySelectorAll('.panel-section').forEach(s => s.classList.toggle('active', s.dataset.panelSection === panel));
+function fileToText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.readAsText(file);
+  });
+}
+
+async function handleFileUpload(event) {
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+  try {
+    const text = await fileToText(file);
+    let parsed = parseDataset(text);
+    if (parsed.length === 0 && file.name.toLowerCase().endsWith(".csv")) {
+      parsed = text
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line, i) => {
+          const [key, value] = line.split(",");
+          return { Key: key ?? i, Value: value ?? "" };
+        });
+    }
+    if (parsed.length === 0) {
+      throw new Error("Unsupported file format or empty payload");
+    }
+    const normalized = normalizeDataset(parsed);
+    setValue("datasetInput", JSON.stringify(normalized, null, 2));
+    updateDatasetState(normalized, file.name);
+  } catch (error) {
+    log(`File ingest failed: ${error.message}`, "error");
   }
+}
+
+function setTheme(themeClass) {
+  const root = $("appRoot");
+  if (!root) return;
+  root.classList.remove("theme-cyber", "theme-matrix", "theme-solar", "theme-arctic", "theme-comfort");
+  root.classList.add(themeClass);
+  state.activeTheme = themeClass;
+  document.querySelectorAll(".theme-pill").forEach((pill) => {
+    pill.classList.toggle("active", pill.dataset.theme === themeClass);
+  });
+  log(`Theme switched to ${themeClass.replace("theme-", "")}.`, "default");
+}
+
+function togglePanel(panel) {
+  const slidePanel = $("slidePanel");
+  if (!slidePanel) return;
+  if (uiState.activePanel === panel && !slidePanel.classList.contains("collapsed")) {
+    slidePanel.classList.add("collapsed");
+    return;
+  }
+  slidePanel.classList.remove("collapsed");
+  uiState.activePanel = panel;
+  document.querySelectorAll(".icon-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.panel === panel);
+  });
+  document.querySelectorAll(".panel-section").forEach((section) => {
+    section.classList.toggle("active", section.dataset.panelSection === panel);
+  });
 }
 
 function setMode(mode) {
-  document.querySelectorAll('.mode-pill').forEach(p => p.classList.toggle('active', p.dataset.mode === mode));
-  $('askPanel').classList.toggle('hidden', mode !== 'ask');
-  $('fitnessCard').classList.toggle('hidden', mode === 'ask');
-  $('leaderboardCard').classList.toggle('hidden', mode === 'ask');
-  log(`Kernel mode set to: ${mode.toUpperCase()}`);
+  document.querySelectorAll(".mode-pill").forEach((pill) => {
+    pill.classList.toggle("active", pill.dataset.mode === mode);
+  });
+  $("askPanel")?.classList.toggle("hidden", mode !== "ask");
+  $("fitnessCard")?.classList.toggle("hidden", mode === "ask");
+  $("leaderboardCard")?.classList.toggle("hidden", mode === "ask");
+  log(`Kernel mode set to ${mode.toUpperCase()}.`, "system");
+}
+
+function stepTraining() {
+  if (!state.running) return;
+  state.generation += 1;
+  const improvement = (1 - state.best) * (0.014 + Math.random() * 0.03);
+  state.best = clamp01(state.best + improvement);
+  state.history.push(state.best);
+  setText("genLabel", `GEN ${state.generation}`);
+  setText("bestLabel", `${(state.best * 100).toFixed(2)}%`);
+  updateLeaderboard();
+
+  if (state.generation % 10 === 0) {
+    log(`Epoch ${state.generation}: best=${(state.best * 100).toFixed(2)}%`, "default");
+  }
+
+  const stopOnTarget = $("stopOnTarget")?.checked ?? false;
+  if (state.generation >= state.maxGenerations || (stopOnTarget && state.best >= state.targetAccuracy)) {
+    stopTraining();
+    log("Simulation complete. Target reached or max generations hit.", "success");
+  }
+}
+
+function startTraining() {
+  syncNumericSettings();
+  if (state.dataset.length === 0) {
+    log("Cannot start: load dataset first.", "error");
+    togglePanel("files");
+    return;
+  }
+  state.running = true;
+  state.generation = 0;
+  state.best = 0;
+  state.history = [];
+  state.historyDisplay = [];
+  $("appRoot")?.classList.add("training-running");
+  updateStatus("Training");
+  if (state.interval) clearInterval(state.interval);
+  state.interval = setInterval(stepTraining, 160);
+  log("Evolution kernel started.", "system");
+}
+
+function stopTraining() {
+  state.running = false;
+  $("appRoot")?.classList.remove("training-running");
+  if (state.interval) clearInterval(state.interval);
+  state.interval = null;
+  updateStatus("System Standby");
+}
+
+function setGuideStep(index) {
+  const normalized = ((index % guideSteps.length) + guideSteps.length) % guideSteps.length;
+  uiState.guideIndex = normalized;
+  const step = guideSteps[normalized];
+  setText("guideTitle", step.title);
+  setText("guideText", step.text);
+  setText("guideStep", `${normalized + 1}/${guideSteps.length}`);
+}
+
+function toggleNodeMap() {
+  const nodeMap = $("nodeMap");
+  if (!nodeMap) return;
+  nodeMap.classList.toggle("hidden");
+  if (!nodeMap.classList.contains("hidden")) {
+    nodeMap.innerHTML = "";
+    for (let i = 0; i < 14; i += 1) {
+      const dot = el("span", "node-dot");
+      dot.style.left = `${8 + Math.random() * 84}%`;
+      dot.style.top = `${8 + Math.random() * 84}%`;
+      nodeMap.appendChild(dot);
+    }
+  }
+}
+
+function runAutopilot() {
+  if (state.dataset.length === 0) {
+    loadExample("animals").then(() => startTraining());
+    return;
+  }
+  startTraining();
+}
+
+function triggerCataclysm() {
+  if (!state.running) {
+    log("Cataclysm requires active training.", "error");
+    return;
+  }
+  state.best = clamp01(state.best * 0.65);
+  log("Cataclysm triggered. Fitness dropped, exploration increased.", "error");
+}
+
+function applyRewind() {
+  const rewind = Number($("rewindSlider")?.value || 0);
+  setText("rewindValue", String(rewind));
+  if (state.history.length === 0) return;
+  const idx = Math.max(0, Math.min(rewind, state.history.length - 1));
+  state.generation = idx;
+  state.best = state.history[idx] || 0;
+  state.history = state.history.slice(0, idx + 1);
+  state.historyDisplay = state.historyDisplay.slice(0, idx + 1);
+  setText("genLabel", `GEN ${state.generation}`);
+  setText("bestLabel", `${(state.best * 100).toFixed(2)}%`);
+  log(`Timeline rewound to generation ${idx}.`, "system");
+}
+
+function updateApiBadge() {
+  const enabled = $("apiToggle")?.checked ?? false;
+  const url = `${window.location.origin}${window.location.pathname.replace(/index\.html$/, "")}api/flux`;
+  setText("apiUrl", enabled ? url : "Endpoint Disabled");
+}
+
+function bindEvents() {
+  document.querySelectorAll(".icon-btn").forEach((btn) => {
+    btn.addEventListener("click", () => togglePanel(btn.dataset.panel));
+  });
+
+  document.querySelectorAll(".theme-pill").forEach((pill) => {
+    pill.addEventListener("click", () => setTheme(pill.dataset.theme));
+  });
+
+  document.querySelectorAll(".mode-pill").forEach((pill) => {
+    pill.addEventListener("click", () => setMode(pill.dataset.mode));
+  });
+
+  $("librarySize")?.addEventListener("input", syncNumericSettings);
+  $("populationSize")?.addEventListener("change", syncNumericSettings);
+  $("genomeLength")?.addEventListener("change", syncNumericSettings);
+  $("generationCount")?.addEventListener("change", syncNumericSettings);
+  $("accuracyTarget")?.addEventListener("change", syncNumericSettings);
+  $("rewindSlider")?.addEventListener("input", () => setText("rewindValue", $("rewindSlider").value));
+
+  $("btnStart")?.addEventListener("click", startTraining);
+  $("btnStop")?.addEventListener("click", stopTraining);
+  $("btnSample")?.addEventListener("click", () => $("exampleModal")?.classList.remove("hidden"));
+  $("btnExampleClose")?.addEventListener("click", () => $("exampleModal")?.classList.add("hidden"));
+  $("btnClearConsole")?.addEventListener("click", () => {
+    const out = $("consoleOutput");
+    if (out) out.innerHTML = "";
+  });
+  $("btnAutoformat")?.addEventListener("click", autoformatDataset);
+  $("btnGenerateHuman")?.addEventListener("click", generateHumanAlgorithm);
+  $("btnAsk")?.addEventListener("click", executeInference);
+  $("btnExportPy")?.addEventListener("click", () => exportModel("py"));
+  $("btnExportJs")?.addEventListener("click", () => exportModel("js"));
+  $("btnAutopilot")?.addEventListener("click", runAutopilot);
+  $("btnCataclysm")?.addEventListener("click", triggerCataclysm);
+  $("btnRewind")?.addEventListener("click", applyRewind);
+  $("btnRewindBoost")?.addEventListener("click", () => {
+    const slider = $("rewindSlider");
+    if (!slider) return;
+    slider.value = String(Math.max(0, Number(slider.value) - 15));
+    applyRewind();
+  });
+  $("apiToggle")?.addEventListener("change", updateApiBadge);
+  $("btnNodeMap")?.addEventListener("click", toggleNodeMap);
+  $("btnGhost")?.addEventListener("click", () => log("Ghost telemetry enabled.", "system"));
+
+  $("btnGuideNext")?.addEventListener("click", () => setGuideStep(uiState.guideIndex + 1));
+  $("btnGuidePrev")?.addEventListener("click", () => setGuideStep(uiState.guideIndex - 1));
+  $("btnGuideStart")?.addEventListener("click", () => setGuideStep(0));
+  $("btnGuideClose")?.addEventListener("click", () => $("guideCard")?.classList.add("hidden"));
+
+  $("fileInput")?.addEventListener("change", handleFileUpload);
+  $("datasetInput")?.addEventListener("blur", () => {
+    const parsed = parseDataset($("datasetInput").value);
+    if (parsed.length > 0) updateDatasetState(parsed, $("fileName")?.textContent || "inline");
+  });
+
+  document.querySelectorAll(".example-card").forEach((card) => {
+    card.addEventListener("click", () => loadExample(card.dataset.example));
+  });
+
+  window.addEventListener("resize", () => refreshChartState());
+}
+
+function renderLoop() {
+  refreshChartState();
+  window.requestAnimationFrame(renderLoop);
 }
 
 function init() {
-  // Navigation
-  document.querySelectorAll('.icon-btn').forEach(b => {
-    b.onclick = () => togglePanel(b.dataset.panel);
-  });
-
-  // Controls
-  if ($('btnStart')) $('btnStart').onclick = startTraining;
-  if ($('btnStop')) $('btnStop').onclick = stopTraining;
-  if ($('btnSample')) $('btnSample').onclick = () => $('exampleModal').classList.remove('hidden');
-  if ($('btnExampleClose')) $('btnExampleClose').onclick = () => $('exampleModal').classList.add('hidden');
-  if ($('btnClearConsole')) $('btnClearConsole').onclick = () => $('consoleOutput').innerHTML = "";
-
-  // Preset Cards
-  document.querySelectorAll('.example-card').forEach(c => {
-    c.onclick = () => {
-      const exId = c.getAttribute('data-example');
-      loadExample(exId);
-    };
-  });
-
-  // Modes
-  document.querySelectorAll('.mode-pill').forEach(p => {
-    p.onclick = () => setMode(p.dataset.mode);
-  });
-
-  // Guide
-  if ($('btnGuideNext')) $('btnGuideNext').onclick = () => {
-    uiState.guideIndex = (uiState.guideIndex + 1) % guideSteps.length;
-    const step = guideSteps[uiState.guideIndex];
-    if ($('guideTitle')) $('guideTitle').textContent = step.title;
-    if ($('guideText')) $('guideText').textContent = step.text;
-    if ($('guideStep')) $('guideStep').textContent = `${uiState.guideIndex + 1} / ${guideSteps.length}`;
-  };
-
-  // Animation Frame
-  function loop() {
-    if (state.history.length > 0) {
-      if (state.historyDisplay.length < state.history.length) {
-        state.historyDisplay.push(state.history[state.historyDisplay.length]);
-      }
-      state.historyDisplay = state.historyDisplay.map((v, i) => v + (state.history[i] - v) * 0.1);
-    }
-    drawFitness();
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  log("Flux Neural Evolution Kernel Ready.");
+  bindEvents();
+  syncNumericSettings();
+  updateBuildBadges();
+  updateApiBadge();
+  setGuideStep(0);
+  setTheme(state.activeTheme);
+  updateLeaderboard();
+  renderLoop();
+  log(`Flux kernel v${state.appVersion} ready.`, "system");
 }
 
-window.onload = init;
+window.addEventListener("load", init);
