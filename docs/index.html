@@ -40,7 +40,6 @@
         </div>
 
         <div class="slide-panel" id="slidePanel">
-          <!-- Panels are dynamically updated via active class -->
           <section class="panel-section active" data-panel-section="settings">
             <div class="panel-header">
               <h3>Core Engine</h3>
@@ -94,6 +93,7 @@
             <div class="panel-header">
               <h3>Data Architect</h3>
             </div>
+            <button id="btnSample" class="btn-primary full-width" style="margin-bottom: 12px;">Load Neural Presets</button>
             <div class="drop-zone" id="dropZone">
               <input type="file" id="fileInput" />
               <div class="drop-msg">
@@ -139,7 +139,6 @@
             </div>
             <button id="btnAutopilot" class="btn-outline">Start Autopilot Demo</button>
             <button id="btnCataclysm" class="btn-danger">Trigger Cataclysm</button>
-            <button id="btnSample" class="btn-outline">Load Neural Presets</button>
           </section>
 
           <section class="panel-section" data-panel-section="rewind">
@@ -318,7 +317,6 @@
       </section>
     </main>
 
-    <!-- Modals -->
     <div class="modal hidden" id="mapperModal">
       <div class="modal-content">
         <h3>Feature Mapper</h3>
