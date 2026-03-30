@@ -3,235 +3,364 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flux Evolver IDE</title>
+    <title>Flux Evolver IDE | Neural Formula Studio</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div id="particles-js" class="bg-layer"></div>
     <main class="ide theme-cyber" id="appRoot">
       <aside class="sidebar">
         <div class="icon-strip">
-          <button class="icon-btn active" data-panel="settings" aria-label="Settings">
-            <span>⚙</span>
-          </button>
-          <button class="icon-btn" data-panel="files" aria-label="Files">
-            <span>📂</span>
-          </button>
-          <button class="icon-btn" data-panel="library" aria-label="Library">
-            <span>🧬</span>
-          </button>
-          <button class="icon-btn" data-panel="metrics" aria-label="Metrics">
-            <span>📊</span>
-          </button>
-          <button class="icon-btn" data-panel="mutator" aria-label="Gene Mutator">
-            <span>🧪</span>
-          </button>
-          <button class="icon-btn" data-panel="rewind" aria-label="Epoch Rewind">
-            <span>⏪</span>
-          </button>
-          <button class="icon-btn" data-panel="export" aria-label="Export">
-            <span>⬆</span>
+          <div class="nav-group">
+            <button class="icon-btn active" data-panel="settings" title="Engine Settings">
+              <span class="icon">⚙️</span>
+            </button>
+            <button class="icon-btn" data-panel="files" title="Data Architect">
+              <span class="icon">📂</span>
+            </button>
+            <button class="icon-btn" data-panel="library" title="Gene Library">
+              <span class="icon">🧬</span>
+            </button>
+            <button class="icon-btn" data-panel="mutator" title="Gene Mutator">
+              <span class="icon">🧪</span>
+            </button>
+          </div>
+          <div class="nav-group">
+            <button class="icon-btn" data-panel="metrics" title="Real-time Metrics">
+              <span class="icon">📊</span>
+            </button>
+            <button class="icon-btn" data-panel="rewind" title="Epoch Rewind">
+              <span class="icon">⏪</span>
+            </button>
+          </div>
+          <div class="nav-spacer"></div>
+          <button class="icon-btn" data-panel="export" title="Export Solution">
+            <span class="icon">⬆️</span>
           </button>
         </div>
+
         <div class="slide-panel" id="slidePanel">
+          <!-- Panels are dynamically updated via active class -->
           <section class="panel-section active" data-panel-section="settings">
-            <h3>Settings</h3>
-            <label>Library Size <span id="libraryValue">300</span></label>
-            <input id="librarySize" type="range" min="1" max="1000" value="300" />
-            <div class="form-grid">
-              <label>Population</label>
-              <input id="populationSize" type="number" min="10" max="400" value="120" />
-              <label>Genome Length</label>
-              <input id="genomeLength" type="number" min="3" max="20" value="8" />
-              <label>Generations</label>
-              <input id="generationCount" type="number" min="10" max="2000" value="300" />
-              <label>Accuracy Target</label>
-              <input id="accuracyTarget" type="number" min="0.1" max="1" step="0.01" value="0.95" />
+            <div class="panel-header">
+              <h3>Core Engine</h3>
+              <span class="badge">Active</span>
             </div>
-            <div class="theme-row">
-              <span>Theme</span>
+            <div class="setting-group">
+              <div class="label-row">
+                <label>Library Complexity</label>
+                <span id="libraryValue" class="val-tag">300</span>
+              </div>
+              <input id="librarySize" type="range" min="50" max="2000" value="300" class="neon-range" />
+            </div>
+            <div class="form-grid">
+              <div class="input-field">
+                <label>Pop. Size</label>
+                <input id="populationSize" type="number" value="120" />
+              </div>
+              <div class="input-field">
+                <label>Genome</label>
+                <input id="genomeLength" type="number" value="8" />
+              </div>
+              <div class="input-field">
+                <label>Epochs</label>
+                <input id="generationCount" type="number" value="300" />
+              </div>
+              <div class="input-field">
+                <label>Accuracy</label>
+                <input id="accuracyTarget" type="number" step="0.01" value="0.95" />
+              </div>
+            </div>
+            <div class="theme-selector">
+              <label>UI Environment</label>
               <div class="theme-pills">
-                <button class="theme-pill active" data-theme="theme-cyber">Cyber Synth</button>
-                <button class="theme-pill" data-theme="theme-matrix">Matrix Green</button>
-                <button class="theme-pill" data-theme="theme-solar">Solar Flare</button>
-                <button class="theme-pill" data-theme="theme-arctic">Arctic Frost</button>
+                <button class="theme-pill active" data-theme="theme-cyber">Synth</button>
+                <button class="theme-pill" data-theme="theme-matrix">Matrix</button>
+                <button class="theme-pill" data-theme="theme-solar">Solar</button>
+                <button class="theme-pill" data-theme="theme-arctic">Arctic</button>
+                <button class="theme-pill" data-theme="theme-comfort">Comfort</button>
               </div>
             </div>
             <div class="toggle-row">
+              <span>Halt on Convergence</span>
               <label class="switch">
                 <input type="checkbox" id="stopOnTarget" checked />
                 <span class="slider"></span>
               </label>
-              <span>Stop on target accuracy</span>
             </div>
           </section>
+
           <section class="panel-section" data-panel-section="files">
-            <h3>Training Data</h3>
-            <div class="upload-zone">
+            <div class="panel-header">
+              <h3>Data Architect</h3>
+            </div>
+            <div class="drop-zone" id="dropZone">
               <input type="file" id="fileInput" />
-              <div>
-                <strong>Upload dataset</strong>
-                <span>JSON or CSV</span>
+              <div class="drop-msg">
+                <span class="drop-icon">📥</span>
+                <strong>Ingest Dataset</strong>
+                <small>JSON / CSV / TXT</small>
               </div>
             </div>
-            <div class="file-meta">
-              <span>Loaded file:</span>
-              <strong id="fileName">None</strong>
+            <div class="data-meta">
+              <span id="fileName">No source linked</span>
+              <span id="datasetStatus" class="badge">0 items</span>
             </div>
-            <textarea id="datasetInput" rows="8" placeholder="Paste dataset JSON or CSV"></textarea>
-            <div class="json-preview" id="jsonPreview">Preview will appear here.</div>
-            <div class="panel-meta">
-              <span id="datasetStatus">0 samples</span>
-              <span id="statusMessage">Ready.</span>
+            <div class="editor-box">
+              <textarea id="datasetInput" spellcheck="false" placeholder="Input raw telemetry or algorithm keyframes..."></textarea>
             </div>
+            <div class="action-stack">
+              <button id="btnAutoformat" class="btn-secondary">Autoformat Sequence</button>
+              <button id="btnGenerateHuman" class="btn-secondary">Decompile Logic</button>
+            </div>
+            <textarea id="fullVersionInput" class="hidden"></textarea>
           </section>
-          <section class="panel-section" data-panel-section="library">
-            <h3>Gene Frequency</h3>
-            <div class="chart-area">
-              <canvas id="geneChart" height="200"></canvas>
-            </div>
-            <p class="hint">Top 10 agents gene usage distribution.</p>
-          </section>
-          <section class="panel-section" data-panel-section="metrics">
-            <h3>Quick Actions</h3>
-            <div class="panel-actions">
-              <button id="btnSample" class="ghost">Load Example</button>
-              <button id="btnStart">Start Training</button>
-              <button id="btnStop" class="ghost">Stop</button>
-            </div>
-            <button id="btnAutopilot" class="ghost">Autopilot Demo</button>
-            <button id="btnCataclysm" class="danger">Population Cataclysm</button>
-          </section>
+
           <section class="panel-section" data-panel-section="mutator">
-            <h3>Gene Mutator Brush</h3>
-            <p class="hint">Lock or ban parameters to steer evolution.</p>
+            <div class="panel-header">
+              <h3>Gene Mutator</h3>
+            </div>
+            <p class="panel-hint">Direct influence on allele frequency.</p>
+            <div class="mutator-controls">
+              <button id="btnLockAll" class="tiny">Lock All</button>
+              <button id="btnBanAll" class="tiny">Ban All</button>
+              <button id="btnClearLocks" class="tiny">Reset</button>
+            </div>
             <div class="mutator-grid" id="mutatorGrid"></div>
-            <div class="panel-actions">
-              <button id="btnLockAll" class="ghost">Lock Selected</button>
-              <button id="btnBanAll" class="ghost">Ban Selected</button>
-              <button id="btnClearLocks">Clear All</button>
-            </div>
           </section>
+
+          <section class="panel-section" data-panel-section="metrics">
+            <div class="panel-header">
+              <h3>Engine Controls</h3>
+            </div>
+            <div class="main-actions">
+              <button id="btnStart" class="btn-primary">Initialize Evolution</button>
+              <button id="btnStop" class="btn-secondary">Halt</button>
+            </div>
+            <button id="btnAutopilot" class="btn-outline">Start Autopilot Demo</button>
+            <button id="btnCataclysm" class="btn-danger">Trigger Cataclysm</button>
+            <button id="btnSample" class="btn-outline">Load Neural Presets</button>
+          </section>
+
           <section class="panel-section" data-panel-section="rewind">
-            <h3>Epoch Rewind</h3>
-            <label>Rewind to generation <span id="rewindValue">0</span></label>
-            <input id="rewindSlider" type="range" min="0" max="300" value="0" />
-            <div class="panel-actions">
-              <button id="btnRewind" class="ghost">Branch From Here</button>
-              <button id="btnRewindBoost">Rewind + Chaos</button>
+            <div class="panel-header">
+              <h3>Epoch Rewind</h3>
+            </div>
+            <div class="rewind-box">
+              <div class="label-row">
+                <label>Rewind to Gen</label>
+                <span id="rewindValue" class="val-tag">0</span>
+              </div>
+              <input id="rewindSlider" type="range" min="0" max="300" value="0" />
+              <div class="action-stack">
+                <button id="btnRewind" class="btn-secondary">Branch Timeline</button>
+                <button id="btnRewindBoost" class="btn-secondary">Chaos Branch</button>
+              </div>
             </div>
           </section>
+
           <section class="panel-section" data-panel-section="export">
-            <h3>Export & Implement</h3>
-            <div class="panel-actions">
-              <button id="btnExportPy" class="ghost">Export Python</button>
-              <button id="btnExportJs" class="ghost">Export JavaScript</button>
+            <div class="panel-header">
+              <h3>Deployment</h3>
             </div>
-            <div class="toggle-row">
-              <label class="switch">
-                <input type="checkbox" id="apiToggle" />
-                <span class="slider"></span>
-              </label>
-              <span>Enable API Endpoint</span>
+            <div class="export-grid">
+              <button id="btnExportPy" class="btn-outline">Python SDK</button>
+              <button id="btnExportJs" class="btn-outline">Node.js</button>
             </div>
-            <div class="api-url" id="apiUrl">API disabled</div>
+            <div class="api-bridge">
+              <div class="toggle-row">
+                <label>REST API Endpoint</label>
+                <label class="switch">
+                  <input type="checkbox" id="apiToggle" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <code class="api-code" id="apiUrl">Endpoint Disabled</code>
+            </div>
           </section>
         </div>
       </aside>
 
       <section class="workspace">
         <header class="workspace-header">
-          <div class="workspace-title">
-            <h1>Formula Maker</h1>
-            <p>Hyper-modern evolutionary IDE.</p>
+          <div class="branding">
+            <div class="logo-orb"></div>
+            <div class="title-group">
+              <h1>Flux Evolver</h1>
+              <div class="status-indicator">
+                <span class="pulse-dot"></span>
+                <span id="statusMessage">System Ready</span>
+              </div>
+            </div>
           </div>
-          <div class="mode-switch">
-            <button class="mode-pill active" data-mode="train">⚡ Training Mode</button>
-            <button class="mode-pill" data-mode="ask">🔍 Asking Mode</button>
+
+          <div class="center-controls">
+            <div class="mode-switch">
+              <button class="mode-pill active" data-mode="train">Evolution</button>
+              <button class="mode-pill" data-mode="ask">Inference</button>
+            </div>
+          </div>
+
+          <div class="header-meta">
+            <div class="build-info">
+              <span class="label">BUILD</span>
+              <span id="buildVersion" class="value">v0.0.3</span>
+            </div>
           </div>
         </header>
 
-        <div class="bento">
-          <section class="card liquid train-only" id="fitnessCard">
-            <div class="card-header">
-              <h2>Fitness Convergence</h2>
-              <div class="card-actions">
-                <button id="btnGhost" class="ghost tiny">Ghost Lines</button>
-                <button id="btnNodeMap" class="ghost tiny">Node Map</button>
-                <span id="genLabel">Gen 0</span>
+        <div class="bento-grid">
+          <div class="bento-item span-2" id="fitnessCard">
+            <div class="item-header">
+              <div class="title-with-icon">
+                <span class="icon">📈</span>
+                <h2>Convergence Telemetry</h2>
+              </div>
+              <div class="item-actions">
+                <button id="btnGhost" class="tab-btn">Ghosting</button>
+                <button id="btnNodeMap" class="tab-btn">Topology</button>
+                <div class="counter" id="genLabel">GEN 0</div>
               </div>
             </div>
-            <div class="chart-area">
-              <canvas id="fitnessChart" height="220"></canvas>
+            <div class="chart-container">
+              <canvas id="fitnessChart"></canvas>
+              <div class="node-map hidden" id="nodeMap"></div>
             </div>
-            <div class="node-map hidden" id="nodeMap"></div>
-          </section>
+          </div>
 
-          <section class="card liquid train-only" id="leaderboardCard">
-            <div class="card-header">
-              <h2>Live Leaderboard</h2>
-              <span id="bestLabel">Best 0.000</span>
+          <div class="bento-item" id="leaderboardCard">
+            <div class="item-header">
+              <div class="title-with-icon">
+                <span class="icon">🏆</span>
+                <h2>Alpha Candidates</h2>
+              </div>
+              <div id="bestLabel" class="accuracy-badge">0.00%</div>
             </div>
-            <div class="leaderboard-layout">
-              <div>
-                <div class="leaderboard-head">
-                  <span>Rank</span>
-                  <span>Formula</span>
-                  <span>Score</span>
+            <div class="leaderboard-scroll">
+              <div class="leaderboard-header">
+                <span>RNK</span>
+                <span>GENETIC SEQUENCE</span>
+                <span>FIT</span>
+              </div>
+              <div class="leaderboard" id="leaderboard"></div>
+            </div>
+          </div>
+
+          <div class="bento-item span-2 hidden" id="askPanel">
+            <div class="item-header">
+              <div class="title-with-icon">
+                <span class="icon">🧠</span>
+                <h2>Neural Inference</h2>
+              </div>
+              <div id="askStatus" class="status-badge">Awaiting Input</div>
+            </div>
+            <div class="inference-layout">
+              <div class="inference-input">
+                <div class="input-row">
+                  <input id="askInput" type="text" placeholder="Enter feature key for inference..." />
+                  <button id="btnAsk" class="btn-primary">Execute</button>
                 </div>
-                <div class="leaderboard" id="leaderboard"></div>
+                <div class="output-console" id="askOutput">Result will appear here...</div>
+              </div>
+              <div class="inference-viz">
+                <label>Logic Execution Path</label>
+                <div class="formula-playback" id="formulaPlayback"></div>
               </div>
             </div>
-          </section>
-
-          <section class="card liquid ask-panel hidden" id="askPanel">
-            <div class="card-header">
-              <h2>Ask the Formula</h2>
-              <span id="askStatus">Paste algorithm key to begin.</span>
-            </div>
-            <details class="advanced-box" id="advancedBox">
-              <summary>Advanced Options</summary>
-              <textarea id="algoKeyAsk" rows="4" placeholder="Algorithm key (top formula)"></textarea>
-              <textarea id="algoKeyInput" rows="4" placeholder="Algorithm key JSON"></textarea>
-              <button id="btnCopyAlgo" class="ghost tiny">Copy</button>
+            <details class="advanced-inference">
+              <summary>Algorithm Keys</summary>
+              <div class="key-editor">
+                <textarea id="algoKeyAsk" placeholder="Primary algorithm string..."></textarea>
+                <textarea id="algoKeyInput" placeholder="Weights JSON..."></textarea>
+                <button id="btnCopyAlgo" class="tiny">Copy Keys</button>
+              </div>
             </details>
-            <div class="ask-row">
-              <input id="askInput" placeholder="Type a key (JSON allowed)" />
-              <button id="btnAsk">Ask</button>
+          </div>
+
+          <div class="bento-item" id="guideCard">
+            <div class="item-header">
+              <div class="title-with-icon">
+                <span class="icon">📖</span>
+                <h2>Protocol Guide</h2>
+              </div>
+              <div class="guide-nav">
+                <button id="btnGuidePrev" class="icon-nav">⟨</button>
+                <span id="guideStep">1/5</span>
+                <button id="btnGuideNext" class="icon-nav">⟩</button>
+              </div>
             </div>
-            <div class="ask-output" id="askOutput">Awaiting question...</div>
-            <div class="formula-playback" id="formulaPlayback"></div>
-          </section>
+            <div class="guide-content">
+              <h4 id="guideTitle">Loading Environment</h4>
+              <p id="guideText">Link a dataset to initialize the genetic search space.</p>
+            </div>
+            <div class="guide-footer">
+              <button id="btnGuideStart" class="btn-link">Restart Protocol</button>
+              <button id="btnGuideClose" class="btn-link">Dismiss</button>
+            </div>
+          </div>
+
+          <div class="bento-item span-full" id="consoleCard">
+            <div class="item-header">
+              <div class="title-with-icon">
+                <span class="icon">📟</span>
+                <h2>System Log</h2>
+              </div>
+              <div class="console-actions">
+                <button id="btnClearConsole" class="tiny">Clear</button>
+              </div>
+            </div>
+            <div class="console-output" id="consoleOutput">
+              <div class="log-line system">Flux Evolver Kernel v0.0.3 Initialized.</div>
+              <div class="log-line">Awaiting telemetry ingestion...</div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <div class="mapper hidden" id="mapperModal">
-      <div class="mapper-card">
-        <h3>CSV/JSON Mapper</h3>
-        <p>Select the input keys and target value columns.</p>
+    <!-- Modals -->
+    <div class="modal hidden" id="mapperModal">
+      <div class="modal-content">
+        <h3>Feature Mapper</h3>
+        <p>Assign neural roles to detected columns.</p>
         <div class="mapper-grid" id="mapperGrid"></div>
-        <div class="panel-actions">
-          <button id="btnMapperApply">Apply</button>
-          <button id="btnMapperClose" class="ghost">Cancel</button>
+        <div class="modal-actions">
+          <button id="btnMapperApply" class="btn-primary">Commit Mapping</button>
+          <button id="btnMapperClose" class="btn-secondary">Discard</button>
         </div>
       </div>
     </div>
 
-    <div class="mapper hidden" id="exampleModal">
-      <div class="mapper-card">
-        <h3>Load Example Dataset</h3>
-        <p>Select a preset to populate training data.</p>
+    <div class="modal hidden" id="exampleModal">
+      <div class="modal-content">
+        <h3>Neural Presets</h3>
         <div class="example-grid">
-          <button class="example-card" data-example="animals">Animals Taxonomy</button>
-          <button class="example-card" data-example="taxonomy">Object Taxonomy</button>
-          <button class="example-card" data-example="lexicon">Lexicon Signals</button>
-          <button class="example-card" data-example="market">Market Linear</button>
-          <button class="example-card" data-example="solar">Solar Systems</button>
-          <button class="example-card" data-example="slingshot">Slingshot Physics</button>
+          <div class="example-card" data-example="animals">
+            <span class="ex-icon">🦁</span>
+            <h4>Animal Taxonomy</h4>
+          </div>
+          <div class="example-card" data-example="taxonomy">
+            <span class="ex-icon">📦</span>
+            <h4>Object Hierarchy</h4>
+          </div>
+          <div class="example-card" data-example="lexicon">
+            <span class="ex-icon">🔡</span>
+            <h4>Semantic Signals</h4>
+          </div>
+          <div class="example-card" data-example="market">
+            <span class="ex-icon">📈</span>
+            <h4>Market Linear</h4>
+          </div>
+          <div class="example-card" data-example="solar">
+            <span class="ex-icon">☀️</span>
+            <h4>Orbital Physics</h4>
+          </div>
+          <div class="example-card" data-example="slingshot">
+            <span class="ex-icon">🎯</span>
+            <h4>Ballistics</h4>
+          </div>
         </div>
-        <div class="panel-actions">
-          <button id="btnExampleClose" class="ghost">Close</button>
-        </div>
+        <button id="btnExampleClose" class="btn-secondary full-width">Close Presets</button>
       </div>
     </div>
 

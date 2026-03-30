@@ -1,3 +1,8 @@
+/**
+ * Flux Evolver Core v0.0.3
+ * Improved Neural Formula Studio
+ */
+
 const state = {
   running: false,
   interval: null,
@@ -26,6 +31,16 @@ const state = {
   stagnationGenerations: 16,
   stagnationCounter: 0,
   domain: "numeric",
+  appVersion: "0.0.3",
+  changeCounter: 0,
+};
+
+const uiState = {
+  ghostLines: false,
+  nodeMap: false,
+  autopilot: false,
+  mutator: new Map(),
+  activePanel: 'settings',
 };
 
 const el = {
@@ -81,7 +96,6 @@ const el = {
   apiUrl: document.getElementById("apiUrl"),
   formulaPlayback: document.getElementById("formulaPlayback"),
   fileName: document.getElementById("fileName"),
-  jsonPreview: document.getElementById("jsonPreview"),
   mapperModal: document.getElementById("mapperModal"),
   mapperGrid: document.getElementById("mapperGrid"),
   btnMapperApply: document.getElementById("btnMapperApply"),
@@ -90,40 +104,65 @@ const el = {
   exampleModal: document.getElementById("exampleModal"),
   btnExampleClose: document.getElementById("btnExampleClose"),
   exampleCards: Array.from(document.querySelectorAll(".example-card")),
+  buildVersion: document.getElementById("buildVersion"),
+  btnAutoformat: document.getElementById("btnAutoformat"),
+  btnGenerateHuman: document.getElementById("btnGenerateHuman"),
+  fullVersionInput: document.getElementById("fullVersionInput"),
+  guideCard: document.getElementById("guideCard"),
+  guideTitle: document.getElementById("guideTitle"),
+  guideText: document.getElementById("guideText"),
+  guideStep: document.getElementById("guideStep"),
+  btnGuidePrev: document.getElementById("btnGuidePrev"),
+  btnGuideNext: document.getElementById("btnGuideNext"),
+  btnGuideClose: document.getElementById("btnGuideClose"),
+  btnGuideStart: document.getElementById("btnGuideStart"),
+  consoleOutput: document.getElementById("consoleOutput"),
+  btnClearConsole: document.getElementById("btnClearConsole"),
 };
 
-const uiState = {
-  ghostLines: false,
-  nodeMap: false,
-  mutator: new Map(),
-  autopilot: false,
-};
+const guideSteps = [
+  { title: "Protocol 1: Data Link", text: "Ingest a dataset via Data Architect to initialize search space." },
+  { title: "Protocol 2: Logic Decompile", text: "Autoformat raw signals and decompile to human-readable strategies." },
+  { title: "Protocol 3: Seed Evolution", text: "Configure population density and genome length to begin training." },
+  { title: "Protocol 4: Interactive Mutator", text: "Pin or ban specific alleles to influence evolution in real-time." },
+  { title: "Protocol 5: Deploy SDK", text: "Export optimized neural sequences as Python or JS modules." },
+];
+
+let guideIndex = 0;
+
+/**
+ * Console Utilities
+ */
+function log(msg, type = 'default') {
+  const line = document.createElement("div");
+  line.className = `log-line ${type}`;
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+  line.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
+  el.consoleOutput.prepend(line);
+}
 
 function setStatus(message) {
   el.statusMessage.textContent = message;
 }
 
 function setDatasetStatus() {
-  el.datasetStatus.textContent = `${state.dataset.length} samples`;
+  el.datasetStatus.textContent = `${state.dataset.length} items`;
 }
 
+/**
+ * Data Processing
+ */
 function parseDataset(text) {
-  if (!text || !text.trim()) {
-    return [];
-  }
+  if (!text || !text.trim()) return [];
   const trimmed = text.trim();
-  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
-    try {
+  try {
+    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
       const payload = JSON.parse(trimmed);
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (payload && typeof payload === "object") {
-        return Object.values(payload);
-      }
-    } catch (err) {
-      return [];
+      return Array.isArray(payload) ? payload : Object.values(payload);
     }
+  } catch (err) {
+    log("Error parsing JSON, attempting CSV/Text", "error");
   }
   const rows = trimmed.split(/\r?\n/).filter((line) => line.trim());
   return rows.map((line) => line.split(","));
@@ -132,25 +171,8 @@ function parseDataset(text) {
 function loadDatasetFromText() {
   state.datasetRaw = null;
   const trimmed = el.datasetInput.value.trim();
-  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
-    try {
-      const payload = JSON.parse(trimmed);
-      if (Array.isArray(payload)) {
-        state.dataset = payload;
-      } else if (payload && typeof payload === "object") {
-        state.datasetRaw = payload;
-        state.dataset = Object.values(payload);
-      } else {
-        state.dataset = [];
-      }
-    } catch (err) {
-      state.dataset = parseDataset(el.datasetInput.value);
-    }
-  } else {
-    state.dataset = parseDataset(el.datasetInput.value);
-  }
+  state.dataset = parseDataset(trimmed);
   setDatasetStatus();
-  updatePreview();
   return state.dataset.length > 0;
 }
 
@@ -161,11 +183,14 @@ function handleFileUpload(file) {
     if (el.fileName) el.fileName.textContent = file.name;
     loadDatasetFromText();
     openMapper();
-    setStatus("Dataset loaded.");
+    log(`Dataset "${file.name}" ingested.`, "success");
   };
   reader.readAsText(file);
 }
 
+/**
+ * Simulation Engine
+ */
 function randomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -181,31 +206,27 @@ function randomFormula() {
     const poolSize = domain === "text" ? state.textParamCount : state.numericParamCount;
     const paramId = String(randomInt(poolSize) + 1).padStart(3, "0");
     const op = ops[randomInt(ops.length)];
-    steps.push(`Param_${paramId}:${op}`);
+    steps.push(`P${paramId}:${op}`);
   }
-  return steps.join(" -> ");
+  return steps.join("→");
 }
 
 function inferDomain() {
-  if (state.datasetRaw && Object.keys(state.datasetRaw).length > 0) {
-    return "text";
-  }
-  const first = Array.isArray(state.dataset) ? state.dataset[0] : null;
-  if (typeof first === "string") return "text";
-  if (Array.isArray(first) && typeof first[0] === "string") return "text";
-  if (first && typeof first === "object") return "text";
+  const first = state.dataset[0];
+  if (typeof first === "string" || (Array.isArray(first) && typeof first[0] === "string")) return "text";
   return "numeric";
 }
 
+/**
+ * Visualization
+ */
 function resizeCanvas(canvas) {
   const parent = canvas.parentElement;
-  if (!parent) {
-    return null;
-  }
+  if (!parent) return null;
   const rect = parent.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
-  const width = Math.max(1, rect.width);
-  const height = Math.max(1, rect.height);
+  const width = rect.width || 400;
+  const height = rect.height || 220;
   if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -222,28 +243,20 @@ function lerp(a, b, t) {
 function updateLeaderboard() {
   el.leaderboard.innerHTML = "";
   const topFormula = randomFormula();
-  if (el.algoKeyAsk) {
-    el.algoKeyAsk.value = topFormula;
-  }
-  if (el.algoKeyInput && !el.algoKeyInput.value.trim()) {
-    el.algoKeyInput.value = topFormula;
-  }
-  for (let i = 0; i < 5; i += 1) {
+  if (el.algoKeyAsk) el.algoKeyAsk.value = topFormula;
+  
+  for (let i = 0; i < 6; i += 1) {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
-    const score = Math.max(0, state.best - i * 0.03).toFixed(3);
+    const score = (Math.max(0, state.best * 100 - i * 3.42)).toFixed(2);
     const formula = i === 0 ? topFormula : randomFormula();
-    row.innerHTML = `<span>#${i + 1}</span><span>${formula}</span><span>${score}</span>`;
+    row.innerHTML = `
+      <span class="rank">#${i + 1}</span>
+      <span class="formula">${formula}</span>
+      <span class="score">${score}%</span>
+    `;
     el.leaderboard.appendChild(row);
   }
-}
-
-function simulateGenePassing() {
-  const pool = [];
-  for (let i = 0; i < state.topK; i += 1) {
-    pool.push(randomFormula());
-  }
-  return pool;
 }
 
 function drawLineChart() {
@@ -252,547 +265,198 @@ function drawLineChart() {
   const size = resizeCanvas(canvas);
   if (!size) return;
   const { ctx, width, height } = size;
+  
   ctx.clearRect(0, 0, width, height);
-  ctx.lineJoin = "round";
-  ctx.lineCap = "round";
-  const padding = { left: 44, right: 12, top: 12, bottom: 24 };
-  const plotW = Math.max(1, width - padding.left - padding.right);
-  const plotH = Math.max(1, height - padding.top - padding.bottom);
-  ctx.strokeStyle = "#2c3342";
+  const padding = { left: 40, right: 20, top: 20, bottom: 30 };
+  const plotW = width - padding.left - padding.right;
+  const plotH = height - padding.top - padding.bottom;
+
+  // Draw Grid
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
   ctx.lineWidth = 1;
-  ctx.font = "11px \"JetBrains Mono\", monospace";
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--muted");
-  for (let i = 0; i <= 4; i += 1) {
-    const value = 1 - i / 4;
-    const y = padding.top + plotH * (1 - value);
+  for(let i=0; i<=4; i++) {
+    const y = padding.top + (plotH * (1 - i/4));
     ctx.beginPath();
     ctx.moveTo(padding.left, y);
     ctx.lineTo(width - padding.right, y);
     ctx.stroke();
-    const label = `${Math.round(value * 100)}%`;
-    ctx.fillText(label, 6, y + 4);
   }
-  ctx.strokeStyle = "#3a4150";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padding.left, padding.top);
-  ctx.lineTo(padding.left, height - padding.bottom);
-  ctx.lineTo(width - padding.right, height - padding.bottom);
-  ctx.stroke();
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--muted");
-  ctx.fillText("Accuracy", padding.left, padding.top - 4);
-  ctx.fillText("Generations", width - 110, height - 6);
-  for (let i = 0; i <= 4; i += 1) {
-    const x = padding.left + plotW * (i / 4);
-    const label = Math.round(state.generation * (i / 4));
-    ctx.fillText(String(label), x - 6, height - 6);
-  }
+
   if (state.historyDisplay.length < 2) return;
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
-  ctx.lineWidth = 2.5;
+
+  // Draw Line
   ctx.beginPath();
-  const points = state.historyDisplay.map((value, index) => {
-    const x = padding.left + (plotW / Math.max(1, state.historyDisplay.length - 1)) * index;
-    const y = padding.top + (1 - value) * plotH;
-    return { x, y };
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
+  ctx.lineJoin = "round";
+
+  state.historyDisplay.forEach((val, idx) => {
+    const x = padding.left + (plotW / (state.historyDisplay.length - 1)) * idx;
+    const y = padding.top + (1 - val) * plotH;
+    if (idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
   });
-  ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 1; i < points.length - 1; i += 1) {
-    const midX = (points[i].x + points[i + 1].x) / 2;
-    const midY = (points[i].y + points[i + 1].y) / 2;
-    ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
-  }
-  const last = points[points.length - 1];
-  ctx.lineTo(last.x, last.y);
   ctx.stroke();
-  if (uiState.ghostLines) {
-    ctx.strokeStyle = "rgba(120, 140, 170, 0.3)";
-    for (let g = 0; g < 5; g += 1) {
-      ctx.beginPath();
-      state.historyDisplay.forEach((value, index) => {
-        const jitter = (Math.random() - 0.5) * 0.05;
-        const x = padding.left + (plotW / Math.max(1, state.historyDisplay.length - 1)) * index;
-        const y = padding.top + (1 - Math.max(0, Math.min(1, value + jitter))) * plotH;
-        if (index === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
-    }
+
+  // Draw Area
+  ctx.lineTo(padding.left + plotW, padding.top + plotH);
+  ctx.lineTo(padding.left, padding.top + plotH);
+  const grad = ctx.createLinearGradient(0, padding.top, 0, padding.top + plotH);
+  grad.addColorStop(0, "rgba(0, 210, 255, 0.1)");
+  grad.addColorStop(1, "rgba(0, 210, 255, 0)");
+  ctx.fillStyle = grad;
+  ctx.fill();
+}
+
+/**
+ * Event Listeners & UI Lifecycle
+ */
+function bumpVersion(reason) {
+  state.changeCounter += 1;
+  if (el.buildVersion) {
+    el.buildVersion.textContent = `v${state.appVersion}.${state.changeCounter}`;
   }
 }
 
-function drawBarChart() {
-  const canvas = el.geneChart;
-  if (!canvas) return;
-  const size = resizeCanvas(canvas);
-  if (!size) return;
-  const { ctx, width, height } = size;
-  ctx.clearRect(0, 0, width, height);
-  const bars = 10;
-  const gap = 8;
-  const barWidth = (width - gap * (bars - 1)) / bars;
-  for (let i = 0; i < bars; i += 1) {
-    const value = state.geneDisplay[i] ?? Math.random();
-    const barHeight = value * height;
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent");
-    ctx.fillRect(i * (barWidth + gap), height - barHeight, barWidth, barHeight);
-  }
-}
-
-function smoothCharts() {
-  const target = state.history;
-  if (state.historyDisplay.length < target.length) {
-    while (state.historyDisplay.length < target.length) {
-      state.historyDisplay.push(target[state.historyDisplay.length] ?? 0);
-    }
-  }
-  state.historyDisplay = state.historyDisplay.map((val, idx) => lerp(val, target[idx] ?? val, 0.08));
-  const geneTarget = state.geneFreq;
-  if (state.geneDisplay.length < geneTarget.length) {
-    while (state.geneDisplay.length < geneTarget.length) {
-      state.geneDisplay.push(geneTarget[state.geneDisplay.length] ?? 0);
-    }
-  }
-  state.geneDisplay = state.geneDisplay.map((val, idx) => lerp(val, geneTarget[idx] ?? val, 0.14));
-}
-
-function populateMutator() {
-  if (!el.mutatorGrid) return;
-  el.mutatorGrid.innerHTML = "";
-  const count = Math.min(60, state.librarySize);
-  for (let i = 0; i < count; i += 1) {
-    const chip = document.createElement("div");
-    chip.className = "mutator-chip";
-    const label = `P${String(i + 1).padStart(3, "0")}`;
-    chip.textContent = label;
-    chip.dataset.param = label;
-    chip.addEventListener("click", () => {
-      const status = uiState.mutator.get(label) || "free";
-      let next = "locked";
-      if (status === "locked") next = "banned";
-      if (status === "banned") next = "free";
-      uiState.mutator.set(label, next);
-      chip.classList.toggle("locked", next === "locked");
-      chip.classList.toggle("banned", next === "banned");
-      if (next === "free") {
-        uiState.mutator.delete(label);
-      }
-    });
-    el.mutatorGrid.appendChild(chip);
-  }
-}
-
-function renderNodeMap() {
-  if (!el.nodeMap) return;
-  el.nodeMap.innerHTML = "";
-  const steps = randomFormula().split(" -> ");
-  steps.forEach((step) => {
-    const node = document.createElement("div");
-    node.className = "node";
-    node.textContent = step;
-    el.nodeMap.appendChild(node);
-  });
-}
-
-function runPlayback() {
-  if (!el.formulaPlayback) return;
-  el.formulaPlayback.innerHTML = "";
-  const steps = randomFormula().split(" -> ");
-  steps.forEach((step, idx) => {
-    const chip = document.createElement("div");
-    chip.className = "formula-step";
-    chip.textContent = step;
-    el.formulaPlayback.appendChild(chip);
-    setTimeout(() => {
-      chip.classList.add("active");
-    }, 120 * idx);
-  });
-}
-
-function openMapper() {
-  if (!el.mapperModal) return;
-  el.mapperGrid.innerHTML = "";
-  const sampleKeys = ["Col 1", "Col 2", "Col 3", "Target"];
-  sampleKeys.forEach((key) => {
-    const item = document.createElement("div");
-    item.className = "mapper-item";
-    item.textContent = key;
-    item.addEventListener("click", () => item.classList.toggle("selected"));
-    el.mapperGrid.appendChild(item);
-  });
-  el.mapperModal.classList.remove("hidden");
-}
-
-function closeMapper() {
-  if (!el.mapperModal) return;
-  el.mapperModal.classList.add("hidden");
-}
-
-function updatePreview() {
-  if (!el.jsonPreview) return;
-  try {
-    const payload = JSON.parse(el.datasetInput.value);
-    el.jsonPreview.textContent = JSON.stringify(payload, null, 2).slice(0, 1200);
-  } catch (err) {
-    el.jsonPreview.textContent = "Preview unavailable (invalid JSON).";
-  }
-}
-
-function openExampleModal() {
-  if (!el.exampleModal) return;
-  el.exampleModal.classList.remove("hidden");
-}
-
-function closeExampleModal() {
-  if (!el.exampleModal) return;
-  el.exampleModal.classList.add("hidden");
-}
-
-function loadExample(example) {
-  const map = {
-    animals: "data/animals.json",
-    taxonomy: "data/taxonomy.json",
-    lexicon: "data/lexicon.json",
-    market: "data/market_linear.json",
-    solar: "data/solar_system.json",
-    slingshot: "data/slingshot_data.json",
-  };
-  const path = map[example];
-  if (!path) return Promise.resolve();
-  return fetch(path)
-    .then((res) => res.json())
-    .then((data) => {
-      el.datasetInput.value = JSON.stringify(data, null, 2);
-      loadDatasetFromText();
-      if (el.fileName) el.fileName.textContent = path.split("/").pop();
-      openMapper();
-      setStatus("Sample data loaded.");
-      closeExampleModal();
-    })
-    .catch(() => {
-      setStatus("Failed to load example.");
-      closeExampleModal();
-    });
-}
-
-async function runAutopilot() {
-  if (uiState.autopilot) return;
-  uiState.autopilot = true;
-  setStatus("Autopilot running...");
-  const sequence = [
-    () => togglePanel("files"),
-    () => loadExample("animals"),
-    () => setMode("train"),
-    () => startTraining(),
-    () => togglePanel("metrics"),
-    () => el.btnGhost.click(),
-    () => el.btnNodeMap.click(),
-    () => el.btnCataclysm.click(),
-    () => setMode("ask"),
-    () => {
-      if (el.algoKeyAsk) el.algoKeyAsk.value = randomFormula();
-      if (el.algoKeyInput) el.algoKeyInput.value = randomFormula();
-      if (el.askInput) el.askInput.value = "dog";
-      runAsk();
-    },
-    () => togglePanel("mutator"),
-    () => el.btnLockAll.click(),
-    () => togglePanel("rewind"),
-    () => {
-      el.rewindSlider.value = "20";
-      el.rewindValue.textContent = "20";
-      el.btnRewind.click();
-    },
-    () => togglePanel("export"),
-    () => el.btnExportPy.click(),
-    () => {
-      el.apiToggle.checked = true;
-      el.apiToggle.dispatchEvent(new Event("change"));
-    },
-    () => {
-      stopTraining();
-      setMode("train");
-      setStatus("Autopilot complete.");
-      uiState.autopilot = false;
-    },
-  ];
-  for (const step of sequence) {
-    const result = step();
-    if (result && typeof result.then === "function") {
-      await result;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 700));
-  }
+function renderGuide() {
+  const step = guideSteps[guideIndex];
+  el.guideTitle.textContent = step.title;
+  el.guideText.textContent = step.text;
+  el.guideStep.textContent = `${guideIndex + 1} / ${guideSteps.length}`;
 }
 
 function stepTraining() {
   if (!state.running) return;
   state.generation += 1;
-  const improvement = (1 - state.best) * (0.02 + Math.random() * 0.05);
-  state.best = Math.min(1, state.best + improvement);
-  state.avg = state.best * (0.65 + Math.random() * 0.1);
+  
+  const step = 0.02 + Math.random() * 0.04;
+  state.best = Math.min(1, state.best + (1 - state.best) * step);
   state.history.push(state.best);
-  const genePool = simulateGenePassing();
-  state.geneFreq = Array.from({ length: 10 }, () => Math.random());
-  el.genLabel.textContent = `Gen ${state.generation}`;
-  el.bestLabel.textContent = `Best ${state.best.toFixed(3)}`;
+  
+  el.genLabel.textContent = `GEN ${state.generation}`;
+  el.bestLabel.textContent = `${(state.best * 100).toFixed(2)}%`;
+  
   updateLeaderboard();
-  if (state.mutationPressure) {
-    const delta = state.history.length > 1 ? state.history[state.history.length - 1] - state.history[state.history.length - 2] : 0;
-    if (delta < 0.0005) {
-      state.stagnationCounter += 1;
-      if (state.stagnationCounter >= state.stagnationGenerations) {
-        state.mutationRate = Math.min(0.6, state.mutationRate * 1.2);
-        state.stagnationCounter = 0;
-      }
-    } else {
-      state.mutationRate = Math.max(0.05, state.mutationRate * 0.95);
-      state.stagnationCounter = 0;
-    }
+  
+  if (state.generation % 10 === 0) {
+    log(`Gen ${state.generation}: Alpha Fitness at ${(state.best * 100).toFixed(2)}%`);
   }
-  if (state.generation >= state.maxGenerations) {
-    stopTraining();
-    setStatus(`Training complete at Gen ${state.generation} (max generations).`);
-    return;
-  }
-  const shouldStopOnTarget = el.stopOnTarget && el.stopOnTarget.checked;
-  if (shouldStopOnTarget && state.best >= state.targetAccuracy && state.generation >= state.minGenerations) {
-    stopTraining();
-    setStatus(`Training complete at Gen ${state.generation} (target reached).`);
-  }
-}
 
-function renderLoop() {
-  smoothCharts();
-  drawLineChart();
-  drawBarChart();
-  requestAnimationFrame(renderLoop);
+  if (state.generation >= state.maxGenerations || (el.stopOnTarget.checked && state.best >= state.targetAccuracy)) {
+    stopTraining();
+    log(`Simulation stabilized at Gen ${state.generation}. Target fitness reached.`, "success");
+  }
 }
 
 function startTraining() {
   if (!loadDatasetFromText()) {
-    setStatus("Load training data first.");
+    log("Simulation failed: Dataset source required.", "error");
     return;
   }
-  state.librarySize = Number(el.librarySize.value);
-  state.domain = inferDomain();
-  state.genomeLength = Number(el.genomeLength.value);
-  state.maxGenerations = Number(el.generationCount.value);
-  state.targetAccuracy = Number(el.accuracyTarget.value);
-  state.minGenerations = Math.max(80, Math.floor(state.maxGenerations * 0.5));
   state.running = true;
-  el.appRoot.classList.add("training-running");
   state.generation = 0;
   state.best = 0;
   state.history = [];
   state.historyDisplay = [];
-  state.stagnationCounter = 0;
-  el.rewindSlider.max = String(state.maxGenerations);
-  el.rewindValue.textContent = "0";
-  setStatus("Training running...");
+  
+  el.appRoot.classList.add("training-running");
+  log("Initializing neural evolution kernel...", "system");
+  
   if (state.interval) clearInterval(state.interval);
-  state.interval = setInterval(stepTraining, 280);
+  state.interval = setInterval(stepTraining, 200);
 }
 
 function stopTraining() {
   state.running = false;
   el.appRoot.classList.remove("training-running");
-  if (state.interval) {
-    clearInterval(state.interval);
-    state.interval = null;
-  }
-}
-
-function setMode(mode) {
-  el.modePills.forEach((pill) => {
-    pill.classList.toggle("active", pill.dataset.mode === mode);
-  });
-  el.askPanel.classList.toggle("hidden", mode !== "ask");
-  el.trainCards.forEach((card) => {
-    card.classList.toggle("hidden", mode === "ask");
-  });
-  if (mode === "ask") {
-    setStatus("Ask mode active.");
-  } else {
-    setStatus("Training mode active.");
-  }
-}
-
-function runAsk() {
-  const key = el.askInput.value.trim();
-  const algo =
-    (el.algoKeyAsk && el.algoKeyAsk.value.trim()) ||
-    (el.algoKeyInput && el.algoKeyInput.value.trim()) ||
-    "";
-  el.askStatus.textContent = "Processing...";
-  if (!key) {
-    el.askOutput.textContent = "No key provided.";
-    return;
-  }
-  if (state.datasetRaw && Object.prototype.hasOwnProperty.call(state.datasetRaw, key)) {
-    el.askOutput.textContent = JSON.stringify(state.datasetRaw[key], null, 2);
-  } else if (state.dataset && state.dataset[key]) {
-    el.askOutput.textContent = JSON.stringify(state.dataset[key], null, 2);
-  } else {
-    el.askOutput.textContent = `No match for "${key}".`;
-  }
-  if (!algo) {
-    el.askStatus.textContent = "Answer from dataset match (no algorithm key).";
-  }
-  runPlayback();
-}
-
-function setTheme(theme) {
-  el.appRoot.className = `ide ${theme}`;
-  el.themePills.forEach((pill) => {
-    pill.classList.toggle("active", pill.dataset.theme === theme);
-  });
-  drawLineChart();
-  drawBarChart();
+  if (state.interval) clearInterval(state.interval);
+  setStatus("Engine Standby");
 }
 
 function togglePanel(panel) {
-  const isActive = el.slidePanel.dataset.active === panel;
-  if (isActive) {
-    const willCollapse = !el.slidePanel.classList.contains("collapsed");
+  if (uiState.activePanel === panel) {
     el.slidePanel.classList.toggle("collapsed");
-    el.appRoot.classList.toggle("panel-collapsed", willCollapse);
-    drawLineChart();
-    drawBarChart();
-    return;
-  }
-  el.slidePanel.dataset.active = panel;
-  el.slidePanel.classList.remove("collapsed");
-  el.appRoot.classList.remove("panel-collapsed");
-  el.iconButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.panel === panel);
-  });
-  el.panelSections.forEach((section) => {
-    section.classList.toggle("active", section.dataset.panelSection === panel);
-  });
-  drawLineChart();
-  drawBarChart();
-}
-
-function loadSample() {
-  openExampleModal();
-}
-
-el.iconButtons.forEach((btn) => {
-  btn.addEventListener("click", () => togglePanel(btn.dataset.panel));
-});
-
-document.querySelectorAll("button").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    btn.classList.remove("press");
-    void btn.offsetWidth;
-    btn.classList.add("press");
-    setTimeout(() => btn.classList.remove("press"), 240);
-  });
-});
-
-el.librarySize.addEventListener("input", () => {
-  el.libraryValue.textContent = el.librarySize.value;
-});
-
-el.fileInput.addEventListener("change", (event) => {
-  const file = event.target.files && event.target.files[0];
-  if (file) handleFileUpload(file);
-});
-
-el.datasetInput.addEventListener("input", () => {
-  loadDatasetFromText();
-  setStatus("Dataset updated.");
-});
-
-el.themePills.forEach((pill) => {
-  pill.addEventListener("click", () => setTheme(pill.dataset.theme));
-});
-
-el.modePills.forEach((pill) => {
-  pill.addEventListener("click", () => setMode(pill.dataset.mode));
-});
-
-el.btnAsk.addEventListener("click", runAsk);
-el.btnStart.addEventListener("click", startTraining);
-el.btnStop.addEventListener("click", stopTraining);
-el.btnSample.addEventListener("click", loadSample);
-el.btnAutopilot.addEventListener("click", runAutopilot);
-el.btnCataclysm.addEventListener("click", () => {
-  setStatus("Cataclysm triggered. Re-seeding 80% population.");
-  state.best = Math.max(0.1, state.best - 0.1);
-});
-el.btnGhost.addEventListener("click", () => {
-  uiState.ghostLines = !uiState.ghostLines;
-  el.btnGhost.classList.toggle("active", uiState.ghostLines);
-});
-el.btnNodeMap.addEventListener("click", () => {
-  uiState.nodeMap = !uiState.nodeMap;
-  el.nodeMap.classList.toggle("hidden", !uiState.nodeMap);
-  if (uiState.nodeMap) renderNodeMap();
-});
-el.btnLockAll.addEventListener("click", () => {
-  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
-    chip.classList.add("locked");
-    chip.classList.remove("banned");
-  });
-});
-el.btnBanAll.addEventListener("click", () => {
-  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
-    chip.classList.add("banned");
-    chip.classList.remove("locked");
-  });
-});
-el.btnClearLocks.addEventListener("click", () => {
-  el.mutatorGrid.querySelectorAll(".mutator-chip").forEach((chip) => {
-    chip.classList.remove("locked", "banned");
-  });
-});
-el.rewindSlider.addEventListener("input", () => {
-  el.rewindValue.textContent = el.rewindSlider.value;
-});
-el.btnRewind.addEventListener("click", () => {
-  const target = Number(el.rewindSlider.value);
-  state.generation = target;
-  setStatus(`Rewound to Gen ${target}.`);
-});
-el.btnRewindBoost.addEventListener("click", () => {
-  const target = Number(el.rewindSlider.value);
-  state.generation = target;
-  state.best = Math.max(0, state.best - 0.1);
-  setStatus(`Rewound to Gen ${target} with chaos.`);
-});
-el.btnExportPy.addEventListener("click", () => {
-  setStatus("Python export copied.");
-});
-el.btnExportJs.addEventListener("click", () => {
-  setStatus("JavaScript export copied.");
-});
-el.apiToggle.addEventListener("change", () => {
-  if (el.apiToggle.checked) {
-    el.apiUrl.textContent = "https://flux-evolver.example/api/v1/ask";
   } else {
-    el.apiUrl.textContent = "API disabled";
+    el.slidePanel.classList.remove("collapsed");
+    uiState.activePanel = panel;
+    
+    el.iconButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.panel === panel));
+    el.panelSections.forEach(sec => sec.classList.toggle("active", sec.dataset.panelSection === panel));
   }
-});
-el.btnMapperApply.addEventListener("click", closeMapper);
-el.btnMapperClose.addEventListener("click", closeMapper);
-el.btnExampleClose.addEventListener("click", closeExampleModal);
-el.exampleCards.forEach((card) => {
-  card.addEventListener("click", () => loadExample(card.dataset.example));
-});
-el.btnCopyAlgo.addEventListener("click", () => {
-  const target = el.algoKeyAsk || el.algoKeyInput;
-  if (!target) return;
-  target.select();
-  document.execCommand("copy");
-  setStatus("Algorithm key copied.");
-});
+}
 
-setDatasetStatus();
+/**
+ * Initialization
+ */
+function init() {
+  // Navigation
+  el.iconButtons.forEach(btn => btn.addEventListener("click", () => togglePanel(btn.dataset.panel)));
+
+  // Engine Controls
+  el.btnStart.addEventListener("click", startTraining);
+  el.btnStop.addEventListener("click", stopTraining);
+  
+  // Theme Switching
+  el.themePills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      el.themePills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      el.appRoot.className = `ide ${pill.dataset.theme}`;
+      log(`UI Environment synced: ${pill.textContent}`, "system");
+    });
+  });
+
+  // Guide
+  el.btnGuideNext.addEventListener("click", () => {
+    guideIndex = (guideIndex + 1) % guideSteps.length;
+    renderGuide();
+  });
+  el.btnGuidePrev.addEventListener("click", () => {
+    guideIndex = (guideIndex - 1 + guideSteps.length) % guideSteps.length;
+    renderGuide();
+  });
+
+  // File handling
+  el.fileInput.addEventListener("change", (e) => handleFileUpload(e.target.files[0]));
+
+  // Start Visual Loop
+  function animate() {
+    if (state.history.length > 0) {
+      if (state.historyDisplay.length < state.history.length) {
+        state.historyDisplay.push(state.history[state.historyDisplay.length]);
+      }
+      state.historyDisplay = state.historyDisplay.map((v, i) => lerp(v, state.history[i], 0.1));
+    }
+    drawLineChart();
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+  renderGuide();
+  log("Neural Evolution Engine v0.0.3 Ready.");
+}
+
+document.addEventListener("DOMContentLoaded", init);
+
+// Mapper Modal handling
+function openMapper() { el.mapperModal.classList.remove("hidden"); }
+function closeMapper() { el.mapperModal.classList.add("hidden"); }
+el.btnMapperClose.addEventListener("click", closeMapper);
+el.btnMapperApply.addEventListener("click", closeMapper);
+
+// Presets Modal
+el.btnSample.addEventListener("click", () => el.exampleModal.classList.remove("hidden"));
+el.btnExampleClose.addEventListener("click", () => el.exampleModal.classList.add("hidden"));
+
+// Mutation Brush (mockup)
+function populateMutator() {
+  el.mutatorGrid.innerHTML = "";
+  for(let i=1; i<=30; i++) {
+    const chip = document.createElement("div");
+    chip.className = "mutator-chip";
+    chip.textContent = `P${i.toString().padStart(3, '0')}`;
+    chip.addEventListener("click", () => chip.classList.toggle("locked"));
+    el.mutatorGrid.appendChild(chip);
+  }
+}
 populateMutator();
-renderLoop();
-window.addEventListener("resize", () => {
-  drawLineChart();
-  drawBarChart();
-});
