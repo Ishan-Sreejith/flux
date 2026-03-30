@@ -43,82 +43,84 @@ const uiState = {
   activePanel: 'settings',
 };
 
+// Simplified element accessor with safety
+const getEl = (id) => document.getElementById(id);
+
 const el = {
-  appRoot: document.getElementById("appRoot"),
+  appRoot: getEl("appRoot"),
   iconButtons: Array.from(document.querySelectorAll(".icon-btn")),
-  slidePanel: document.getElementById("slidePanel"),
+  slidePanel: getEl("slidePanel"),
   panelSections: Array.from(document.querySelectorAll(".panel-section")),
-  librarySize: document.getElementById("librarySize"),
-  libraryValue: document.getElementById("libraryValue"),
-  populationSize: document.getElementById("populationSize"),
-  genomeLength: document.getElementById("genomeLength"),
-  generationCount: document.getElementById("generationCount"),
-  accuracyTarget: document.getElementById("accuracyTarget"),
-  fileInput: document.getElementById("fileInput"),
-  datasetInput: document.getElementById("datasetInput"),
-  datasetStatus: document.getElementById("datasetStatus"),
-  statusMessage: document.getElementById("statusMessage"),
+  librarySize: getEl("librarySize"),
+  libraryValue: getEl("libraryValue"),
+  populationSize: getEl("populationSize"),
+  genomeLength: getEl("genomeLength"),
+  generationCount: getEl("generationCount"),
+  accuracyTarget: getEl("accuracyTarget"),
+  fileInput: getEl("fileInput"),
+  datasetInput: getEl("datasetInput"),
+  datasetStatus: getEl("datasetStatus"),
+  statusMessage: getEl("statusMessage"),
   themePills: Array.from(document.querySelectorAll(".theme-pill")),
   modePills: Array.from(document.querySelectorAll(".mode-pill")),
-  askPanel: document.getElementById("askPanel"),
-  askInput: document.getElementById("askInput"),
-  algoKeyInput: document.getElementById("algoKeyInput"),
-  algoKeyAsk: document.getElementById("algoKeyAsk"),
-  askOutput: document.getElementById("askOutput"),
-  askStatus: document.getElementById("askStatus"),
-  btnAsk: document.getElementById("btnAsk"),
-  btnStart: document.getElementById("btnStart"),
-  btnStop: document.getElementById("btnStop"),
-  btnSample: document.getElementById("btnSample"),
-  btnAutopilot: document.getElementById("btnAutopilot"),
-  fitnessChart: document.getElementById("fitnessChart"),
-  geneChart: document.getElementById("geneChart"),
-  leaderboard: document.getElementById("leaderboard"),
-  genLabel: document.getElementById("genLabel"),
-  bestLabel: document.getElementById("bestLabel"),
+  askPanel: getEl("askPanel"),
+  askInput: getEl("askInput"),
+  algoKeyInput: getEl("algoKeyInput"),
+  algoKeyAsk: getEl("algoKeyAsk"),
+  askOutput: getEl("askOutput"),
+  askStatus: getEl("askStatus"),
+  btnAsk: getEl("btnAsk"),
+  btnStart: getEl("btnStart"),
+  btnStop: getEl("btnStop"),
+  btnSample: getEl("btnSample"),
+  btnAutopilot: getEl("btnAutopilot"),
+  fitnessChart: getEl("fitnessChart"),
+  geneChart: getEl("geneChart"),
+  leaderboard: getEl("leaderboard"),
+  genLabel: getEl("genLabel"),
+  bestLabel: getEl("bestLabel"),
   trainCards: Array.from(document.querySelectorAll(".train-only")),
-  btnCopyAlgo: document.getElementById("btnCopyAlgo"),
-  btnGhost: document.getElementById("btnGhost"),
-  btnNodeMap: document.getElementById("btnNodeMap"),
-  nodeMap: document.getElementById("nodeMap"),
-  btnCataclysm: document.getElementById("btnCataclysm"),
-  mutatorGrid: document.getElementById("mutatorGrid"),
-  btnLockAll: document.getElementById("btnLockAll"),
-  btnBanAll: document.getElementById("btnBanAll"),
-  btnClearLocks: document.getElementById("btnClearLocks"),
-  rewindSlider: document.getElementById("rewindSlider"),
-  rewindValue: document.getElementById("rewindValue"),
-  btnRewind: document.getElementById("btnRewind"),
-  btnRewindBoost: document.getElementById("btnRewindBoost"),
-  btnExportPy: document.getElementById("btnExportPy"),
-  btnExportJs: document.getElementById("btnExportJs"),
-  apiToggle: document.getElementById("apiToggle"),
-  apiUrl: document.getElementById("apiUrl"),
-  formulaPlayback: document.getElementById("formulaPlayback"),
-  fileName: document.getElementById("fileName"),
-  mapperModal: document.getElementById("mapperModal"),
-  mapperGrid: document.getElementById("mapperGrid"),
-  btnMapperApply: document.getElementById("btnMapperApply"),
-  btnMapperClose: document.getElementById("btnMapperClose"),
-  stopOnTarget: document.getElementById("stopOnTarget"),
-  exampleModal: document.getElementById("exampleModal"),
-  btnExampleClose: document.getElementById("btnExampleClose"),
+  btnCopyAlgo: getEl("btnCopyAlgo"),
+  btnGhost: getEl("btnGhost"),
+  btnNodeMap: getEl("btnNodeMap"),
+  nodeMap: getEl("nodeMap"),
+  btnCataclysm: getEl("btnCataclysm"),
+  mutatorGrid: getEl("mutatorGrid"),
+  btnLockAll: getEl("btnLockAll"),
+  btnBanAll: getEl("btnBanAll"),
+  btnClearLocks: getEl("btnClearLocks"),
+  rewindSlider: getEl("rewindSlider"),
+  rewindValue: getEl("rewindValue"),
+  btnRewind: getEl("btnRewind"),
+  btnRewindBoost: getEl("btnRewindBoost"),
+  btnExportPy: getEl("btnExportPy"),
+  btnExportJs: getEl("btnExportJs"),
+  apiToggle: getEl("apiToggle"),
+  apiUrl: getEl("apiUrl"),
+  formulaPlayback: getEl("formulaPlayback"),
+  fileName: getEl("fileName"),
+  mapperModal: getEl("mapperModal"),
+  mapperGrid: getEl("mapperGrid"),
+  btnMapperApply: getEl("btnMapperApply"),
+  btnMapperClose: getEl("btnMapperClose"),
+  stopOnTarget: getEl("stopOnTarget"),
+  exampleModal: getEl("exampleModal"),
+  btnExampleClose: getEl("btnExampleClose"),
   exampleCards: Array.from(document.querySelectorAll(".example-card")),
-  buildVersion: document.getElementById("buildVersion"),
-  btnAutoformat: document.getElementById("btnAutoformat"),
-  btnGenerateHuman: document.getElementById("btnGenerateHuman"),
-  fullVersionInput: document.getElementById("fullVersionInput"),
-  humanAlgoOutput: document.getElementById("humanAlgoOutput"),
-  guideCard: document.getElementById("guideCard"),
-  guideTitle: document.getElementById("guideTitle"),
-  guideText: document.getElementById("guideText"),
-  guideStep: document.getElementById("guideStep"),
-  btnGuidePrev: document.getElementById("btnGuidePrev"),
-  btnGuideNext: document.getElementById("btnGuideNext"),
-  btnGuideClose: document.getElementById("btnGuideClose"),
-  btnGuideStart: document.getElementById("btnGuideStart"),
-  consoleOutput: document.getElementById("consoleOutput"),
-  btnClearConsole: document.getElementById("btnClearConsole"),
+  buildVersion: getEl("buildVersion"),
+  btnAutoformat: getEl("btnAutoformat"),
+  btnGenerateHuman: getEl("btnGenerateHuman"),
+  fullVersionInput: getEl("fullVersionInput"),
+  guideCard: getEl("guideCard"),
+  guideTitle: getEl("guideTitle"),
+  guideText: getEl("guideText"),
+  guideStep: getEl("guideStep"),
+  btnGuidePrev: getEl("btnGuidePrev"),
+  btnGuideNext: getEl("btnGuideNext"),
+  btnGuideClose: getEl("btnGuideClose"),
+  btnGuideStart: getEl("btnGuideStart"),
+  consoleOutput: getEl("consoleOutput"),
+  btnClearConsole: getEl("btnClearConsole"),
 };
 
 const guideSteps = [
@@ -131,9 +133,6 @@ const guideSteps = [
 
 let guideIndex = 0;
 
-/**
- * Console Utilities
- */
 function log(msg, type = 'default') {
   if (!el.consoleOutput) return;
   const line = document.createElement("div");
@@ -152,9 +151,6 @@ function setDatasetStatus() {
   if (el.datasetStatus) el.datasetStatus.textContent = `${state.dataset.length} items`;
 }
 
-/**
- * Data Processing
- */
 function parseDataset(text) {
   if (!text || !text.trim()) return [];
   const trimmed = text.trim();
@@ -164,13 +160,14 @@ function parseDataset(text) {
       return Array.isArray(payload) ? payload : Object.values(payload);
     }
   } catch (err) {
-    log("Error parsing JSON, attempting CSV/Text", "error");
+    log("Parsing CSV/Text format...", "default");
   }
   const rows = trimmed.split(/\r?\n/).filter((line) => line.trim());
   return rows.map((line) => line.split(","));
 }
 
 function loadDatasetFromText() {
+  if (!el.datasetInput) return false;
   state.datasetRaw = null;
   const trimmed = el.datasetInput.value.trim();
   state.dataset = parseDataset(trimmed);
@@ -190,9 +187,36 @@ function handleFileUpload(file) {
   reader.readAsText(file);
 }
 
-/**
- * Simulation Engine
- */
+function loadExample(exampleId) {
+  const map = {
+    animals: "data/animals.json",
+    taxonomy: "data/taxonomy.json",
+    lexicon: "data/lexicon.json",
+    market: "data/market_linear.json",
+    solar: "data/solar_system.json",
+    slingshot: "data/slingshot_data.json",
+  };
+  const path = map[exampleId];
+  if (!path) return;
+  
+  log(`Fetching preset: ${exampleId}...`, "system");
+  fetch(path)
+    .then(res => res.json())
+    .then(data => {
+      if (el.datasetInput) {
+        el.datasetInput.value = JSON.stringify(data, null, 2);
+        loadDatasetFromText();
+        if (el.fileName) el.fileName.textContent = path.split("/").pop();
+        log(`Neural preset "${exampleId}" loaded.`, "success");
+        if (el.exampleModal) el.exampleModal.classList.add("hidden");
+        openMapper();
+      }
+    })
+    .catch(err => {
+      log(`Failed to load preset: ${err.message}`, "error");
+    });
+}
+
 function randomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -214,14 +238,12 @@ function randomFormula() {
 }
 
 function inferDomain() {
+  if (!state.dataset || state.dataset.length === 0) return "numeric";
   const first = state.dataset[0];
   if (typeof first === "string" || (Array.isArray(first) && typeof first[0] === "string")) return "text";
   return "numeric";
 }
 
-/**
- * Visualization
- */
 function resizeCanvas(canvas) {
   const parent = canvas.parentElement;
   if (!parent) return null;
@@ -274,7 +296,6 @@ function drawLineChart() {
   const plotW = width - padding.left - padding.right;
   const plotH = height - padding.top - padding.bottom;
 
-  // Draw Grid
   ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
   ctx.lineWidth = 1;
   for(let i=0; i<=4; i++) {
@@ -287,10 +308,9 @@ function drawLineChart() {
 
   if (state.historyDisplay.length < 2) return;
 
-  // Draw Line
   ctx.beginPath();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2") || "#00d2ff";
+  ctx.strokeStyle = "#00d2ff";
   ctx.lineJoin = "round";
 
   state.historyDisplay.forEach((val, idx) => {
@@ -301,7 +321,6 @@ function drawLineChart() {
   });
   ctx.stroke();
 
-  // Draw Area
   ctx.lineTo(padding.left + plotW, padding.top + plotH);
   ctx.lineTo(padding.left, padding.top + plotH);
   const grad = ctx.createLinearGradient(0, padding.top, 0, padding.top + plotH);
@@ -311,10 +330,7 @@ function drawLineChart() {
   ctx.fill();
 }
 
-/**
- * Event Listeners & UI Lifecycle
- */
-function bumpVersion(reason) {
+function bumpVersion() {
   state.changeCounter += 1;
   if (el.buildVersion) {
     el.buildVersion.textContent = `v${state.appVersion}.${state.changeCounter}`;
@@ -356,6 +372,7 @@ function stepTraining() {
 function startTraining() {
   if (!loadDatasetFromText()) {
     log("Simulation failed: Dataset source required.", "error");
+    togglePanel("files");
     return;
   }
   state.running = true;
@@ -364,7 +381,7 @@ function startTraining() {
   state.history = [];
   state.historyDisplay = [];
   
-  el.appRoot.classList.add("training-running");
+  if (el.appRoot) el.appRoot.classList.add("training-running");
   log("Initializing neural evolution kernel...", "system");
   
   if (state.interval) clearInterval(state.interval);
@@ -373,40 +390,58 @@ function startTraining() {
 
 function stopTraining() {
   state.running = false;
-  el.appRoot.classList.remove("training-running");
+  if (el.appRoot) el.appRoot.classList.remove("training-running");
   if (state.interval) clearInterval(state.interval);
   setStatus("Engine Standby");
 }
 
-function togglePanel(panel) {
-  if (uiState.activePanel === panel) {
-    el.slidePanel.classList.toggle("collapsed");
-  } else {
-    el.slidePanel.classList.remove("collapsed");
-    uiState.activePanel = panel;
-    
-    el.iconButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.panel === panel));
-    el.panelSections.forEach(sec => sec.classList.toggle("active", sec.dataset.panelSection === panel));
+function togglePanel(panelName) {
+  if (uiState.activePanel === panelName && el.slidePanel && !el.slidePanel.classList.contains("collapsed")) {
+    el.slidePanel.classList.add("collapsed");
+    return;
   }
+  
+  if (el.slidePanel) el.slidePanel.classList.remove("collapsed");
+  uiState.activePanel = panelName;
+  
+  el.iconButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.panel === panelName));
+  el.panelSections.forEach(sec => sec.classList.toggle("active", sec.dataset.panelSection === panelName));
 }
 
 function setMode(mode) {
   el.modePills.forEach((pill) => {
     pill.classList.toggle("active", pill.dataset.mode === mode);
   });
-  if (el.askPanel) el.askPanel.classList.toggle("hidden", mode !== "ask");
-  if (el.trainCards) {
-    el.trainCards.forEach((card) => {
-      card.classList.toggle("hidden", mode === "ask");
-    });
+  
+  const fitnessCard = getEl("fitnessCard");
+  const leaderboardCard = getEl("leaderboardCard");
+  
+  if (mode === "ask") {
+    if (el.askPanel) el.askPanel.classList.remove("hidden");
+    if (fitnessCard) fitnessCard.classList.add("hidden");
+    if (leaderboardCard) leaderboardCard.classList.add("hidden");
+  } else {
+    if (el.askPanel) el.askPanel.classList.add("hidden");
+    if (fitnessCard) fitnessCard.classList.remove("hidden");
+    if (leaderboardCard) leaderboardCard.classList.remove("hidden");
   }
-  // Added logic to hide convergence/leaderboard in ask mode
-  const fitnessCard = document.getElementById("fitnessCard");
-  const leaderboardCard = document.getElementById("leaderboardCard");
-  if (fitnessCard) fitnessCard.classList.toggle("hidden", mode === "ask");
-  if (leaderboardCard) leaderboardCard.classList.toggle("hidden", mode === "ask");
 
   log(`Switching to ${mode} mode.`);
+}
+
+function openMapper() { if (el.mapperModal) el.mapperModal.classList.remove("hidden"); }
+function closeMapper() { if (el.mapperModal) el.mapperModal.classList.add("hidden"); }
+
+function populateMutator() {
+  if (!el.mutatorGrid) return;
+  el.mutatorGrid.innerHTML = "";
+  for(let i=1; i<=30; i++) {
+    const chip = document.createElement("div");
+    chip.className = "mutator-chip";
+    chip.textContent = `P${i.toString().padStart(3, '0')}`;
+    chip.addEventListener("click", () => chip.classList.toggle("locked"));
+    el.mutatorGrid.appendChild(chip);
+  }
 }
 
 /**
@@ -414,51 +449,78 @@ function setMode(mode) {
  */
 function init() {
   // Navigation
-  el.iconButtons.forEach(btn => btn.addEventListener("click", () => togglePanel(btn.dataset.panel)));
+  el.iconButtons.forEach(btn => {
+    btn.onclick = () => togglePanel(btn.dataset.panel);
+  });
 
   // Mode Switching
   el.modePills.forEach(pill => {
-    pill.addEventListener("click", () => setMode(pill.dataset.mode));
+    pill.onclick = () => setMode(pill.dataset.mode);
   });
 
   // Engine Controls
-  if (el.btnStart) el.btnStart.addEventListener("click", startTraining);
-  if (el.btnStop) el.btnStop.addEventListener("click", stopTraining);
+  if (el.btnStart) el.btnStart.onclick = startTraining;
+  if (el.btnStop) el.btnStop.onclick = stopTraining;
   
   // Theme Switching
   el.themePills.forEach(pill => {
-    pill.addEventListener("click", () => {
+    pill.onclick = () => {
       el.themePills.forEach(p => p.classList.remove("active"));
       pill.classList.add("active");
-      el.appRoot.className = `ide ${pill.dataset.theme}`;
+      if (el.appRoot) el.appRoot.className = `ide ${pill.dataset.theme}`;
       log(`UI Environment synced: ${pill.textContent}`, "system");
-    });
+    };
   });
 
   // Guide
-  if (el.btnGuideNext) el.btnGuideNext.addEventListener("click", () => {
+  if (el.btnGuideNext) el.btnGuideNext.onclick = () => {
     guideIndex = (guideIndex + 1) % guideSteps.length;
     renderGuide();
-  });
-  if (el.btnGuidePrev) el.btnGuidePrev.addEventListener("click", () => {
+  };
+  if (el.btnGuidePrev) el.btnGuidePrev.onclick = () => {
     guideIndex = (guideIndex - 1 + guideSteps.length) % guideSteps.length;
     renderGuide();
-  });
-  if (el.btnGuideClose) el.btnGuideClose.addEventListener("click", () => {
+  };
+  if (el.btnGuideClose) el.btnGuideClose.onclick = () => {
     if (el.guideCard) el.guideCard.classList.add("hidden");
-  });
-  if (el.btnGuideStart) el.btnGuideStart.addEventListener("click", () => {
+  };
+  if (el.btnGuideStart) el.btnGuideStart.onclick = () => {
     guideIndex = 0;
     if (el.guideCard) el.guideCard.classList.remove("hidden");
     renderGuide();
-  });
+  };
 
   // File handling
-  if (el.fileInput) el.fileInput.addEventListener("change", (e) => handleFileUpload(e.target.files[0]));
+  if (el.fileInput) {
+    el.fileInput.onchange = (e) => handleFileUpload(e.target.files[0]);
+  }
+  
+  // Dataset Input
+  if (el.datasetInput) {
+    el.datasetInput.oninput = () => {
+      loadDatasetFromText();
+      bumpVersion();
+    };
+  }
 
   // Console
-  if (el.btnClearConsole) el.btnClearConsole.addEventListener("click", () => {
+  if (el.btnClearConsole) el.btnClearConsole.onclick = () => {
     if (el.consoleOutput) el.consoleOutput.innerHTML = "";
+  };
+
+  // Modals
+  if (el.btnSample) el.btnSample.onclick = () => {
+    if (el.exampleModal) el.exampleModal.classList.remove("hidden");
+  };
+  if (el.btnExampleClose) el.btnExampleClose.onclick = () => {
+    if (el.exampleModal) el.exampleModal.classList.add("hidden");
+  };
+  if (el.btnMapperClose) el.btnMapperClose.onclick = closeMapper;
+  if (el.btnMapperApply) el.btnMapperApply.onclick = closeMapper;
+
+  // Example Cards
+  el.exampleCards.forEach(card => {
+    card.onclick = () => loadExample(card.dataset.example);
   });
 
   // Start Visual Loop
@@ -475,48 +537,9 @@ function init() {
   
   animate();
   renderGuide();
-  log("Neural Evolution Engine v0.0.3 Ready.");
   populateMutator();
+  log("Neural Evolution Engine v0.0.3 Ready.");
 }
 
-document.addEventListener("DOMContentLoaded", init);
-
-// Mapper Modal handling
-function openMapper() { if (el.mapperModal) el.mapperModal.classList.remove("hidden"); }
-function closeMapper() { if (el.mapperModal) el.mapperModal.classList.add("hidden"); }
-if (el.btnMapperClose) el.btnMapperClose.addEventListener("click", closeMapper);
-if (el.btnMapperApply) el.btnMapperApply.addEventListener("click", closeMapper);
-
-// Presets Modal
-if (el.btnSample) el.btnSample.addEventListener("click", () => el.exampleModal.classList.remove("hidden"));
-if (el.btnExampleClose) el.btnExampleClose.addEventListener("click", () => el.exampleModal.classList.add("hidden"));
-
-// Mutation Brush
-function populateMutator() {
-  if (!el.mutatorGrid) return;
-  el.mutatorGrid.innerHTML = "";
-  for(let i=1; i<=30; i++) {
-    const chip = document.createElement("div");
-    chip.className = "mutator-chip";
-    chip.textContent = `P${i.toString().padStart(3, '0')}`;
-    chip.addEventListener("click", () => chip.classList.toggle("locked"));
-    el.mutatorGrid.appendChild(chip);
-  }
-}
-
-// Autoformat & Decompile Logic
-if (el.btnAutoformat) {
-  el.btnAutoformat.addEventListener("click", () => {
-    log("Executing autoformat sequence...", "system");
-    // Placeholder for actual logic
-    bumpVersion();
-  });
-}
-
-if (el.btnGenerateHuman) {
-  el.btnGenerateHuman.addEventListener("click", () => {
-    log("Decompiling neural logic...", "system");
-    // Placeholder for actual logic
-    bumpVersion();
-  });
-}
+// Global initialization
+window.onload = init;
