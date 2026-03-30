@@ -114,7 +114,7 @@ function startTraining() {
   state.historyDisplay = [];
   
   $('appRoot').classList.add("training-running");
-  log("Neural Evolution Kernel Initialized...", "system");
+  log("Initializing neural evolution kernel...", "system");
   
   if (state.interval) clearInterval(state.interval);
   state.interval = setInterval(stepTraining, 150);
@@ -207,20 +207,35 @@ function loadExample(id) {
     slingshot: "data/slingshot_data.json"
   };
   
-  log(`Linking telemetry: ${id}...`, "system");
-  fetch(paths[id])
-    .then(r => r.json())
+  const path = paths[id];
+  if (!path) {
+    log(`Preset ID "${id}" not found.`, "error");
+    return;
+  }
+
+  log(`Linking telemetry stream: ${id}...`, "system");
+  
+  fetch(path)
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+      return r.json();
+    })
     .then(data => {
       if ($('datasetInput')) {
         $('datasetInput').value = JSON.stringify(data, null, 2);
         state.dataset = Array.isArray(data) ? data : Object.values(data);
+        
         if ($('datasetStatus')) $('datasetStatus').textContent = `${state.dataset.length} items`;
         if ($('fileName')) $('fileName').textContent = `${id}.json`;
-        $('exampleModal').classList.add('hidden');
-        log(`Data stream "${id}" active.`, "success");
+        
+        if ($('exampleModal')) $('exampleModal').classList.add('hidden');
+        log(`Data stream "${id}" linked and validated.`, "success");
       }
     })
-    .catch(e => log(`Stream failed: ${e.message}`, "error"));
+    .catch(e => {
+      log(`Stream failed: ${e.message}`, "error");
+      console.error("Fetch error:", e);
+    });
 }
 
 /**
@@ -243,7 +258,7 @@ function setMode(mode) {
   $('askPanel').classList.toggle('hidden', mode !== 'ask');
   $('fitnessCard').classList.toggle('hidden', mode === 'ask');
   $('leaderboardCard').classList.toggle('hidden', mode === 'ask');
-  log(`Mode switched: ${mode}`);
+  log(`Kernel mode set to: ${mode.toUpperCase()}`);
 }
 
 function init() {
@@ -259,9 +274,12 @@ function init() {
   if ($('btnExampleClose')) $('btnExampleClose').onclick = () => $('exampleModal').classList.add('hidden');
   if ($('btnClearConsole')) $('btnClearConsole').onclick = () => $('consoleOutput').innerHTML = "";
 
-  // Presets
+  // Preset Cards
   document.querySelectorAll('.example-card').forEach(c => {
-    c.onclick = () => loadExample(c.dataset.example);
+    c.onclick = () => {
+      const exId = c.getAttribute('data-example');
+      loadExample(exId);
+    };
   });
 
   // Modes
@@ -273,9 +291,9 @@ function init() {
   if ($('btnGuideNext')) $('btnGuideNext').onclick = () => {
     uiState.guideIndex = (uiState.guideIndex + 1) % guideSteps.length;
     const step = guideSteps[uiState.guideIndex];
-    $('guideTitle').textContent = step.title;
-    $('guideText').textContent = step.text;
-    $('guideStep').textContent = `${uiState.guideIndex + 1} / ${guideSteps.length}`;
+    if ($('guideTitle')) $('guideTitle').textContent = step.title;
+    if ($('guideText')) $('guideText').textContent = step.text;
+    if ($('guideStep')) $('guideStep').textContent = `${uiState.guideIndex + 1} / ${guideSteps.length}`;
   };
 
   // Animation Frame
@@ -291,7 +309,7 @@ function init() {
   }
   loop();
 
-  log("Flux Kernel v0.0.3 Ready.");
+  log("Flux Neural Evolution Kernel Ready.");
 }
 
 window.onload = init;
