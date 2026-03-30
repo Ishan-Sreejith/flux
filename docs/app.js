@@ -108,6 +108,7 @@ const el = {
   btnAutoformat: document.getElementById("btnAutoformat"),
   btnGenerateHuman: document.getElementById("btnGenerateHuman"),
   fullVersionInput: document.getElementById("fullVersionInput"),
+  humanAlgoOutput: document.getElementById("humanAlgoOutput"),
   guideCard: document.getElementById("guideCard"),
   guideTitle: document.getElementById("guideTitle"),
   guideText: document.getElementById("guideText"),
@@ -134,6 +135,7 @@ let guideIndex = 0;
  * Console Utilities
  */
 function log(msg, type = 'default') {
+  if (!el.consoleOutput) return;
   const line = document.createElement("div");
   line.className = `log-line ${type}`;
   const now = new Date();
@@ -143,11 +145,11 @@ function log(msg, type = 'default') {
 }
 
 function setStatus(message) {
-  el.statusMessage.textContent = message;
+  if (el.statusMessage) el.statusMessage.textContent = message;
 }
 
 function setDatasetStatus() {
-  el.datasetStatus.textContent = `${state.dataset.length} items`;
+  if (el.datasetStatus) el.datasetStatus.textContent = `${state.dataset.length} items`;
 }
 
 /**
@@ -241,6 +243,7 @@ function lerp(a, b, t) {
 }
 
 function updateLeaderboard() {
+  if (!el.leaderboard) return;
   el.leaderboard.innerHTML = "";
   const topFormula = randomFormula();
   if (el.algoKeyAsk) el.algoKeyAsk.value = topFormula;
@@ -287,7 +290,7 @@ function drawLineChart() {
   // Draw Line
   ctx.beginPath();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2");
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--accent-2") || "#00d2ff";
   ctx.lineJoin = "round";
 
   state.historyDisplay.forEach((val, idx) => {
@@ -319,6 +322,7 @@ function bumpVersion(reason) {
 }
 
 function renderGuide() {
+  if (!el.guideTitle || !el.guideText || !el.guideStep) return;
   const step = guideSteps[guideIndex];
   el.guideTitle.textContent = step.title;
   el.guideText.textContent = step.text;
@@ -333,8 +337,8 @@ function stepTraining() {
   state.best = Math.min(1, state.best + (1 - state.best) * step);
   state.history.push(state.best);
   
-  el.genLabel.textContent = `GEN ${state.generation}`;
-  el.bestLabel.textContent = `${(state.best * 100).toFixed(2)}%`;
+  if (el.genLabel) el.genLabel.textContent = `GEN ${state.generation}`;
+  if (el.bestLabel) el.bestLabel.textContent = `${(state.best * 100).toFixed(2)}%`;
   
   updateLeaderboard();
   
@@ -342,7 +346,8 @@ function stepTraining() {
     log(`Gen ${state.generation}: Alpha Fitness at ${(state.best * 100).toFixed(2)}%`);
   }
 
-  if (state.generation >= state.maxGenerations || (el.stopOnTarget.checked && state.best >= state.targetAccuracy)) {
+  const stopChecked = el.stopOnTarget ? el.stopOnTarget.checked : false;
+  if (state.generation >= state.maxGenerations || (stopChecked && state.best >= state.targetAccuracy)) {
     stopTraining();
     log(`Simulation stabilized at Gen ${state.generation}. Target fitness reached.`, "success");
   }
@@ -385,6 +390,25 @@ function togglePanel(panel) {
   }
 }
 
+function setMode(mode) {
+  el.modePills.forEach((pill) => {
+    pill.classList.toggle("active", pill.dataset.mode === mode);
+  });
+  if (el.askPanel) el.askPanel.classList.toggle("hidden", mode !== "ask");
+  if (el.trainCards) {
+    el.trainCards.forEach((card) => {
+      card.classList.toggle("hidden", mode === "ask");
+    });
+  }
+  // Added logic to hide convergence/leaderboard in ask mode
+  const fitnessCard = document.getElementById("fitnessCard");
+  const leaderboardCard = document.getElementById("leaderboardCard");
+  if (fitnessCard) fitnessCard.classList.toggle("hidden", mode === "ask");
+  if (leaderboardCard) leaderboardCard.classList.toggle("hidden", mode === "ask");
+
+  log(`Switching to ${mode} mode.`);
+}
+
 /**
  * Initialization
  */
@@ -392,9 +416,14 @@ function init() {
   // Navigation
   el.iconButtons.forEach(btn => btn.addEventListener("click", () => togglePanel(btn.dataset.panel)));
 
+  // Mode Switching
+  el.modePills.forEach(pill => {
+    pill.addEventListener("click", () => setMode(pill.dataset.mode));
+  });
+
   // Engine Controls
-  el.btnStart.addEventListener("click", startTraining);
-  el.btnStop.addEventListener("click", stopTraining);
+  if (el.btnStart) el.btnStart.addEventListener("click", startTraining);
+  if (el.btnStop) el.btnStop.addEventListener("click", stopTraining);
   
   // Theme Switching
   el.themePills.forEach(pill => {
@@ -407,17 +436,30 @@ function init() {
   });
 
   // Guide
-  el.btnGuideNext.addEventListener("click", () => {
+  if (el.btnGuideNext) el.btnGuideNext.addEventListener("click", () => {
     guideIndex = (guideIndex + 1) % guideSteps.length;
     renderGuide();
   });
-  el.btnGuidePrev.addEventListener("click", () => {
+  if (el.btnGuidePrev) el.btnGuidePrev.addEventListener("click", () => {
     guideIndex = (guideIndex - 1 + guideSteps.length) % guideSteps.length;
+    renderGuide();
+  });
+  if (el.btnGuideClose) el.btnGuideClose.addEventListener("click", () => {
+    if (el.guideCard) el.guideCard.classList.add("hidden");
+  });
+  if (el.btnGuideStart) el.btnGuideStart.addEventListener("click", () => {
+    guideIndex = 0;
+    if (el.guideCard) el.guideCard.classList.remove("hidden");
     renderGuide();
   });
 
   // File handling
-  el.fileInput.addEventListener("change", (e) => handleFileUpload(e.target.files[0]));
+  if (el.fileInput) el.fileInput.addEventListener("change", (e) => handleFileUpload(e.target.files[0]));
+
+  // Console
+  if (el.btnClearConsole) el.btnClearConsole.addEventListener("click", () => {
+    if (el.consoleOutput) el.consoleOutput.innerHTML = "";
+  });
 
   // Start Visual Loop
   function animate() {
@@ -434,22 +476,24 @@ function init() {
   animate();
   renderGuide();
   log("Neural Evolution Engine v0.0.3 Ready.");
+  populateMutator();
 }
 
 document.addEventListener("DOMContentLoaded", init);
 
 // Mapper Modal handling
-function openMapper() { el.mapperModal.classList.remove("hidden"); }
-function closeMapper() { el.mapperModal.classList.add("hidden"); }
-el.btnMapperClose.addEventListener("click", closeMapper);
-el.btnMapperApply.addEventListener("click", closeMapper);
+function openMapper() { if (el.mapperModal) el.mapperModal.classList.remove("hidden"); }
+function closeMapper() { if (el.mapperModal) el.mapperModal.classList.add("hidden"); }
+if (el.btnMapperClose) el.btnMapperClose.addEventListener("click", closeMapper);
+if (el.btnMapperApply) el.btnMapperApply.addEventListener("click", closeMapper);
 
 // Presets Modal
-el.btnSample.addEventListener("click", () => el.exampleModal.classList.remove("hidden"));
-el.btnExampleClose.addEventListener("click", () => el.exampleModal.classList.add("hidden"));
+if (el.btnSample) el.btnSample.addEventListener("click", () => el.exampleModal.classList.remove("hidden"));
+if (el.btnExampleClose) el.btnExampleClose.addEventListener("click", () => el.exampleModal.classList.add("hidden"));
 
-// Mutation Brush (mockup)
+// Mutation Brush
 function populateMutator() {
+  if (!el.mutatorGrid) return;
   el.mutatorGrid.innerHTML = "";
   for(let i=1; i<=30; i++) {
     const chip = document.createElement("div");
@@ -459,4 +503,20 @@ function populateMutator() {
     el.mutatorGrid.appendChild(chip);
   }
 }
-populateMutator();
+
+// Autoformat & Decompile Logic
+if (el.btnAutoformat) {
+  el.btnAutoformat.addEventListener("click", () => {
+    log("Executing autoformat sequence...", "system");
+    // Placeholder for actual logic
+    bumpVersion();
+  });
+}
+
+if (el.btnGenerateHuman) {
+  el.btnGenerateHuman.addEventListener("click", () => {
+    log("Decompiling neural logic...", "system");
+    // Placeholder for actual logic
+    bumpVersion();
+  });
+}
