@@ -158,6 +158,15 @@ body {
   display: none;
 }
 
+.ui-simple .sidebar,
+.ui-simple .workspace {
+  display: none;
+}
+
+.ui-simple .simple-shell {
+  display: grid;
+}
+
 /* Slide Panel */
 .slide-panel {
   width: 340px;
@@ -448,6 +457,105 @@ textarea:focus {
 
 .ui-simple .slide-panel {
   box-shadow: none;
+}
+
+.simple-shell {
+  display: none;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.simple-screen {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.simple-card,
+.simple-chat-card {
+  width: min(760px, 100%);
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.simple-card h2,
+.simple-chat-card h3 {
+  margin: 0;
+}
+
+.simple-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.simple-upload {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--glass);
+}
+
+#simpleDatasetInput {
+  min-height: 220px;
+  resize: vertical;
+}
+
+.simple-status {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.simple-chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.simple-chat-messages {
+  min-height: 360px;
+  max-height: 55vh;
+  overflow-y: auto;
+  display: grid;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.chat-bubble {
+  max-width: min(85%, 560px);
+  border-radius: 14px;
+  padding: 10px 12px;
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+.chat-bubble.user {
+  justify-self: end;
+  background: rgba(var(--accent-2-rgb), 0.2);
+  border: 1px solid rgba(var(--accent-2-rgb), 0.4);
+}
+
+.chat-bubble.bot {
+  justify-self: start;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+}
+
+.simple-chat-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
 }
 
 .bento-item {
@@ -1298,5 +1406,13 @@ kbd {
 
   .shortcut-list div {
     grid-template-columns: 1fr;
+  }
+
+  .simple-chat-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .simple-chat-messages {
+    min-height: 280px;
   }
 }

@@ -341,6 +341,38 @@
           </div>
         </div>
       </section>
+
+      <section id="simpleShell" class="simple-shell hidden" aria-label="Simple Mode">
+        <div id="simpleUploadScreen" class="simple-screen">
+          <div class="simple-card">
+            <h2>Upload Training Data</h2>
+            <p>Paste JSON or upload a JSON file, then submit to train.</p>
+            <div class="simple-upload">
+              <input type="file" id="simpleFileInput" accept=".json,application/json,text/plain" />
+            </div>
+            <textarea id="simpleDatasetInput" placeholder='[{"Key":1,"Value":2}]'></textarea>
+            <button id="btnSimpleSubmit" class="btn-primary full-width">Submit And Train</button>
+            <div id="simpleTrainStatus" class="simple-status">Waiting for dataset...</div>
+          </div>
+        </div>
+
+        <div id="simpleChatScreen" class="simple-screen hidden">
+          <div class="simple-chat-card">
+            <div class="simple-chat-head">
+              <div>
+                <h3>Flux Chat</h3>
+                <small id="simpleChatMeta">Model ready</small>
+              </div>
+              <button id="btnSimpleBack" class="tiny">New Dataset</button>
+            </div>
+            <div id="simpleChatMessages" class="simple-chat-messages"></div>
+            <div class="simple-chat-input-row">
+              <input id="simpleChatInput" type="text" placeholder="Ask for a value (e.g. 11)" />
+              <button id="btnSimpleSend" class="btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <div class="modal hidden" id="mapperModal">

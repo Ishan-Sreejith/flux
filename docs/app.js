@@ -129,13 +129,40 @@ function toFiniteNumber(value) {
 
 function applyUiMode(mode) {
   const root = $("appRoot");
+  const shell = $("simpleShell");
   if (!root) return;
   state.uiMode = mode === "advanced" ? "advanced" : "simple";
   root.classList.toggle("ui-simple", state.uiMode === "simple");
   root.classList.toggle("ui-advanced", state.uiMode === "advanced");
+  if (shell) shell.classList.toggle("hidden", state.uiMode !== "simple");
   const btn = $("btnUiMode");
   if (btn) btn.textContent = state.uiMode === "simple" ? "Advanced Mode" : "Simple Mode";
+  if (state.uiMode === "simple") {
+    showSimpleUploadScreen();
+  }
   persistWorkspace(false);
+}
+
+function showSimpleUploadScreen() {
+  $("simpleUploadScreen")?.classList.remove("hidden");
+  $("simpleChatScreen")?.classList.add("hidden");
+}
+
+function showSimpleChatScreen() {
+  $("simpleUploadScreen")?.classList.add("hidden");
+  $("simpleChatScreen")?.classList.remove("hidden");
+}
+
+function setSimpleStatus(message) {
+  setText("simpleTrainStatus", message);
+}
+
+function pushSimpleChatMessage(text, role = "bot") {
+  const root = $("simpleChatMessages");
+  if (!root) return;
+  const bubble = el("div", `chat-bubble ${role}`, text);
+  root.appendChild(bubble);
+  root.scrollTop = root.scrollHeight;
 }
 
 function showToast(message, type = "info") {
@@ -210,6 +237,7 @@ function hydrateFromWorkspace() {
     }
     if (typeof data.datasetInput === "string" && data.datasetInput.trim()) {
       setValue("datasetInput", data.datasetInput);
+      setValue("simpleDatasetInput", data.datasetInput);
       const parsed = parseDataset(data.datasetInput);
       if (parsed.length > 0) updateDatasetState(parsed, "workspace.json", false);
     }
@@ -243,6 +271,8 @@ function resetWorkspace() {
   setValue("accuracyTarget", 0.95);
   setValue("librarySize", 300);
   setValue("datasetInput", "");
+  setValue("simpleDatasetInput", "");
+  setValue("simpleChatInput", "");
   setValue("prebuiltSearch", "");
   setText("fileName", "No source linked");
   setText("datasetStatus", "0 items");
@@ -253,6 +283,10 @@ function resetWorkspace() {
   const fill = $("progressFill");
   if (fill) fill.style.width = "0%";
   localStorage.removeItem(STORAGE_KEY);
+  const chat = $("simpleChatMessages");
+  if (chat) chat.innerHTML = "";
+  setSimpleStatus("Waiting for dataset...");
+  showSimpleUploadScreen();
   syncNumericSettings();
   applyUiMode(state.uiMode);
   renderPrebuiltList();
@@ -777,6 +811,74 @@ async function handleFileUpload(event) {
   }
 }
 
+async function loadSimpleFileIntoTextbox() {
+  const file = $("simpleFileInput")?.files?.[0];
+  if (!file) return;
+  try {
+    const text = await fileToText(file);
+    setValue("simpleDatasetInput", text);
+    setSimpleStatus(`Loaded file: ${file.name}`);
+  } catch {
+    setSimpleStatus("Unable to read selected file.");
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function submitSimpleDataset() {
+  const raw = $("simpleDatasetInput")?.value?.trim() || "";
+  if (!raw) {
+    setSimpleStatus("Paste JSON or choose a file before submitting.");
+    showToast("Missing dataset", "error");
+    return;
+  }
+  let parsed = parseDataset(raw);
+  if (parsed.length === 0) {
+    setSimpleStatus("JSON format is invalid or empty.");
+    showToast("Invalid JSON", "error");
+    return;
+  }
+
+  setSimpleStatus("Validating dataset...");
+  await sleep(250);
+  setSimpleStatus("Training model (25%)...");
+  await sleep(250);
+  setSimpleStatus("Training model (55%)...");
+  await sleep(250);
+  setSimpleStatus("Training model (85%)...");
+  await sleep(250);
+
+  updateDatasetState(parsed, "simple-upload.json", false);
+  setValue("datasetInput", JSON.stringify(normalizeDataset(parsed), null, 2));
+  generateHumanAlgorithm(false);
+
+  const modelKind = state.inferenceModel?.type || "lookup";
+  setText("simpleChatMeta", `Model: ${modelKind}`);
+  const chat = $("simpleChatMessages");
+  if (chat) chat.innerHTML = "";
+  pushSimpleChatMessage("Model is ready. Ask for any key and I will predict the value.");
+  if (state.inferenceModel?.type === "numeric_linear" || state.inferenceModel?.type === "numeric_key_lookup") {
+    pushSimpleChatMessage("Unseen numeric keys are supported using extrapolation/interpolation.");
+  }
+  showSimpleChatScreen();
+  setSimpleStatus("Training complete.");
+}
+
+function sendSimpleChat() {
+  const input = $("simpleChatInput");
+  if (!input) return;
+  const raw = input.value.trim();
+  if (!raw) return;
+  pushSimpleChatMessage(raw, "user");
+  input.value = "";
+  const key = Number.isNaN(Number(raw)) ? raw : Number(raw);
+  const predicted = predictWithModel(key);
+  const text = typeof predicted.value === "string" ? predicted.value : JSON.stringify(predicted.value);
+  pushSimpleChatMessage(text, "bot");
+}
+
 function setTheme(themeClass) {
   const root = $("appRoot");
   if (!root) return;
@@ -1137,6 +1239,14 @@ function bindEvents() {
   $("btnSaveWorkspace")?.addEventListener("click", () => persistWorkspace(true));
   $("btnResetWorkspace")?.addEventListener("click", resetWorkspace);
 
+  $("simpleFileInput")?.addEventListener("change", loadSimpleFileIntoTextbox);
+  $("btnSimpleSubmit")?.addEventListener("click", submitSimpleDataset);
+  $("btnSimpleSend")?.addEventListener("click", sendSimpleChat);
+  $("simpleChatInput")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") sendSimpleChat();
+  });
+  $("btnSimpleBack")?.addEventListener("click", showSimpleUploadScreen);
+
   $("btnClearConsole")?.addEventListener("click", () => {
     const out = $("consoleOutput");
     if (out) out.innerHTML = "";
@@ -1207,6 +1317,7 @@ function init() {
   renderPrebuiltList();
   updateLeaderboard();
   generateHumanAlgorithm(false);
+  setSimpleStatus("Waiting for dataset...");
   updateProgressUI();
   syncRewindRange();
   renderLoop();
