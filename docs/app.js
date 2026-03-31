@@ -64,10 +64,12 @@ const state = {
   maxGenerations: 300,
   targetAccuracy: 0.95,
   appVersion: "0.3.0",
-  activeTheme: "theme-cyber",
+  activeTheme: "theme-comfort",
+  uiMode: "simple",
   ghostMode: false,
   activePrebuiltId: null,
   prebuiltQuery: "",
+  inferenceModel: null,
   lastEpochAt: 0,
   epochRate: 0,
   mutator: {
@@ -120,6 +122,22 @@ function clamp01(v) {
   return Math.max(0, Math.min(1, v));
 }
 
+function toFiniteNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function applyUiMode(mode) {
+  const root = $("appRoot");
+  if (!root) return;
+  state.uiMode = mode === "advanced" ? "advanced" : "simple";
+  root.classList.toggle("ui-simple", state.uiMode === "simple");
+  root.classList.toggle("ui-advanced", state.uiMode === "advanced");
+  const btn = $("btnUiMode");
+  if (btn) btn.textContent = state.uiMode === "simple" ? "Advanced Mode" : "Simple Mode";
+  persistWorkspace(false);
+}
+
 function showToast(message, type = "info") {
   const root = $("toastContainer");
   if (!root) return;
@@ -153,6 +171,7 @@ function workspaceSnapshot() {
   return {
     datasetInput: $("datasetInput")?.value || "",
     activeTheme: state.activeTheme,
+    uiMode: state.uiMode,
     activePrebuiltId: state.activePrebuiltId,
     settings: {
       populationSize: state.populationSize,
@@ -199,6 +218,7 @@ function hydrateFromWorkspace() {
       setValue("prebuiltSearch", data.prebuiltQuery);
     }
     if (typeof data.activeTheme === "string") state.activeTheme = data.activeTheme;
+    if (data.uiMode === "simple" || data.uiMode === "advanced") state.uiMode = data.uiMode;
     if (typeof data.activePrebuiltId === "string") state.activePrebuiltId = data.activePrebuiltId;
   } catch {
     log("Workspace restoration failed. Starting with defaults.", "error");
@@ -215,6 +235,8 @@ function resetWorkspace() {
   state.dataset = [];
   state.prebuiltQuery = "";
   state.activePrebuiltId = null;
+  state.inferenceModel = null;
+  state.uiMode = "simple";
   setValue("populationSize", 120);
   setValue("genomeLength", 8);
   setValue("generationCount", 300);
@@ -232,6 +254,7 @@ function resetWorkspace() {
   if (fill) fill.style.width = "0%";
   localStorage.removeItem(STORAGE_KEY);
   syncNumericSettings();
+  applyUiMode(state.uiMode);
   renderPrebuiltList();
   updateLeaderboard();
   drawFitness();
@@ -405,6 +428,7 @@ function normalizeDataset(input) {
 
 function updateDatasetState(data, sourceName = "inline", notify = true) {
   state.dataset = normalizeDataset(data);
+  state.inferenceModel = compileInferenceModel(state.dataset);
   setText("datasetStatus", `${state.dataset.length} items`);
   setText("fileName", sourceName);
   if (state.dataset.length > 0) {
@@ -416,6 +440,7 @@ function updateDatasetState(data, sourceName = "inline", notify = true) {
   } else if (notify) {
     log("Dataset is empty after normalization.", "error");
   }
+  generateHumanAlgorithm(false);
   persistWorkspace(false);
 }
 
@@ -433,13 +458,72 @@ function autoformatDataset() {
   log("Dataset normalized and formatted.", "success");
 }
 
-function inferFormulaSteps(dataset) {
-  if (!dataset.length) return ["No deterministic rule inferred from empty dataset."];
-  const numericPairs = dataset.filter((r) => Number.isFinite(Number(r.Key)) && Number.isFinite(Number(r.Value)));
-  if (numericPairs.length >= Math.max(3, Math.floor(dataset.length * 0.6))) {
-    return ["parse key as number", "estimate linear trend from examples", "apply residual correction", "return bounded result"];
+function compileInferenceModel(dataset) {
+  const exactByKey = new Map(dataset.map((row) => [String(row.Key), row.Value]));
+  const numericPairs = dataset
+    .map((row) => ({ x: toFiniteNumber(row.Key), y: toFiniteNumber(row.Value) }))
+    .filter((row) => row.x !== null && row.y !== null);
+
+  if (numericPairs.length >= 2) {
+    const n = numericPairs.length;
+    let sumX = 0;
+    let sumY = 0;
+    let sumXX = 0;
+    let sumXY = 0;
+    for (const p of numericPairs) {
+      sumX += p.x;
+      sumY += p.y;
+      sumXX += p.x * p.x;
+      sumXY += p.x * p.y;
+    }
+    const denom = n * sumXX - sumX * sumX;
+    const slope = Math.abs(denom) < 1e-9 ? 0 : (n * sumXY - sumX * sumY) / denom;
+    const intercept = (sumY - slope * sumX) / n;
+    const roundOutputs = numericPairs.every((p) => Math.abs(p.y - Math.round(p.y)) < 1e-9);
+    return {
+      type: "numeric_linear",
+      slope,
+      intercept,
+      roundOutputs,
+      minX: Math.min(...numericPairs.map((p) => p.x)),
+      maxX: Math.max(...numericPairs.map((p) => p.x)),
+      exactByKey,
+    };
   }
-  return ["coerce key to text", "normalize case and spacing", "match known token patterns", "fallback to template"];
+
+  return { type: "lookup", exactByKey };
+}
+
+function predictWithModel(key) {
+  const k = String(key);
+  if (!state.inferenceModel) return { value: `No model available for ${k}`, mode: "heuristic" };
+  if (state.inferenceModel.exactByKey.has(k)) {
+    return { value: state.inferenceModel.exactByKey.get(k), mode: "exact" };
+  }
+  if (state.inferenceModel.type === "numeric_linear") {
+    const num = toFiniteNumber(key);
+    if (num !== null) {
+      let predicted = state.inferenceModel.slope * num + state.inferenceModel.intercept;
+      if (state.inferenceModel.roundOutputs) predicted = Math.round(predicted);
+      return { value: Number(predicted.toFixed(6)), mode: "predicted" };
+    }
+  }
+  return { value: `No exact match. Heuristic: ${k}`, mode: "heuristic" };
+}
+
+function inferFormulaSteps(dataset) {
+  if (!dataset.length || !state.inferenceModel) return ["No deterministic rule inferred from empty dataset."];
+  if (state.inferenceModel.type === "numeric_linear") {
+    const m = state.inferenceModel.slope.toFixed(6);
+    const b = state.inferenceModel.intercept.toFixed(6);
+    return [
+      "parse key as number",
+      "apply learned linear model",
+      `compute value = (${m} * x) + (${b})`,
+      "return rounded value when target domain is integer",
+    ];
+  }
+  return ["coerce key to text", "lookup exact token", "fallback to heuristic output"];
 }
 
 function deriveRuleFromDataset(dataset) {
@@ -449,6 +533,7 @@ function deriveRuleFromDataset(dataset) {
 }
 
 function generateHumanAlgorithm(notify = true) {
+  state.inferenceModel = compileInferenceModel(state.dataset);
   const output = deriveRuleFromDataset(state.dataset);
   const full = $("fullVersionInput");
   if (full) {
@@ -462,6 +547,7 @@ function generateHumanAlgorithm(notify = true) {
       {
         version: state.appVersion,
         prebuilt: state.activePrebuiltId,
+        model: state.inferenceModel,
         config: {
           population: state.populationSize,
           genomeLength: state.genomeLength,
@@ -474,6 +560,20 @@ function generateHumanAlgorithm(notify = true) {
       2
     )
   );
+  if (state.inferenceModel?.type === "numeric_linear") {
+    const probe = Math.round(state.inferenceModel.maxX + 1);
+    setValue("askInput", String(probe));
+    setText("askStatus", "Model Ready");
+    setText(
+      "askOutput",
+      `Compiled model: y = ${state.inferenceModel.slope.toFixed(6)}*x + ${state.inferenceModel.intercept.toFixed(6)}`
+    );
+  } else {
+    const firstKey = state.dataset[0]?.Key;
+    if (firstKey !== undefined) setValue("askInput", String(firstKey));
+    setText("askStatus", "Model Ready");
+    setText("askOutput", "Compiled lookup model from current dataset.");
+  }
   if (notify) log("Generated human-readable algorithm draft.", "system");
   return output;
 }
@@ -500,12 +600,15 @@ function executeInference() {
   }
   const maybeNumber = Number(raw);
   const key = Number.isNaN(maybeNumber) ? raw : maybeNumber;
-  const match = state.dataset.find((row) => row.Key === key || String(row.Key) === String(key));
-  const value = match ? match.Value : `No exact match. Heuristic: ${raw}`;
+  const predicted = predictWithModel(key);
+  const value = predicted.value;
   out.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
-  setText("askStatus", match ? "Exact Match" : "Heuristic Output");
+  setText(
+    "askStatus",
+    predicted.mode === "exact" ? "Exact Match" : predicted.mode === "predicted" ? "Predicted Output" : "Heuristic Output"
+  );
   updatePlayback(key, value);
-  log(`Inference executed for key "${raw}".`, "default");
+  log(`Inference executed for key "${raw}" (${predicted.mode}).`, "default");
 }
 
 function toDataUrl(content, mimeType) {
@@ -975,6 +1078,7 @@ function bindEvents() {
   $("btnExampleClose")?.addEventListener("click", () => $("exampleModal")?.classList.add("hidden"));
   $("btnShortcuts")?.addEventListener("click", () => $("shortcutsModal")?.classList.remove("hidden"));
   $("btnShortcutsClose")?.addEventListener("click", () => $("shortcutsModal")?.classList.add("hidden"));
+  $("btnUiMode")?.addEventListener("click", () => applyUiMode(state.uiMode === "simple" ? "advanced" : "simple"));
   $("btnSaveWorkspace")?.addEventListener("click", () => persistWorkspace(true));
   $("btnResetWorkspace")?.addEventListener("click", resetWorkspace);
 
@@ -1043,6 +1147,7 @@ function init() {
   updateApiBadge();
   setGuideStep(0);
   setTheme(state.activeTheme);
+  applyUiMode(state.uiMode);
   renderMutatorGrid();
   renderPrebuiltList();
   updateLeaderboard();

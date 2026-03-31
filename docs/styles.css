@@ -152,6 +152,12 @@ body {
   box-shadow: 0 0 20px rgba(var(--accent-2-rgb), 0.2);
 }
 
+.ui-simple .icon-btn[data-panel="mutator"],
+.ui-simple .icon-btn[data-panel="rewind"],
+.ui-simple .icon-btn[data-panel="export"] {
+  display: none;
+}
+
 /* Slide Panel */
 .slide-panel {
   width: 340px;
@@ -304,6 +310,13 @@ textarea:focus {
   backdrop-filter: blur(20px);
 }
 
+.ui-simple .workspace-header {
+  height: auto;
+  min-height: 72px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .center-controls {
   display: flex;
   align-items: center;
@@ -412,6 +425,29 @@ textarea:focus {
   grid-template-rows: 1fr 1fr auto;
   gap: 12px;
   padding-bottom: 4px;
+}
+
+.ui-simple .bento-grid {
+  grid-template-columns: 1.8fr 1fr;
+  grid-template-rows: auto auto;
+}
+
+.ui-simple #guideCard,
+.ui-simple #consoleCard {
+  display: none;
+}
+
+.ui-simple .bento-item {
+  padding: 18px;
+}
+
+.ui-simple .title-with-icon h2 {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.ui-simple .slide-panel {
+  box-shadow: none;
 }
 
 .bento-item {
