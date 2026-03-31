@@ -130,13 +130,29 @@ function toFiniteNumber(value) {
 function applyUiMode(mode) {
   const root = $("appRoot");
   const shell = $("simpleShell");
+  const sidebar = document.querySelector(".sidebar");
+  const workspace = document.querySelector(".workspace");
   if (!root) return;
   state.uiMode = mode === "advanced" ? "advanced" : "simple";
   root.classList.toggle("ui-simple", state.uiMode === "simple");
   root.classList.toggle("ui-advanced", state.uiMode === "advanced");
-  if (shell) shell.classList.toggle("hidden", state.uiMode !== "simple");
+  if (state.uiMode === "simple") {
+    if (sidebar) sidebar.style.display = "none";
+    if (workspace) workspace.style.display = "none";
+    if (shell) {
+      shell.classList.remove("hidden");
+      shell.style.display = "grid";
+    }
+  } else {
+    if (sidebar) sidebar.style.display = "";
+    if (workspace) workspace.style.display = "";
+    if (shell) {
+      shell.classList.add("hidden");
+      shell.style.display = "none";
+    }
+  }
   const btn = $("btnUiMode");
-  if (btn) btn.textContent = state.uiMode === "simple" ? "Advanced Mode" : "Simple Mode";
+  if (btn) btn.textContent = state.uiMode === "simple" ? "Switch To Advanced" : "Switch To Simple";
   if (state.uiMode === "simple") {
     showSimpleUploadScreen();
   }
