@@ -351,6 +351,7 @@
               <input type="file" id="simpleFileInput" accept=".json,application/json,text/plain" />
             </div>
             <textarea id="simpleDatasetInput" placeholder='[{"Key":1,"Value":2}]'></textarea>
+            <div id="simpleDatasetMeta" class="simple-meta">Rows: 0 | Model: unknown</div>
             <button id="btnSimpleSubmit" class="btn-primary full-width">Submit And Train</button>
             <div id="simpleTrainStatus" class="simple-status">Waiting for dataset...</div>
           </div>
@@ -363,9 +364,14 @@
                 <h3>Flux Chat</h3>
                 <small id="simpleChatMeta">Model ready</small>
               </div>
-              <button id="btnSimpleBack" class="tiny">New Dataset</button>
+              <div class="simple-chat-head-actions">
+                <button id="btnSimpleExportChat" class="tiny">Export Chat</button>
+                <button id="btnSimpleClearChat" class="tiny">Clear</button>
+                <button id="btnSimpleBack" class="tiny">New Dataset</button>
+              </div>
             </div>
             <div id="simpleChatMessages" class="simple-chat-messages"></div>
+            <div id="simpleQuickKeys" class="simple-quick-keys"></div>
             <div class="simple-chat-input-row">
               <input id="simpleChatInput" type="text" placeholder="Ask for a value (e.g. 11)" />
               <button id="btnSimpleSend" class="btn-primary">Send</button>

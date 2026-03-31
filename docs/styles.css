@@ -513,11 +513,23 @@ textarea:focus {
   color: var(--muted);
 }
 
+.simple-meta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .simple-chat-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+}
+
+.simple-chat-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .simple-chat-messages {
@@ -540,6 +552,14 @@ textarea:focus {
   font-size: 14px;
 }
 
+.chat-bubble[data-meta]::after {
+  content: attr(data-meta);
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0.75;
+}
+
 .chat-bubble.user {
   justify-self: end;
   background: rgba(var(--accent-2-rgb), 0.2);
@@ -555,6 +575,12 @@ textarea:focus {
 .simple-chat-input-row {
   display: grid;
   grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.simple-quick-keys {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -1414,5 +1440,10 @@ kbd {
 
   .simple-chat-messages {
     min-height: 280px;
+  }
+
+  .simple-chat-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

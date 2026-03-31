@@ -173,12 +173,23 @@ function setSimpleStatus(message) {
   setText("simpleTrainStatus", message);
 }
 
-function pushSimpleChatMessage(text, role = "bot") {
+function pushSimpleChatMessage(text, role = "bot", meta = "") {
   const root = $("simpleChatMessages");
   if (!root) return;
   const bubble = el("div", `chat-bubble ${role}`, text);
+  if (meta) bubble.setAttribute("data-meta", meta);
   root.appendChild(bubble);
   root.scrollTop = root.scrollHeight;
+}
+
+function setSimpleDatasetMeta(rows, modelType) {
+  const readableModel =
+    modelType === "numeric_linear"
+      ? "numeric linear"
+      : modelType === "numeric_key_lookup"
+        ? "numeric key lookup"
+        : modelType || "unknown";
+  setText("simpleDatasetMeta", `Rows: ${rows} | Model: ${readableModel}`);
 }
 
 function showToast(message, type = "info") {
@@ -302,6 +313,7 @@ function resetWorkspace() {
   const chat = $("simpleChatMessages");
   if (chat) chat.innerHTML = "";
   setSimpleStatus("Waiting for dataset...");
+  setSimpleDatasetMeta(0, "unknown");
   showSimpleUploadScreen();
   syncNumericSettings();
   applyUiMode(state.uiMode);
@@ -568,23 +580,28 @@ function compileInferenceModel(dataset) {
 
 function predictWithModel(key) {
   const k = String(key);
-  if (!state.inferenceModel) return { value: `No model available for ${k}`, mode: "heuristic" };
+  if (!state.inferenceModel) return { value: `No model available for ${k}`, mode: "heuristic", confidence: 0.1 };
   if (state.inferenceModel.exactByKey.has(k)) {
-    return { value: state.inferenceModel.exactByKey.get(k), mode: "exact" };
+    return { value: state.inferenceModel.exactByKey.get(k), mode: "exact", confidence: 1.0 };
   }
   if (state.inferenceModel.type === "numeric_linear") {
     const num = toFiniteNumber(key);
     if (num !== null) {
       let predicted = state.inferenceModel.slope * num + state.inferenceModel.intercept;
       if (state.inferenceModel.roundOutputs) predicted = Math.round(predicted);
-      return { value: Number(predicted.toFixed(6)), mode: "predicted" };
+      const minX = state.inferenceModel.minX;
+      const maxX = state.inferenceModel.maxX;
+      const span = Math.max(1, maxX - minX);
+      const dist = num < minX ? minX - num : num > maxX ? num - maxX : 0;
+      const confidence = Math.max(0.2, 1 - dist / (span * 2));
+      return { value: Number(predicted.toFixed(6)), mode: "predicted", confidence };
     }
   }
   if (state.inferenceModel.type === "numeric_key_lookup") {
     const x = toFiniteNumber(key);
     if (x !== null) {
       const rows = state.inferenceModel.numericRows;
-      if (rows.length === 1) return { value: rows[0].rawValue, mode: "predicted" };
+      if (rows.length === 1) return { value: rows[0].rawValue, mode: "predicted", confidence: 0.5 };
       let right = rows.findIndex((row) => row.key >= x);
       if (right === -1) right = rows.length - 1;
       const left = Math.max(0, right - 1);
@@ -594,13 +611,15 @@ function predictWithModel(key) {
         const t = (x - a.key) / (b.key - a.key);
         const y = a.numericValue + t * (b.numericValue - a.numericValue);
         const rounded = Number.isInteger(a.numericValue) && Number.isInteger(b.numericValue);
-        return { value: rounded ? Math.round(y) : Number(y.toFixed(6)), mode: "predicted" };
+        const gap = Math.abs(b.key - a.key);
+        const confidence = gap <= 2 ? 0.9 : gap <= 6 ? 0.75 : 0.6;
+        return { value: rounded ? Math.round(y) : Number(y.toFixed(6)), mode: "predicted", confidence };
       }
       const nearest = Math.abs(a.key - x) <= Math.abs(b.key - x) ? a : b;
-      return { value: nearest.rawValue, mode: "predicted" };
+      return { value: nearest.rawValue, mode: "predicted", confidence: 0.55 };
     }
   }
-  return { value: `No exact match. Heuristic: ${k}`, mode: "heuristic" };
+  return { value: `No exact match. Heuristic: ${k}`, mode: "heuristic", confidence: 0.2 };
 }
 
 function inferFormulaSteps(dataset) {
@@ -630,6 +649,12 @@ function deriveRuleFromDataset(dataset) {
   const logic = inferFormulaSteps(dataset);
   const pairs = dataset.slice(0, 5).map((item) => `${JSON.stringify(item.Key)} -> ${JSON.stringify(item.Value)}`);
   return ["Likely mapping strategy:", ...logic.map((s, i) => `${i + 1}. ${s}`), "", "Sample traces:", ...pairs].join("\n");
+}
+
+function confidenceLabel(confidence) {
+  if (confidence >= 0.85) return "high confidence";
+  if (confidence >= 0.6) return "medium confidence";
+  return "low confidence";
 }
 
 function generateHumanAlgorithm(notify = true) {
@@ -710,7 +735,11 @@ function executeInference() {
   out.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
   setText(
     "askStatus",
-    predicted.mode === "exact" ? "Exact Match" : predicted.mode === "predicted" ? "Predicted Output" : "Heuristic Output"
+    predicted.mode === "exact"
+      ? "Exact Match"
+      : predicted.mode === "predicted"
+        ? `Predicted (${confidenceLabel(predicted.confidence)})`
+        : "Heuristic Output"
   );
   updatePlayback(key, value);
   log(`Inference executed for key "${raw}" (${predicted.mode}).`, "default");
@@ -834,6 +863,8 @@ async function loadSimpleFileIntoTextbox() {
     const text = await fileToText(file);
     setValue("simpleDatasetInput", text);
     setSimpleStatus(`Loaded file: ${file.name}`);
+    const parsed = parseDataset(text);
+    setSimpleDatasetMeta(parsed.length, compileInferenceModel(normalizeDataset(parsed)).type);
   } catch {
     setSimpleStatus("Unable to read selected file.");
   }
@@ -841,6 +872,54 @@ async function loadSimpleFileIntoTextbox() {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function renderSimpleQuickKeys() {
+  const root = $("simpleQuickKeys");
+  if (!root) return;
+  root.innerHTML = "";
+  const keys = state.dataset.slice(0, 6).map((row) => row.Key);
+  keys.forEach((key) => {
+    const chip = el("button", "tiny", String(key));
+    chip.addEventListener("click", () => {
+      setValue("simpleChatInput", String(key));
+      sendSimpleChat();
+    });
+    root.appendChild(chip);
+  });
+  if (state.inferenceModel?.type === "numeric_linear" || state.inferenceModel?.type === "numeric_key_lookup") {
+    const max = toFiniteNumber(state.dataset[state.dataset.length - 1]?.Key);
+    if (max !== null) {
+      const extrapolated = String(Math.round(max + 1));
+      const chip = el("button", "tiny", `${extrapolated} (new)`);
+      chip.addEventListener("click", () => {
+        setValue("simpleChatInput", extrapolated);
+        sendSimpleChat();
+      });
+      root.appendChild(chip);
+    }
+  }
+}
+
+function clearSimpleChat() {
+  const root = $("simpleChatMessages");
+  if (root) root.innerHTML = "";
+  pushSimpleChatMessage("Chat cleared. Ask a new value.");
+}
+
+function exportSimpleChat() {
+  const root = $("simpleChatMessages");
+  if (!root) return;
+  const lines = Array.from(root.querySelectorAll(".chat-bubble")).map((node) => {
+    const role = node.classList.contains("user") ? "user" : "assistant";
+    return `${role}: ${node.textContent}`;
+  });
+  if (lines.length === 0) {
+    showToast("No chat to export", "error");
+    return;
+  }
+  downloadText("flux_simple_chat.txt", `${lines.join("\n")}\n`, "text/plain");
+  showToast("Chat exported", "success");
 }
 
 async function submitSimpleDataset() {
@@ -871,6 +950,7 @@ async function submitSimpleDataset() {
   generateHumanAlgorithm(false);
 
   const modelKind = state.inferenceModel?.type || "lookup";
+  setSimpleDatasetMeta(state.dataset.length, modelKind);
   setText("simpleChatMeta", `Model: ${modelKind}`);
   const chat = $("simpleChatMessages");
   if (chat) chat.innerHTML = "";
@@ -878,6 +958,7 @@ async function submitSimpleDataset() {
   if (state.inferenceModel?.type === "numeric_linear" || state.inferenceModel?.type === "numeric_key_lookup") {
     pushSimpleChatMessage("Unseen numeric keys are supported using extrapolation/interpolation.");
   }
+  renderSimpleQuickKeys();
   showSimpleChatScreen();
   setSimpleStatus("Training complete.");
 }
@@ -892,7 +973,7 @@ function sendSimpleChat() {
   const key = Number.isNaN(Number(raw)) ? raw : Number(raw);
   const predicted = predictWithModel(key);
   const text = typeof predicted.value === "string" ? predicted.value : JSON.stringify(predicted.value);
-  pushSimpleChatMessage(text, "bot");
+  pushSimpleChatMessage(text, "bot", confidenceLabel(predicted.confidence));
 }
 
 function setTheme(themeClass) {
@@ -1256,8 +1337,16 @@ function bindEvents() {
   $("btnResetWorkspace")?.addEventListener("click", resetWorkspace);
 
   $("simpleFileInput")?.addEventListener("change", loadSimpleFileIntoTextbox);
+  $("simpleDatasetInput")?.addEventListener("input", () => {
+    const parsed = parseDataset($("simpleDatasetInput").value);
+    const normalized = normalizeDataset(parsed);
+    const model = compileInferenceModel(normalized);
+    setSimpleDatasetMeta(normalized.length, model.type);
+  });
   $("btnSimpleSubmit")?.addEventListener("click", submitSimpleDataset);
   $("btnSimpleSend")?.addEventListener("click", sendSimpleChat);
+  $("btnSimpleClearChat")?.addEventListener("click", clearSimpleChat);
+  $("btnSimpleExportChat")?.addEventListener("click", exportSimpleChat);
   $("simpleChatInput")?.addEventListener("keydown", (event) => {
     if (event.key === "Enter") sendSimpleChat();
   });
@@ -1334,6 +1423,7 @@ function init() {
   updateLeaderboard();
   generateHumanAlgorithm(false);
   setSimpleStatus("Waiting for dataset...");
+  setSimpleDatasetMeta(state.dataset.length, state.inferenceModel?.type || "unknown");
   updateProgressUI();
   syncRewindRange();
   renderLoop();
