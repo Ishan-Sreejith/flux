@@ -1,7 +1,52 @@
 /**
- * Flux Evolver Web IDE v0.1.0
- * GitHub Pages friendly, defensive UI wiring.
+ * Flux Evolver Web IDE v0.3.0
+ * Extended UX: persistence, shortcuts, search, progress metrics, cleaner control flow.
  */
+
+const STORAGE_KEY = "flux_evolver_workspace_v3";
+
+const PREBUILT_ALGORITHMS = [
+  {
+    id: "linear-fast",
+    name: "Linear Fastfit",
+    summary: "Numeric mapping tuned for monotonic linear datasets.",
+    preset: "market",
+    config: { population: 180, genome: 6, generations: 260, target: 0.97, library: 420 },
+    logic: ["normalize(input)", "derive slope", "predict output = a*x+b", "clamp outliers"],
+  },
+  {
+    id: "taxonomy-encoder",
+    name: "Taxonomy Encoder",
+    summary: "Text/category mapping for hierarchy labels and semantic grouping.",
+    preset: "taxonomy",
+    config: { population: 220, genome: 8, generations: 320, target: 0.95, library: 520 },
+    logic: ["to_string(input)", "token split", "lookup parent class", "emit category code"],
+  },
+  {
+    id: "orbital-ranker",
+    name: "Orbital Ranker",
+    summary: "Ranking model for ordered physical systems.",
+    preset: "solar",
+    config: { population: 160, genome: 7, generations: 280, target: 0.96, library: 460 },
+    logic: ["coerce numeric", "weight major feature", "rank against priors", "emit indexed class"],
+  },
+  {
+    id: "lexicon-simplifier",
+    name: "Lexicon Simplifier",
+    summary: "String transform baseline for lower/replace/shape operations.",
+    preset: "lexicon",
+    config: { population: 140, genome: 7, generations: 220, target: 0.94, library: 360 },
+    logic: ["lowercase", "strip punctuation", "apply replacements", "emit normalized token"],
+  },
+  {
+    id: "classification-sieve",
+    name: "Classification Sieve",
+    summary: "General-purpose class assignment for mixed symbolic inputs.",
+    preset: "animals",
+    config: { population: 200, genome: 8, generations: 340, target: 0.95, library: 540 },
+    logic: ["tokenize input", "extract features", "score class priors", "emit class id"],
+  },
+];
 
 const state = {
   running: false,
@@ -10,29 +55,41 @@ const state = {
   best: 0,
   history: [],
   historyDisplay: [],
+  historyStartGeneration: 1,
+  maxHistoryPoints: 220,
   dataset: [],
   librarySize: 300,
   populationSize: 120,
   genomeLength: 8,
   maxGenerations: 300,
   targetAccuracy: 0.95,
-  appVersion: "0.1.0",
-  changeCounter: 0,
+  appVersion: "0.3.0",
   activeTheme: "theme-cyber",
+  ghostMode: false,
+  activePrebuiltId: null,
+  prebuiltQuery: "",
+  lastEpochAt: 0,
+  epochRate: 0,
+  mutator: {
+    lockAll: false,
+    banAll: false,
+    locked: new Set(),
+    banned: new Set(),
+    genes: ["add", "sub", "mul", "div", "pow", "mod", "sin", "cos", "clamp", "round", "concat", "replace"],
+  },
 };
 
 const uiState = {
   activePanel: "settings",
   guideIndex: 0,
-  autoplay: false,
 };
 
 const guideSteps = [
-  { title: "Protocol 1: Data Link", text: "Ingest a dataset from presets or upload a file to start." },
-  { title: "Protocol 2: Normalize", text: "Use Autoformat to clean and validate raw JSON input." },
-  { title: "Protocol 3: Decompile", text: "Generate a human-readable algorithm summary from the dataset." },
-  { title: "Protocol 4: Evolve", text: "Run training and monitor convergence in the telemetry chart." },
-  { title: "Protocol 5: Export", text: "Export generated logic as JavaScript or Python templates." },
+  { title: "Protocol 1: Data Link", text: "Load a preset or upload a file to initialize the workspace." },
+  { title: "Protocol 2: Normalize", text: "Run Autoformat to standardize keys and outputs into clean JSON." },
+  { title: "Protocol 3: Library", text: "Pick a prebuilt algorithm and apply its tuned profile." },
+  { title: "Protocol 4: Evolve", text: "Start simulation and monitor bounded telemetry progression." },
+  { title: "Protocol 5: Export", text: "Export generated logic to Python/JS and reuse it for inference." },
 ];
 
 const $ = (id) => document.getElementById(id);
@@ -46,19 +103,7 @@ function el(tag, className, text) {
 
 function nowTimeString() {
   const now = new Date();
-  return [
-    now.getHours().toString().padStart(2, "0"),
-    now.getMinutes().toString().padStart(2, "0"),
-    now.getSeconds().toString().padStart(2, "0"),
-  ].join(":");
-}
-
-function log(msg, type = "default") {
-  const consoleOut = $("consoleOutput");
-  if (!consoleOut) return;
-  const line = el("div", `log-line ${type}`);
-  line.innerHTML = `<span class="log-time">[${nowTimeString()}]</span> ${msg}`;
-  consoleOut.prepend(line);
+  return [now.getHours(), now.getMinutes(), now.getSeconds()].map((v) => String(v).padStart(2, "0")).join(":");
 }
 
 function setText(id, value) {
@@ -71,6 +116,31 @@ function setValue(id, value) {
   if (node) node.value = value;
 }
 
+function clamp01(v) {
+  return Math.max(0, Math.min(1, v));
+}
+
+function showToast(message, type = "info") {
+  const root = $("toastContainer");
+  if (!root) return;
+  const item = el("div", `toast ${type}`);
+  item.textContent = message;
+  root.appendChild(item);
+  requestAnimationFrame(() => item.classList.add("show"));
+  setTimeout(() => {
+    item.classList.remove("show");
+    setTimeout(() => item.remove(), 220);
+  }, 2200);
+}
+
+function log(msg, type = "default") {
+  const consoleOut = $("consoleOutput");
+  if (!consoleOut) return;
+  const line = el("div", `log-line ${type}`);
+  line.innerHTML = `<span class="log-time">[${nowTimeString()}]</span> ${msg}`;
+  consoleOut.prepend(line);
+}
+
 function updateStatus(message) {
   setText("statusMessage", message);
 }
@@ -79,8 +149,111 @@ function updateBuildBadges() {
   setText("buildVersion", `v${state.appVersion}`);
 }
 
-function clamp01(v) {
-  return Math.max(0, Math.min(1, v));
+function workspaceSnapshot() {
+  return {
+    datasetInput: $("datasetInput")?.value || "",
+    activeTheme: state.activeTheme,
+    activePrebuiltId: state.activePrebuiltId,
+    settings: {
+      populationSize: state.populationSize,
+      genomeLength: state.genomeLength,
+      maxGenerations: state.maxGenerations,
+      targetAccuracy: state.targetAccuracy,
+      librarySize: state.librarySize,
+    },
+    prebuiltQuery: state.prebuiltQuery,
+  };
+}
+
+function persistWorkspace(showMessage = false) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(workspaceSnapshot()));
+    if (showMessage) {
+      showToast("Workspace saved", "success");
+      log("Workspace saved to local storage.", "success");
+    }
+  } catch {
+    if (showMessage) showToast("Unable to save workspace", "error");
+  }
+}
+
+function hydrateFromWorkspace() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.settings) {
+      if (Number.isFinite(data.settings.populationSize)) setValue("populationSize", data.settings.populationSize);
+      if (Number.isFinite(data.settings.genomeLength)) setValue("genomeLength", data.settings.genomeLength);
+      if (Number.isFinite(data.settings.maxGenerations)) setValue("generationCount", data.settings.maxGenerations);
+      if (Number.isFinite(data.settings.targetAccuracy)) setValue("accuracyTarget", data.settings.targetAccuracy);
+      if (Number.isFinite(data.settings.librarySize)) setValue("librarySize", data.settings.librarySize);
+    }
+    if (typeof data.datasetInput === "string" && data.datasetInput.trim()) {
+      setValue("datasetInput", data.datasetInput);
+      const parsed = parseDataset(data.datasetInput);
+      if (parsed.length > 0) updateDatasetState(parsed, "workspace.json", false);
+    }
+    if (typeof data.prebuiltQuery === "string") {
+      state.prebuiltQuery = data.prebuiltQuery;
+      setValue("prebuiltSearch", data.prebuiltQuery);
+    }
+    if (typeof data.activeTheme === "string") state.activeTheme = data.activeTheme;
+    if (typeof data.activePrebuiltId === "string") state.activePrebuiltId = data.activePrebuiltId;
+  } catch {
+    log("Workspace restoration failed. Starting with defaults.", "error");
+  }
+}
+
+function resetWorkspace() {
+  stopTraining();
+  state.history = [];
+  state.historyDisplay = [];
+  state.historyStartGeneration = 1;
+  state.best = 0;
+  state.generation = 0;
+  state.dataset = [];
+  state.prebuiltQuery = "";
+  state.activePrebuiltId = null;
+  setValue("populationSize", 120);
+  setValue("genomeLength", 8);
+  setValue("generationCount", 300);
+  setValue("accuracyTarget", 0.95);
+  setValue("librarySize", 300);
+  setValue("datasetInput", "");
+  setValue("prebuiltSearch", "");
+  setText("fileName", "No source linked");
+  setText("datasetStatus", "0 items");
+  setText("genLabel", "GEN 0");
+  setText("bestLabel", "0.00%");
+  setText("progressLabel", "Progress 0.00%");
+  setText("epochRate", "0.0 epochs/s");
+  const fill = $("progressFill");
+  if (fill) fill.style.width = "0%";
+  localStorage.removeItem(STORAGE_KEY);
+  syncNumericSettings();
+  renderPrebuiltList();
+  updateLeaderboard();
+  drawFitness();
+  showToast("Workspace reset", "info");
+  log("Workspace reset to defaults.", "system");
+}
+
+function syncRewindRange() {
+  const slider = $("rewindSlider");
+  if (!slider) return;
+  const max = Math.max(0, state.history.length - 1);
+  slider.max = String(max);
+  if (Number(slider.value) > max) slider.value = String(max);
+  setText("rewindValue", slider.value);
+}
+
+function updateProgressUI() {
+  const pct = clamp01(state.best) * 100;
+  setText("progressLabel", `Progress ${pct.toFixed(2)}%`);
+  setText("epochRate", `${state.epochRate.toFixed(1)} epochs/s`);
+  const fill = $("progressFill");
+  if (fill) fill.style.width = `${pct}%`;
 }
 
 function updateLeaderboard() {
@@ -89,13 +262,9 @@ function updateLeaderboard() {
   lb.innerHTML = "";
   for (let i = 0; i < 6; i += 1) {
     const row = el("div", "leaderboard-row");
-    const fitness = Math.max(0, state.best * 100 - i * 1.8);
+    const fitness = Math.max(0, state.best * 100 - i * 1.4);
     const seq = `P${Math.floor(Math.random() * 250)}:${["add", "mul", "sub", "round"][i % 4]} -> P${Math.floor(Math.random() * 250)}:${["if", "clamp", "div", "pow"][i % 4]}`;
-    row.innerHTML = `
-      <span class="rank">#${i + 1}</span>
-      <span class="formula">${seq}</span>
-      <span class="score">${fitness.toFixed(2)}%</span>
-    `;
+    row.innerHTML = `<span class="rank">#${i + 1}</span><span class="formula">${seq}</span><span class="score">${fitness.toFixed(2)}%</span>`;
     lb.appendChild(row);
   }
 }
@@ -127,13 +296,12 @@ function drawFitness() {
   const size = resizeCanvas(canvas);
   if (!size) return;
   const { ctx, width, height } = size;
-
   ctx.clearRect(0, 0, width, height);
-  const padding = { left: 38, right: 10, top: 10, bottom: 24 };
+  const padding = { left: 44, right: 10, top: 10, bottom: 24 };
   const pW = width - padding.left - padding.right;
   const pH = height - padding.top - padding.bottom;
 
-  ctx.strokeStyle = "rgba(255,255,255,0.07)";
+  ctx.strokeStyle = "rgba(255,255,255,0.08)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i += 1) {
     const y = padding.top + pH * (1 - i / 4);
@@ -142,13 +310,32 @@ function drawFitness() {
     ctx.lineTo(width - padding.right, y);
     ctx.stroke();
   }
-
   if (state.historyDisplay.length < 2) return;
+
+  const firstGen = state.historyStartGeneration;
+  const lastGen = firstGen + state.historyDisplay.length - 1;
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = "11px JetBrains Mono";
+  ctx.fillText(`G${firstGen}`, 6, height - 8);
+  ctx.fillText(`G${lastGen}`, Math.max(6, width - 58), height - 8);
+
+  const stepX = pW / (state.historyDisplay.length - 1);
+  if (state.ghostMode) {
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(0, 210, 255, 0.16)";
+    state.historyDisplay.forEach((v, i) => {
+      const x = padding.left + i * stepX;
+      const y = padding.top + (1 - v) * pH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
 
   ctx.beginPath();
   ctx.lineWidth = 2.5;
   ctx.strokeStyle = "#00d2ff";
-  const stepX = pW / (state.historyDisplay.length - 1);
   state.historyDisplay.forEach((v, i) => {
     const x = padding.left + i * stepX;
     const y = padding.top + (1 - v) * pH;
@@ -168,7 +355,7 @@ function refreshChartState() {
     if (state.historyDisplay.length < state.history.length) {
       state.historyDisplay.push(state.history[state.historyDisplay.length]);
     }
-    state.historyDisplay = state.historyDisplay.map((v, i) => v + (state.history[i] - v) * 0.18);
+    state.historyDisplay = state.historyDisplay.map((v, i) => v + (state.history[i] - v) * 0.2);
   }
   drawFitness();
 }
@@ -185,8 +372,8 @@ function syncNumericSettings() {
   state.maxGenerations = Number.isFinite(generations) ? Math.max(1, generations) : state.maxGenerations;
   state.targetAccuracy = Number.isFinite(accuracy) ? clamp01(accuracy) : state.targetAccuracy;
   state.librarySize = Number.isFinite(library) ? Math.max(10, library) : state.librarySize;
-
   setText("libraryValue", String(state.librarySize));
+  persistWorkspace(false);
 }
 
 function parseDataset(raw) {
@@ -196,10 +383,10 @@ function parseDataset(raw) {
     const parsed = JSON.parse(text);
     if (Array.isArray(parsed)) return parsed;
     if (parsed && typeof parsed === "object") return Object.values(parsed);
-    return [];
   } catch {
     return [];
   }
+  return [];
 }
 
 function normalizeDataset(input) {
@@ -216,16 +403,20 @@ function normalizeDataset(input) {
     .filter((entry) => entry.Key !== undefined && entry.Value !== undefined);
 }
 
-function updateDatasetState(data, sourceName = "inline") {
+function updateDatasetState(data, sourceName = "inline", notify = true) {
   state.dataset = normalizeDataset(data);
   setText("datasetStatus", `${state.dataset.length} items`);
   setText("fileName", sourceName);
   if (state.dataset.length > 0) {
     updateStatus("Dataset Linked");
-    log(`Dataset loaded (${state.dataset.length} rows).`, "success");
-  } else {
+    if (notify) {
+      log(`Dataset loaded (${state.dataset.length} rows).`, "success");
+      showToast(`Dataset loaded: ${state.dataset.length} rows`, "success");
+    }
+  } else if (notify) {
     log("Dataset is empty after normalization.", "error");
   }
+  persistWorkspace(false);
 }
 
 function autoformatDataset() {
@@ -242,29 +433,59 @@ function autoformatDataset() {
   log("Dataset normalized and formatted.", "success");
 }
 
-function deriveRuleFromDataset(dataset) {
-  if (!dataset.length) return "No deterministic rule could be inferred from empty data.";
-  const pairs = dataset.slice(0, 6).map((item) => `${JSON.stringify(item.Key)} -> ${JSON.stringify(item.Value)}`);
-  return [
-    "Likely mapping strategy:",
-    "1. Parse input key as primitive token.",
-    "2. Apply deterministic transform sequence.",
-    "3. Emit value domain-specific target.",
-    "",
-    "Sample traces:",
-    ...pairs,
-  ].join("\n");
+function inferFormulaSteps(dataset) {
+  if (!dataset.length) return ["No deterministic rule inferred from empty dataset."];
+  const numericPairs = dataset.filter((r) => Number.isFinite(Number(r.Key)) && Number.isFinite(Number(r.Value)));
+  if (numericPairs.length >= Math.max(3, Math.floor(dataset.length * 0.6))) {
+    return ["parse key as number", "estimate linear trend from examples", "apply residual correction", "return bounded result"];
+  }
+  return ["coerce key to text", "normalize case and spacing", "match known token patterns", "fallback to template"];
 }
 
-function generateHumanAlgorithm() {
+function deriveRuleFromDataset(dataset) {
+  const logic = inferFormulaSteps(dataset);
+  const pairs = dataset.slice(0, 5).map((item) => `${JSON.stringify(item.Key)} -> ${JSON.stringify(item.Value)}`);
+  return ["Likely mapping strategy:", ...logic.map((s, i) => `${i + 1}. ${s}`), "", "Sample traces:", ...pairs].join("\n");
+}
+
+function generateHumanAlgorithm(notify = true) {
   const output = deriveRuleFromDataset(state.dataset);
-  const target = $("fullVersionInput");
-  if (target) {
-    target.classList.remove("hidden");
-    target.value = output;
+  const full = $("fullVersionInput");
+  if (full) {
+    full.classList.remove("hidden");
+    full.value = output;
   }
-  log("Generated human-readable algorithm draft.", "system");
+  setValue("algoKeyAsk", output);
+  setValue(
+    "algoKeyInput",
+    JSON.stringify(
+      {
+        version: state.appVersion,
+        prebuilt: state.activePrebuiltId,
+        config: {
+          population: state.populationSize,
+          genomeLength: state.genomeLength,
+          generations: state.maxGenerations,
+          targetAccuracy: state.targetAccuracy,
+          librarySize: state.librarySize,
+        },
+      },
+      null,
+      2
+    )
+  );
+  if (notify) log("Generated human-readable algorithm draft.", "system");
   return output;
+}
+
+function updatePlayback(key, value) {
+  const playback = $("formulaPlayback");
+  if (!playback) return;
+  const steps = inferFormulaSteps(state.dataset);
+  playback.innerHTML = "";
+  playback.appendChild(el("div", "playback-title", `Input: ${JSON.stringify(key)}`));
+  steps.forEach((step, i) => playback.appendChild(el("div", "playback-step", `${i + 1}. ${step}`)));
+  playback.appendChild(el("div", "playback-result", `Output: ${JSON.stringify(value)}`));
 }
 
 function executeInference() {
@@ -277,13 +498,13 @@ function executeInference() {
     setText("askStatus", "Missing Input");
     return;
   }
-
   const maybeNumber = Number(raw);
   const key = Number.isNaN(maybeNumber) ? raw : maybeNumber;
   const match = state.dataset.find((row) => row.Key === key || String(row.Key) === String(key));
   const value = match ? match.Value : `No exact match. Heuristic: ${raw}`;
   out.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
   setText("askStatus", match ? "Exact Match" : "Heuristic Output");
+  updatePlayback(key, value);
   log(`Inference executed for key "${raw}".`, "default");
 }
 
@@ -301,14 +522,13 @@ function downloadText(filename, text, mimeType = "text/plain") {
 }
 
 function exportModel(kind) {
-  const readable = generateHumanAlgorithm();
+  const readable = generateHumanAlgorithm(false);
   if (kind === "py") {
-    const py = `# Flux export v${state.appVersion}\nalgorithm = """\n${readable}\n"""\n`;
-    downloadText("flux_algorithm.py", py, "text/x-python");
+    downloadText("flux_algorithm.py", `# Flux export v${state.appVersion}\nalgorithm = """\n${readable}\n"""\n`, "text/x-python");
   } else {
-    const js = `// Flux export v${state.appVersion}\nexport const algorithm = ${JSON.stringify(readable)};\n`;
-    downloadText("flux_algorithm.js", js, "text/javascript");
+    downloadText("flux_algorithm.js", `// Flux export v${state.appVersion}\nexport const algorithm = ${JSON.stringify(readable)};\n`, "text/javascript");
   }
+  showToast(`${kind.toUpperCase()} export ready`, "success");
   log(`Exported ${kind.toUpperCase()} SDK template.`, "success");
 }
 
@@ -316,7 +536,7 @@ function resolveDataPath(relativePath) {
   return new URL(relativePath, window.location.href).toString();
 }
 
-async function loadExample(id) {
+async function loadExample(id, notify = true) {
   const paths = {
     animals: "data/animals.json",
     taxonomy: "data/taxonomy.json",
@@ -326,21 +546,18 @@ async function loadExample(id) {
     slingshot: "data/slingshot_data.json",
   };
   const path = paths[id];
-  if (!path) {
-    log(`Preset "${id}" not found.`, "error");
-    return;
-  }
+  if (!path) return;
   try {
-    log(`Loading preset "${id}"...`, "system");
     const response = await fetch(resolveDataPath(path), { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     const normalized = normalizeDataset(Array.isArray(data) ? data : Object.values(data));
     setValue("datasetInput", JSON.stringify(normalized, null, 2));
-    updateDatasetState(normalized, `${id}.json`);
+    updateDatasetState(normalized, `${id}.json`, notify);
     $("exampleModal")?.classList.add("hidden");
   } catch (error) {
     log(`Preset load failed: ${error.message}`, "error");
+    showToast("Preset load failed", "error");
   }
 }
 
@@ -353,6 +570,28 @@ function fileToText(file) {
   });
 }
 
+function showMapperModal(fileName, sampleColumns) {
+  const modal = $("mapperModal");
+  const grid = $("mapperGrid");
+  if (!modal || !grid) return;
+  grid.innerHTML = "";
+  sampleColumns.forEach((col) => {
+    const row = el("div", "mapper-row");
+    row.innerHTML = `
+      <span class="mapper-col">${col}</span>
+      <select class="mapper-select">
+        <option value="feature">Feature</option>
+        <option value="key">Key</option>
+        <option value="value">Value</option>
+        <option value="ignore">Ignore</option>
+      </select>
+    `;
+    grid.appendChild(row);
+  });
+  modal.classList.remove("hidden");
+  log(`Detected tabular data in "${fileName}". Mapper opened.`, "system");
+}
+
 async function handleFileUpload(event) {
   const file = event?.target?.files?.[0];
   if (!file) return;
@@ -360,23 +599,23 @@ async function handleFileUpload(event) {
     const text = await fileToText(file);
     let parsed = parseDataset(text);
     if (parsed.length === 0 && file.name.toLowerCase().endsWith(".csv")) {
-      parsed = text
-        .split(/\r?\n/)
-        .map((line) => line.trim())
-        .filter(Boolean)
-        .map((line, i) => {
-          const [key, value] = line.split(",");
-          return { Key: key ?? i, Value: value ?? "" };
+      const rows = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+      if (rows.length > 1) {
+        const headers = rows[0].split(",").map((h) => h.trim());
+        parsed = rows.slice(1).map((row, i) => {
+          const cells = row.split(",").map((c) => c.trim());
+          return { Key: cells[0] ?? i, Value: cells[1] ?? "" };
         });
+        showMapperModal(file.name, headers);
+      }
     }
-    if (parsed.length === 0) {
-      throw new Error("Unsupported file format or empty payload");
-    }
+    if (parsed.length === 0) throw new Error("Unsupported file format or empty payload");
     const normalized = normalizeDataset(parsed);
     setValue("datasetInput", JSON.stringify(normalized, null, 2));
     updateDatasetState(normalized, file.name);
   } catch (error) {
     log(`File ingest failed: ${error.message}`, "error");
+    showToast("File ingest failed", "error");
   }
 }
 
@@ -389,7 +628,7 @@ function setTheme(themeClass) {
   document.querySelectorAll(".theme-pill").forEach((pill) => {
     pill.classList.toggle("active", pill.dataset.theme === themeClass);
   });
-  log(`Theme switched to ${themeClass.replace("theme-", "")}.`, "default");
+  persistWorkspace(false);
 }
 
 function togglePanel(panel) {
@@ -401,49 +640,66 @@ function togglePanel(panel) {
   }
   slidePanel.classList.remove("collapsed");
   uiState.activePanel = panel;
-  document.querySelectorAll(".icon-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.panel === panel);
-  });
-  document.querySelectorAll(".panel-section").forEach((section) => {
-    section.classList.toggle("active", section.dataset.panelSection === panel);
-  });
+  document.querySelectorAll(".icon-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.panel === panel));
+  document.querySelectorAll(".panel-section").forEach((section) => section.classList.toggle("active", section.dataset.panelSection === panel));
 }
 
 function setMode(mode) {
-  document.querySelectorAll(".mode-pill").forEach((pill) => {
-    pill.classList.toggle("active", pill.dataset.mode === mode);
-  });
+  document.querySelectorAll(".mode-pill").forEach((pill) => pill.classList.toggle("active", pill.dataset.mode === mode));
   $("askPanel")?.classList.toggle("hidden", mode !== "ask");
   $("fitnessCard")?.classList.toggle("hidden", mode === "ask");
   $("leaderboardCard")?.classList.toggle("hidden", mode === "ask");
-  log(`Kernel mode set to ${mode.toUpperCase()}.`, "system");
+}
+
+function applyMutatorEffect(baseImprovement) {
+  if (state.mutator.banAll) return baseImprovement * 0.6;
+  let multiplier = 1;
+  multiplier += state.mutator.locked.size * 0.004;
+  multiplier -= state.mutator.banned.size * 0.003;
+  return Math.max(0.001, baseImprovement * multiplier);
+}
+
+function pushHistoryPoint(value) {
+  state.history.push(value);
+  if (state.history.length > state.maxHistoryPoints) {
+    state.history.shift();
+    state.historyDisplay.shift();
+    state.historyStartGeneration += 1;
+  }
+  syncRewindRange();
 }
 
 function stepTraining() {
   if (!state.running) return;
+  const now = performance.now();
+  if (state.lastEpochAt > 0) {
+    const dt = Math.max(1, now - state.lastEpochAt);
+    const instant = 1000 / dt;
+    state.epochRate = state.epochRate === 0 ? instant : state.epochRate * 0.8 + instant * 0.2;
+  }
+  state.lastEpochAt = now;
+
   state.generation += 1;
-  const improvement = (1 - state.best) * (0.014 + Math.random() * 0.03);
-  state.best = clamp01(state.best + improvement);
-  state.history.push(state.best);
+  const base = (1 - state.best) * (0.01 + Math.random() * 0.026);
+  state.best = clamp01(state.best + applyMutatorEffect(base));
+  pushHistoryPoint(state.best);
   setText("genLabel", `GEN ${state.generation}`);
   setText("bestLabel", `${(state.best * 100).toFixed(2)}%`);
+  updateProgressUI();
   updateLeaderboard();
-
-  if (state.generation % 10 === 0) {
-    log(`Epoch ${state.generation}: best=${(state.best * 100).toFixed(2)}%`, "default");
-  }
 
   const stopOnTarget = $("stopOnTarget")?.checked ?? false;
   if (state.generation >= state.maxGenerations || (stopOnTarget && state.best >= state.targetAccuracy)) {
     stopTraining();
     log("Simulation complete. Target reached or max generations hit.", "success");
+    showToast("Training complete", "success");
   }
 }
 
 function startTraining() {
   syncNumericSettings();
   if (state.dataset.length === 0) {
-    log("Cannot start: load dataset first.", "error");
+    showToast("Load a dataset first", "error");
     togglePanel("files");
     return;
   }
@@ -452,11 +708,16 @@ function startTraining() {
   state.best = 0;
   state.history = [];
   state.historyDisplay = [];
+  state.historyStartGeneration = 1;
+  state.lastEpochAt = 0;
+  state.epochRate = 0;
   $("appRoot")?.classList.add("training-running");
   updateStatus("Training");
+  updateProgressUI();
+  syncRewindRange();
   if (state.interval) clearInterval(state.interval);
   state.interval = setInterval(stepTraining, 160);
-  log("Evolution kernel started.", "system");
+  showToast("Training started", "info");
 }
 
 function stopTraining() {
@@ -482,7 +743,7 @@ function toggleNodeMap() {
   nodeMap.classList.toggle("hidden");
   if (!nodeMap.classList.contains("hidden")) {
     nodeMap.innerHTML = "";
-    for (let i = 0; i < 14; i += 1) {
+    for (let i = 0; i < 16; i += 1) {
       const dot = el("span", "node-dot");
       dot.style.left = `${8 + Math.random() * 84}%`;
       dot.style.top = `${8 + Math.random() * 84}%`;
@@ -492,20 +753,19 @@ function toggleNodeMap() {
 }
 
 function runAutopilot() {
-  if (state.dataset.length === 0) {
-    loadExample("animals").then(() => startTraining());
-    return;
-  }
-  startTraining();
+  if (state.dataset.length === 0) loadExample("animals", false).then(() => startTraining());
+  else startTraining();
 }
 
 function triggerCataclysm() {
   if (!state.running) {
-    log("Cataclysm requires active training.", "error");
+    showToast("Start training first", "error");
     return;
   }
   state.best = clamp01(state.best * 0.65);
-  log("Cataclysm triggered. Fitness dropped, exploration increased.", "error");
+  if (state.history.length > 0) state.history[state.history.length - 1] = state.best;
+  updateProgressUI();
+  log("Cataclysm triggered. Fitness dropped.", "error");
 }
 
 function applyRewind() {
@@ -513,13 +773,15 @@ function applyRewind() {
   setText("rewindValue", String(rewind));
   if (state.history.length === 0) return;
   const idx = Math.max(0, Math.min(rewind, state.history.length - 1));
-  state.generation = idx;
+  const absoluteGen = state.historyStartGeneration + idx;
+  state.generation = absoluteGen;
   state.best = state.history[idx] || 0;
   state.history = state.history.slice(0, idx + 1);
   state.historyDisplay = state.historyDisplay.slice(0, idx + 1);
   setText("genLabel", `GEN ${state.generation}`);
   setText("bestLabel", `${(state.best * 100).toFixed(2)}%`);
-  log(`Timeline rewound to generation ${idx}.`, "system");
+  updateProgressUI();
+  syncRewindRange();
 }
 
 function updateApiBadge() {
@@ -528,18 +790,162 @@ function updateApiBadge() {
   setText("apiUrl", enabled ? url : "Endpoint Disabled");
 }
 
+function setMutatorMode(mode) {
+  if (mode === "lockAll") {
+    state.mutator.lockAll = true;
+    state.mutator.banAll = false;
+    state.mutator.locked = new Set(state.mutator.genes);
+    state.mutator.banned.clear();
+  } else if (mode === "banAll") {
+    state.mutator.banAll = true;
+    state.mutator.lockAll = false;
+    state.mutator.banned = new Set(state.mutator.genes);
+    state.mutator.locked.clear();
+  } else {
+    state.mutator.banAll = false;
+    state.mutator.lockAll = false;
+    state.mutator.locked.clear();
+    state.mutator.banned.clear();
+  }
+  renderMutatorGrid();
+}
+
+function renderMutatorGrid() {
+  const grid = $("mutatorGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  state.mutator.genes.forEach((gene) => {
+    const btn = el("button", "tiny mutator-chip", gene);
+    if (state.mutator.locked.has(gene)) btn.classList.add("locked");
+    if (state.mutator.banned.has(gene)) btn.classList.add("banned");
+    btn.addEventListener("click", () => {
+      if (state.mutator.banned.has(gene)) state.mutator.banned.delete(gene);
+      else if (state.mutator.locked.has(gene)) {
+        state.mutator.locked.delete(gene);
+        state.mutator.banned.add(gene);
+      } else state.mutator.locked.add(gene);
+      renderMutatorGrid();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function filteredPrebuilts() {
+  const q = state.prebuiltQuery.trim().toLowerCase();
+  if (!q) return PREBUILT_ALGORITHMS;
+  return PREBUILT_ALGORITHMS.filter((item) =>
+    `${item.name} ${item.summary} ${item.preset} ${item.logic.join(" ")}`.toLowerCase().includes(q)
+  );
+}
+
+function renderPrebuiltList() {
+  const root = $("prebuiltList");
+  if (!root) return;
+  root.innerHTML = "";
+  const list = filteredPrebuilts();
+  if (list.length === 0) {
+    root.appendChild(el("div", "prebuilt-empty", "No matching prebuilt profiles."));
+    return;
+  }
+  list.forEach((item) => {
+    const card = el("article", "prebuilt-card");
+    if (state.activePrebuiltId === item.id) card.classList.add("active");
+    card.innerHTML = `
+      <div class="prebuilt-head">
+        <h4>${item.name}</h4>
+        <span class="badge">${item.preset}</span>
+      </div>
+      <p>${item.summary}</p>
+      <div class="prebuilt-logic">${item.logic.join(" -> ")}</div>
+      <div class="prebuilt-actions">
+        <button class="tiny" data-prebuilt-action="apply" data-id="${item.id}">Apply Profile</button>
+        <button class="tiny" data-prebuilt-action="run" data-id="${item.id}">Load + Run</button>
+      </div>
+    `;
+    root.appendChild(card);
+  });
+  root.querySelectorAll("button[data-prebuilt-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const picked = PREBUILT_ALGORITHMS.find((p) => p.id === btn.dataset.id);
+      if (!picked) return;
+      applyPrebuilt(picked, btn.dataset.prebuiltAction === "run");
+    });
+  });
+}
+
+function applyPrebuilt(item, autorun) {
+  state.activePrebuiltId = item.id;
+  setValue("populationSize", item.config.population);
+  setValue("genomeLength", item.config.genome);
+  setValue("generationCount", item.config.generations);
+  setValue("accuracyTarget", item.config.target);
+  setValue("librarySize", item.config.library);
+  syncNumericSettings();
+  generateHumanAlgorithm(false);
+  renderPrebuiltList();
+  togglePanel("library");
+  loadExample(item.preset, false).then(() => {
+    showToast(`Applied ${item.name}`, "success");
+    if (autorun) startTraining();
+  });
+}
+
+function closeMapperModal() {
+  $("mapperModal")?.classList.add("hidden");
+}
+
+function closeAllModals() {
+  $("mapperModal")?.classList.add("hidden");
+  $("exampleModal")?.classList.add("hidden");
+  $("shortcutsModal")?.classList.add("hidden");
+}
+
+function copyAlgorithmKeys() {
+  const text = `${$("algoKeyAsk")?.value || ""}\n\n${$("algoKeyInput")?.value || ""}`;
+  if (!text.trim()) {
+    showToast("No keys available", "error");
+    return;
+  }
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => showToast("Algorithm keys copied", "success"),
+      () => showToast("Clipboard unavailable", "error")
+    );
+    return;
+  }
+  showToast("Clipboard unavailable", "error");
+}
+
+function bindShortcuts() {
+  document.addEventListener("keydown", (event) => {
+    const cmd = event.metaKey || event.ctrlKey;
+    if (event.key === "Escape") {
+      closeAllModals();
+      return;
+    }
+    if (cmd && event.key === "Enter") {
+      event.preventDefault();
+      if (state.running) stopTraining();
+      else startTraining();
+      return;
+    }
+    if (cmd && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      togglePanel("library");
+      $("prebuiltSearch")?.focus();
+      return;
+    }
+    if (cmd && event.key.toLowerCase() === "s") {
+      event.preventDefault();
+      persistWorkspace(true);
+    }
+  });
+}
+
 function bindEvents() {
-  document.querySelectorAll(".icon-btn").forEach((btn) => {
-    btn.addEventListener("click", () => togglePanel(btn.dataset.panel));
-  });
-
-  document.querySelectorAll(".theme-pill").forEach((pill) => {
-    pill.addEventListener("click", () => setTheme(pill.dataset.theme));
-  });
-
-  document.querySelectorAll(".mode-pill").forEach((pill) => {
-    pill.addEventListener("click", () => setMode(pill.dataset.mode));
-  });
+  document.querySelectorAll(".icon-btn").forEach((btn) => btn.addEventListener("click", () => togglePanel(btn.dataset.panel)));
+  document.querySelectorAll(".theme-pill").forEach((pill) => pill.addEventListener("click", () => setTheme(pill.dataset.theme)));
+  document.querySelectorAll(".mode-pill").forEach((pill) => pill.addEventListener("click", () => setMode(pill.dataset.mode)));
 
   $("librarySize")?.addEventListener("input", syncNumericSettings);
   $("populationSize")?.addEventListener("change", syncNumericSettings);
@@ -547,20 +953,14 @@ function bindEvents() {
   $("generationCount")?.addEventListener("change", syncNumericSettings);
   $("accuracyTarget")?.addEventListener("change", syncNumericSettings);
   $("rewindSlider")?.addEventListener("input", () => setText("rewindValue", $("rewindSlider").value));
+  $("prebuiltSearch")?.addEventListener("input", () => {
+    state.prebuiltQuery = $("prebuiltSearch").value;
+    persistWorkspace(false);
+    renderPrebuiltList();
+  });
 
   $("btnStart")?.addEventListener("click", startTraining);
   $("btnStop")?.addEventListener("click", stopTraining);
-  $("btnSample")?.addEventListener("click", () => $("exampleModal")?.classList.remove("hidden"));
-  $("btnExampleClose")?.addEventListener("click", () => $("exampleModal")?.classList.add("hidden"));
-  $("btnClearConsole")?.addEventListener("click", () => {
-    const out = $("consoleOutput");
-    if (out) out.innerHTML = "";
-  });
-  $("btnAutoformat")?.addEventListener("click", autoformatDataset);
-  $("btnGenerateHuman")?.addEventListener("click", generateHumanAlgorithm);
-  $("btnAsk")?.addEventListener("click", executeInference);
-  $("btnExportPy")?.addEventListener("click", () => exportModel("py"));
-  $("btnExportJs")?.addEventListener("click", () => exportModel("js"));
   $("btnAutopilot")?.addEventListener("click", runAutopilot);
   $("btnCataclysm")?.addEventListener("click", triggerCataclysm);
   $("btnRewind")?.addEventListener("click", applyRewind);
@@ -570,26 +970,64 @@ function bindEvents() {
     slider.value = String(Math.max(0, Number(slider.value) - 15));
     applyRewind();
   });
+
+  $("btnSample")?.addEventListener("click", () => $("exampleModal")?.classList.remove("hidden"));
+  $("btnExampleClose")?.addEventListener("click", () => $("exampleModal")?.classList.add("hidden"));
+  $("btnShortcuts")?.addEventListener("click", () => $("shortcutsModal")?.classList.remove("hidden"));
+  $("btnShortcutsClose")?.addEventListener("click", () => $("shortcutsModal")?.classList.add("hidden"));
+  $("btnSaveWorkspace")?.addEventListener("click", () => persistWorkspace(true));
+  $("btnResetWorkspace")?.addEventListener("click", resetWorkspace);
+
+  $("btnClearConsole")?.addEventListener("click", () => {
+    const out = $("consoleOutput");
+    if (out) out.innerHTML = "";
+  });
+  $("btnAutoformat")?.addEventListener("click", autoformatDataset);
+  $("btnGenerateHuman")?.addEventListener("click", () => generateHumanAlgorithm(true));
+  $("btnCopyAlgo")?.addEventListener("click", copyAlgorithmKeys);
+  $("btnAsk")?.addEventListener("click", executeInference);
+  $("askInput")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") executeInference();
+  });
+  $("btnExportPy")?.addEventListener("click", () => exportModel("py"));
+  $("btnExportJs")?.addEventListener("click", () => exportModel("js"));
+
   $("apiToggle")?.addEventListener("change", updateApiBadge);
   $("btnNodeMap")?.addEventListener("click", toggleNodeMap);
-  $("btnGhost")?.addEventListener("click", () => log("Ghost telemetry enabled.", "system"));
+  $("btnGhost")?.addEventListener("click", () => {
+    state.ghostMode = !state.ghostMode;
+    $("btnGhost")?.classList.toggle("active", state.ghostMode);
+  });
+
+  $("btnLockAll")?.addEventListener("click", () => setMutatorMode("lockAll"));
+  $("btnBanAll")?.addEventListener("click", () => setMutatorMode("banAll"));
+  $("btnClearLocks")?.addEventListener("click", () => setMutatorMode("clear"));
 
   $("btnGuideNext")?.addEventListener("click", () => setGuideStep(uiState.guideIndex + 1));
   $("btnGuidePrev")?.addEventListener("click", () => setGuideStep(uiState.guideIndex - 1));
-  $("btnGuideStart")?.addEventListener("click", () => setGuideStep(0));
+  $("btnGuideStart")?.addEventListener("click", () => {
+    $("guideCard")?.classList.remove("hidden");
+    setGuideStep(0);
+  });
   $("btnGuideClose")?.addEventListener("click", () => $("guideCard")?.classList.add("hidden"));
 
   $("fileInput")?.addEventListener("change", handleFileUpload);
   $("datasetInput")?.addEventListener("blur", () => {
     const parsed = parseDataset($("datasetInput").value);
-    if (parsed.length > 0) updateDatasetState(parsed, $("fileName")?.textContent || "inline");
+    if (parsed.length > 0) updateDatasetState(parsed, $("fileName")?.textContent || "inline", false);
+    persistWorkspace(false);
   });
 
-  document.querySelectorAll(".example-card").forEach((card) => {
-    card.addEventListener("click", () => loadExample(card.dataset.example));
+  document.querySelectorAll(".example-card").forEach((card) => card.addEventListener("click", () => loadExample(card.dataset.example)));
+
+  $("btnMapperClose")?.addEventListener("click", closeMapperModal);
+  $("btnMapperApply")?.addEventListener("click", () => {
+    closeMapperModal();
+    showToast("Mapper settings applied", "success");
   });
 
-  window.addEventListener("resize", () => refreshChartState());
+  window.addEventListener("resize", refreshChartState);
+  bindShortcuts();
 }
 
 function renderLoop() {
@@ -599,12 +1037,18 @@ function renderLoop() {
 
 function init() {
   bindEvents();
+  hydrateFromWorkspace();
   syncNumericSettings();
   updateBuildBadges();
   updateApiBadge();
   setGuideStep(0);
   setTheme(state.activeTheme);
+  renderMutatorGrid();
+  renderPrebuiltList();
   updateLeaderboard();
+  generateHumanAlgorithm(false);
+  updateProgressUI();
+  syncRewindRange();
   renderLoop();
   log(`Flux kernel v${state.appVersion} ready.`, "system");
 }

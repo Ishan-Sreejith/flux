@@ -117,6 +117,16 @@
             <textarea id="fullVersionInput" class="hidden"></textarea>
           </section>
 
+          <section class="panel-section" data-panel-section="library">
+            <div class="panel-header">
+              <h3>Prebuilt Algorithms</h3>
+              <span class="badge">Profiles</span>
+            </div>
+            <p class="panel-hint">Apply curated presets with tuned training defaults and logic templates.</p>
+            <input id="prebuiltSearch" type="text" placeholder="Search profiles..." />
+            <div id="prebuiltList" class="prebuilt-list"></div>
+          </section>
+
           <section class="panel-section" data-panel-section="mutator">
             <div class="panel-header">
               <h3>Gene Mutator</h3>
@@ -202,9 +212,14 @@
           </div>
 
           <div class="header-meta">
+            <div class="quick-actions">
+              <button id="btnSaveWorkspace" class="tiny">Save Workspace</button>
+              <button id="btnResetWorkspace" class="tiny">Reset</button>
+              <button id="btnShortcuts" class="tiny">Shortcuts</button>
+            </div>
             <div class="build-info">
               <span class="label">BUILD</span>
-              <span id="buildVersion" class="value">v0.1.0</span>
+              <span id="buildVersion" class="value">v0.3.0</span>
             </div>
           </div>
         </header>
@@ -225,6 +240,15 @@
             <div class="chart-container">
               <canvas id="fitnessChart"></canvas>
               <div class="node-map hidden" id="nodeMap"></div>
+            </div>
+            <div class="progress-strip">
+              <div class="progress-track">
+                <span id="progressFill" class="progress-fill"></span>
+              </div>
+              <div class="progress-meta">
+                <span id="progressLabel">Progress 0.00%</span>
+                <span id="epochRate">0.0 epochs/s</span>
+              </div>
             </div>
           </div>
 
@@ -310,7 +334,7 @@
               </div>
             </div>
             <div class="console-output" id="consoleOutput">
-              <div class="log-line system">Flux Evolver Kernel v0.1.0 Initialized.</div>
+              <div class="log-line system">Flux Evolver Kernel v0.3.0 Initialized.</div>
               <div class="log-line">Awaiting telemetry ingestion...</div>
             </div>
           </div>
@@ -362,6 +386,21 @@
         <button id="btnExampleClose" class="btn-secondary full-width">Close Presets</button>
       </div>
     </div>
+
+    <div class="modal hidden" id="shortcutsModal">
+      <div class="modal-content shortcuts-modal">
+        <h3>Keyboard Shortcuts</h3>
+        <div class="shortcut-list">
+          <div><kbd>Cmd/Ctrl + Enter</kbd><span>Start or Stop Training</span></div>
+          <div><kbd>Cmd/Ctrl + K</kbd><span>Focus Prebuilt Search</span></div>
+          <div><kbd>Cmd/Ctrl + S</kbd><span>Save Workspace</span></div>
+          <div><kbd>Esc</kbd><span>Close Open Modals</span></div>
+        </div>
+        <button id="btnShortcutsClose" class="btn-secondary full-width">Close</button>
+      </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
 
     <noscript>This application requires JavaScript to run.</noscript>
     <script src="app.js"></script>
