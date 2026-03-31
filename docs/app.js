@@ -56,7 +56,7 @@ const state = {
   history: [],
   historyDisplay: [],
   historyStartGeneration: 1,
-  maxHistoryPoints: 220,
+  maxHistoryPoints: 140,
   dataset: [],
   librarySize: 300,
   populationSize: 120,
@@ -378,6 +378,9 @@ function refreshChartState() {
     if (state.historyDisplay.length < state.history.length) {
       state.historyDisplay.push(state.history[state.historyDisplay.length]);
     }
+    if (state.historyDisplay.length > state.maxHistoryPoints) {
+      state.historyDisplay = state.historyDisplay.slice(-state.maxHistoryPoints);
+    }
     state.historyDisplay = state.historyDisplay.map((v, i) => v + (state.history[i] - v) * 0.2);
   }
   drawFitness();
@@ -460,9 +463,17 @@ function autoformatDataset() {
 
 function compileInferenceModel(dataset) {
   const exactByKey = new Map(dataset.map((row) => [String(row.Key), row.Value]));
-  const numericPairs = dataset
-    .map((row) => ({ x: toFiniteNumber(row.Key), y: toFiniteNumber(row.Value) }))
-    .filter((row) => row.x !== null && row.y !== null);
+  const numericRows = dataset
+    .map((row) => ({
+      key: toFiniteNumber(row.Key),
+      rawKey: row.Key,
+      rawValue: row.Value,
+      numericValue: toFiniteNumber(row.Value),
+    }))
+    .filter((row) => row.key !== null)
+    .sort((a, b) => a.key - b.key);
+
+  const numericPairs = numericRows.filter((row) => row.numericValue !== null).map((row) => ({ x: row.key, y: row.numericValue }));
 
   if (numericPairs.length >= 2) {
     const n = numericPairs.length;
@@ -487,6 +498,17 @@ function compileInferenceModel(dataset) {
       roundOutputs,
       minX: Math.min(...numericPairs.map((p) => p.x)),
       maxX: Math.max(...numericPairs.map((p) => p.x)),
+      numericRows,
+      exactByKey,
+    };
+  }
+
+  if (numericRows.length >= 1) {
+    return {
+      type: "numeric_key_lookup",
+      minX: numericRows[0].key,
+      maxX: numericRows[numericRows.length - 1].key,
+      numericRows,
       exactByKey,
     };
   }
@@ -508,6 +530,26 @@ function predictWithModel(key) {
       return { value: Number(predicted.toFixed(6)), mode: "predicted" };
     }
   }
+  if (state.inferenceModel.type === "numeric_key_lookup") {
+    const x = toFiniteNumber(key);
+    if (x !== null) {
+      const rows = state.inferenceModel.numericRows;
+      if (rows.length === 1) return { value: rows[0].rawValue, mode: "predicted" };
+      let right = rows.findIndex((row) => row.key >= x);
+      if (right === -1) right = rows.length - 1;
+      const left = Math.max(0, right - 1);
+      const a = rows[left];
+      const b = rows[Math.min(rows.length - 1, right)];
+      if (a.numericValue !== null && b.numericValue !== null && a.key !== b.key) {
+        const t = (x - a.key) / (b.key - a.key);
+        const y = a.numericValue + t * (b.numericValue - a.numericValue);
+        const rounded = Number.isInteger(a.numericValue) && Number.isInteger(b.numericValue);
+        return { value: rounded ? Math.round(y) : Number(y.toFixed(6)), mode: "predicted" };
+      }
+      const nearest = Math.abs(a.key - x) <= Math.abs(b.key - x) ? a : b;
+      return { value: nearest.rawValue, mode: "predicted" };
+    }
+  }
   return { value: `No exact match. Heuristic: ${k}`, mode: "heuristic" };
 }
 
@@ -521,6 +563,14 @@ function inferFormulaSteps(dataset) {
       "apply learned linear model",
       `compute value = (${m} * x) + (${b})`,
       "return rounded value when target domain is integer",
+    ];
+  }
+  if (state.inferenceModel.type === "numeric_key_lookup") {
+    return [
+      "parse key as number",
+      "locate nearest known key range",
+      "interpolate numeric values when available",
+      "fallback to nearest known output",
     ];
   }
   return ["coerce key to text", "lookup exact token", "fallback to heuristic output"];
@@ -568,6 +618,11 @@ function generateHumanAlgorithm(notify = true) {
       "askOutput",
       `Compiled model: y = ${state.inferenceModel.slope.toFixed(6)}*x + ${state.inferenceModel.intercept.toFixed(6)}`
     );
+  } else if (state.inferenceModel?.type === "numeric_key_lookup") {
+    const probe = Math.round(state.inferenceModel.maxX + 1);
+    setValue("askInput", String(probe));
+    setText("askStatus", "Model Ready");
+    setText("askOutput", "Compiled numeric-key model (interpolation + nearest fallback).");
   } else {
     const firstKey = state.dataset[0]?.Key;
     if (firstKey !== undefined) setValue("askInput", String(firstKey));

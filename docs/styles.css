@@ -572,9 +572,12 @@ textarea:focus {
   flex-grow: 1;
   position: relative;
   min-height: 0;
+  max-height: 320px;
+  overflow: hidden;
 }
 
 canvas {
+  display: block;
   width: 100% !important;
   height: 100% !important;
 }
