@@ -127,6 +127,7 @@ function toFiniteNumber(value) {
   return Number.isFinite(n) ? n : null;
 }
 
+// Fix: Ensure advanced mode toggle is always available and visible
 function applyUiMode(mode) {
   const root = $("appRoot");
   const shell = $("simpleShell");
@@ -152,7 +153,11 @@ function applyUiMode(mode) {
     }
   }
   const btn = $("btnUiMode");
-  if (btn) btn.textContent = state.uiMode === "simple" ? "Switch To Advanced" : "Switch To Simple";
+  if (btn) {
+    btn.textContent = state.uiMode === "simple" ? "Switch To Advanced" : "Switch To Simple";
+    btn.classList.remove("hidden"); // Always show the toggle button
+    btn.style.display = "inline-block";
+  }
   if (state.uiMode === "simple") {
     showSimpleUploadScreen();
   }
