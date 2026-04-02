@@ -152,10 +152,11 @@ function applyUiMode(mode) {
       shell.style.display = "none";
     }
   }
+  // Always show the toggle button and update its label
   const btn = $("btnUiMode");
   if (btn) {
     btn.textContent = state.uiMode === "simple" ? "Switch To Advanced" : "Switch To Simple";
-    btn.classList.remove("hidden"); // Always show the toggle button
+    btn.classList.remove("hidden");
     btn.style.display = "inline-block";
   }
   if (state.uiMode === "simple") {

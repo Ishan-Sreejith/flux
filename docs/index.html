@@ -209,8 +209,8 @@
               <button class="mode-pill active" data-mode="train">Evolution</button>
               <button class="mode-pill" data-mode="ask">Inference</button>
             </div>
-            <!-- Add a clear toggle for UI mode -->
-            <button id="btnUiMode" class="ui-toggle">Switch To Advanced</button>
+            <!-- UI Mode Toggle: Always visible, clear label -->
+            <button id="btnUiMode" class="ui-toggle">Switch To Simple</button>
           </div>
 
           <div class="header-meta">
@@ -344,6 +344,9 @@
       </section>
 
       <section id="simpleShell" class="simple-shell hidden" aria-label="Simple Mode">
+        <header class="simple-header">
+          <button id="btnUiModeSimple" class="ui-toggle" style="margin-bottom:18px;">Switch To Advanced</button>
+        </header>
         <div id="simpleUploadScreen" class="simple-screen">
           <div class="simple-card">
             <h2>Upload Training Data</h2>
