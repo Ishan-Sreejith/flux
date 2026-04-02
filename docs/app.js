@@ -159,7 +159,7 @@ function applyUiMode(mode) {
     btn.classList.remove("hidden");
     btn.style.display = "inline-block";
   }
-  // Bind simple mode toggle button
+  // Bind simple mode toggle button (advanced mode)
   const btnSimpleToggle = $("btnUiModeSimple");
   if (btnSimpleToggle) {
     btnSimpleToggle.onclick = () => applyUiMode("advanced");
