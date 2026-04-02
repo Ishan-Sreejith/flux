@@ -133,24 +133,31 @@ function applyUiMode(mode) {
   const shell = $("simpleShell");
   const sidebar = document.querySelector(".sidebar");
   const workspace = document.querySelector(".workspace");
-  if (!root) return;
   state.uiMode = mode === "advanced" ? "advanced" : "simple";
-  root.classList.toggle("ui-simple", state.uiMode === "simple");
-  root.classList.toggle("ui-advanced", state.uiMode === "advanced");
+  if (!root) return;
+  // Remove all theme classes from simple mode
   if (state.uiMode === "simple") {
+    root.classList.add("ui-simple");
+    root.classList.remove("ui-advanced");
     if (sidebar) sidebar.style.display = "none";
     if (workspace) workspace.style.display = "none";
     if (shell) {
       shell.classList.remove("hidden");
       shell.style.display = "grid";
     }
+    // Remove all theme classes from simpleShell
+    shell.classList.remove("theme-cyber", "theme-matrix", "theme-solar", "theme-arctic");
+    shell.classList.add("theme-comfort");
   } else {
+    root.classList.remove("ui-simple");
+    root.classList.add("ui-advanced");
     if (sidebar) sidebar.style.display = "";
     if (workspace) workspace.style.display = "";
     if (shell) {
       shell.classList.add("hidden");
       shell.style.display = "none";
     }
+    shell.classList.remove("theme-comfort");
   }
   // Always show the toggle button and update its label
   const btn = $("btnUiMode");
