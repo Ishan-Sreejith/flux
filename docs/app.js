@@ -159,6 +159,13 @@ function applyUiMode(mode) {
     btn.classList.remove("hidden");
     btn.style.display = "inline-block";
   }
+  // Bind simple mode toggle button
+  const btnSimpleToggle = $("btnUiModeSimple");
+  if (btnSimpleToggle) {
+    btnSimpleToggle.onclick = () => applyUiMode("advanced");
+    btnSimpleToggle.classList.remove("hidden");
+    btnSimpleToggle.style.display = "inline-block";
+  }
   if (state.uiMode === "simple") {
     showSimpleUploadScreen();
   }
