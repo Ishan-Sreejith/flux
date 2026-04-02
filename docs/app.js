@@ -133,24 +133,31 @@ function applyUiMode(mode) {
   const shell = $("simpleShell");
   const sidebar = document.querySelector(".sidebar");
   const workspace = document.querySelector(".workspace");
-  if (!root) return;
   state.uiMode = mode === "advanced" ? "advanced" : "simple";
-  root.classList.toggle("ui-simple", state.uiMode === "simple");
-  root.classList.toggle("ui-advanced", state.uiMode === "advanced");
+  if (!root) return;
+  // Remove all theme classes from simple mode
   if (state.uiMode === "simple") {
+    root.classList.add("ui-simple");
+    root.classList.remove("ui-advanced");
     if (sidebar) sidebar.style.display = "none";
     if (workspace) workspace.style.display = "none";
     if (shell) {
       shell.classList.remove("hidden");
       shell.style.display = "grid";
     }
+    // Remove all theme classes from simpleShell
+    shell.classList.remove("theme-cyber", "theme-matrix", "theme-solar", "theme-arctic");
+    shell.classList.add("theme-comfort");
   } else {
+    root.classList.remove("ui-simple");
+    root.classList.add("ui-advanced");
     if (sidebar) sidebar.style.display = "";
     if (workspace) workspace.style.display = "";
     if (shell) {
       shell.classList.add("hidden");
       shell.style.display = "none";
     }
+    shell.classList.remove("theme-comfort");
   }
   // Always show the toggle button and update its label
   const btn = $("btnUiMode");
@@ -158,6 +165,13 @@ function applyUiMode(mode) {
     btn.textContent = state.uiMode === "simple" ? "Switch To Advanced" : "Switch To Simple";
     btn.classList.remove("hidden");
     btn.style.display = "inline-block";
+  }
+  // Bind simple mode toggle button (advanced mode)
+  const btnSimpleToggle = $("btnUiModeSimple");
+  if (btnSimpleToggle) {
+    btnSimpleToggle.onclick = () => applyUiMode("advanced");
+    btnSimpleToggle.classList.remove("hidden");
+    btnSimpleToggle.style.display = "inline-block";
   }
   if (state.uiMode === "simple") {
     showSimpleUploadScreen();
@@ -543,6 +557,93 @@ function compileInferenceModel(dataset) {
 
   const numericPairs = numericRows.filter((row) => row.numericValue !== null).map((row) => ({ x: row.key, y: row.numericValue }));
 
+  // Quadratic regression detection (for y = ax^2 + bx + c)
+  if (numericPairs.length >= 3) {
+    // Least squares fit for quadratic: y = ax^2 + bx + c
+    let sumX = 0, sumY = 0, sumXX = 0, sumXY = 0, sumXXX = 0, sumXXXX = 0, sumXYY = 0;
+    let sumXXY = 0;
+    let sumXXXy = 0;
+    let sumX2Y = 0;
+    let sumX3 = 0;
+    let sumX4 = 0;
+    let sumX2 = 0;
+    let sumX3Y = 0;
+    let sumX2X = 0;
+    let sumX2X2 = 0;
+    let sumX2X3 = 0;
+    let sumX2X4 = 0;
+    let sumX2Y2 = 0;
+    let sumX2Y3 = 0;
+    let sumX2Y4 = 0;
+    let sumX2Y5 = 0;
+    let sumX2Y6 = 0;
+    let sumX2Y7 = 0;
+    let sumX2Y8 = 0;
+    let sumX2Y9 = 0;
+    let sumX2Y10 = 0;
+    // Actually, only need up to x^4 for quadratic fit
+    let Sx = 0, Sy = 0, Sxx = 0, Sxxx = 0, Sxxxx = 0, Sxy = 0, Sxxy = 0;
+    const n = numericPairs.length;
+    for (const p of numericPairs) {
+      Sx += p.x;
+      Sy += p.y;
+      Sxx += p.x * p.x;
+      Sxxx += p.x * p.x * p.x;
+      Sxxxx += p.x * p.x * p.x * p.x;
+      Sxy += p.x * p.y;
+      Sxxy += p.x * p.x * p.y;
+    }
+    // Solve the system:
+    // | n    Sx    Sxx  |   | c |   | Sy   |
+    // | Sx   Sxx   Sxxx | * | b | = | Sxy  |
+    // | Sxx  Sxxx  Sxxxx|   | a |   | Sxxy |
+    // Cramer's rule
+    const det = n * (Sxx * Sxxxx - Sxxx * Sxxx) - Sx * (Sx * Sxxxx - Sxxx * Sxx) + Sxx * (Sx * Sxxx - Sxx * Sxx);
+    if (Math.abs(det) > 1e-9) {
+      const detA = n * (Sxy * Sxxxx - Sxxy * Sxxx) - Sx * (Sy * Sxxxx - Sxxy * Sxx) + Sxx * (Sy * Sxxx - Sxy * Sxx);
+      const detB = n * (Sxx * Sxxy - Sxxx * Sxy) - Sx * (Sx * Sxxy - Sxxx * Sy) + Sxx * (Sx * Sxy - Sxx * Sy);
+      const detC = Sy * (Sxx * Sxxxx - Sxxx * Sxxx) - Sx * (Sxy * Sxxxx - Sxxy * Sxxx) + Sxx * (Sxy * Sxxx - Sxx * Sxxy);
+      const a = detA / det;
+      const b = detB / det;
+      const c = detC / det;
+      // Compute fit error for quadratic
+      let quadError = 0;
+      for (const p of numericPairs) {
+        const yhat = a * p.x * p.x + b * p.x + c;
+        quadError += Math.abs(yhat - p.y);
+      }
+      // Compute fit error for linear
+      let sumXl = 0, sumYl = 0, sumXXl = 0, sumXYl = 0;
+      for (const p of numericPairs) {
+        sumXl += p.x;
+        sumYl += p.y;
+        sumXXl += p.x * p.x;
+        sumXYl += p.x * p.y;
+      }
+      const denomL = n * sumXXl - sumXl * sumXl;
+      const slope = Math.abs(denomL) < 1e-9 ? 0 : (n * sumXYl - sumXl * sumYl) / denomL;
+      const intercept = (sumYl - slope * sumXl) / n;
+      let linError = 0;
+      for (const p of numericPairs) {
+        const yhat = slope * p.x + intercept;
+        linError += Math.abs(yhat - p.y);
+      }
+      // If quadratic fit is much better, use it
+      if (quadError < linError * 0.7) {
+        return {
+          type: "numeric_quadratic",
+          a, b, c,
+          minX: Math.min(...numericPairs.map((p) => p.x)),
+          maxX: Math.max(...numericPairs.map((p) => p.x)),
+          numericRows,
+          exactByKey,
+        };
+      }
+      // Otherwise, fall through to linear
+    }
+  }
+
+  // Linear regression fallback
   if (numericPairs.length >= 2) {
     const n = numericPairs.length;
     let sumX = 0;
@@ -590,6 +691,22 @@ function predictWithModel(key) {
   if (state.inferenceModel.exactByKey.has(k)) {
     return { value: state.inferenceModel.exactByKey.get(k), mode: "exact", confidence: 1.0 };
   }
+  if (state.inferenceModel.type === "numeric_quadratic") {
+    const num = toFiniteNumber(key);
+    if (num !== null) {
+      const { a, b, c } = state.inferenceModel;
+      let predicted = a * num * num + b * num + c;
+      // If all outputs are integer, round
+      const allInt = state.inferenceModel.numericRows.every(row => Number.isInteger(row.numericValue));
+      if (allInt) predicted = Math.round(predicted);
+      const minX = state.inferenceModel.minX;
+      const maxX = state.inferenceModel.maxX;
+      const span = Math.max(1, maxX - minX);
+      const dist = num < minX ? minX - num : num > maxX ? num - maxX : 0;
+      const confidence = Math.max(0.2, 1 - dist / (span * 2));
+      return { value: Number(predicted.toFixed(6)), mode: "predicted", confidence };
+    }
+  }
   if (state.inferenceModel.type === "numeric_linear") {
     const num = toFiniteNumber(key);
     if (num !== null) {
@@ -630,6 +747,17 @@ function predictWithModel(key) {
 
 function inferFormulaSteps(dataset) {
   if (!dataset.length || !state.inferenceModel) return ["No deterministic rule inferred from empty dataset."];
+  if (state.inferenceModel.type === "numeric_quadratic") {
+    const a = state.inferenceModel.a.toFixed(6);
+    const b = state.inferenceModel.b.toFixed(6);
+    const c = state.inferenceModel.c.toFixed(6);
+    return [
+      "parse key as number",
+      "apply learned quadratic model",
+      `compute value = (${a})*x^2 + (${b})*x + (${c})`,
+      "return rounded value when target domain is integer",
+    ];
+  }
   if (state.inferenceModel.type === "numeric_linear") {
     const m = state.inferenceModel.slope.toFixed(6);
     const b = state.inferenceModel.intercept.toFixed(6);
